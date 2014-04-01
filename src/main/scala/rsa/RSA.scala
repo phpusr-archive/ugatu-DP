@@ -35,8 +35,7 @@ object RSA extends App {
    * http://landrina.ru/development/c-sharp-realizaciya-rsa/
    */
   private def ladrina() {
-    var dxy = DXY(0, 0, 0)
-    dxy = Euclide.extendedEuclide(e % fi, fi)
+    val dxy = Euclide.extendedEuclide(e % fi, fi)
     println(s"dxy: $dxy")
     d = dxy.d
 

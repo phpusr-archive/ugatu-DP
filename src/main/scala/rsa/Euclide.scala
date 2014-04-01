@@ -33,16 +33,16 @@ object Euclide {
       val q = a / b
       val r = a % b
 
-      val tn = x - q*y
+      val tmp = x - q*y
       x = y
-      y = tn
+      y = tmp
 
       a = b
       b = r
     }
 
-    val tmp2 = a - x * aIn
-    val res = tmp2 / bIn
+    val tmp = a - x * aIn
+    val res = tmp / bIn
 
     DXY(x, res, a)
   }
