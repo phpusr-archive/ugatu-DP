@@ -1,6 +1,6 @@
 package rsa
 
-import scala.annotation.tailrec
+import sun.misc.{BASE64Decoder, BASE64Encoder}
 
 /**
  * @author phpusr
@@ -9,7 +9,8 @@ import scala.annotation.tailrec
  */
 object RSA extends App {
   /** Сообщение для шифрования */
-  val m = 123
+  val m = "mr. President"
+  val splitter = " "
 
   val p = 47
   val q = 71
@@ -24,7 +25,7 @@ object RSA extends App {
   /** Закрытый ключ */
   var d = 0
 
-  ladrina()
+  //ladrina()
   eolimp()
 
   /**
@@ -61,19 +62,29 @@ object RSA extends App {
     println(s"d: $d")
     println("ax + by: " + (a * dxy.x + b * dxy.y))
 
-    val codeMes = code(m)
-    println("\ncode: " + codeMes)
+    val codeMes = encode(m)
+    println("\ncode: " + codeMes.mkString(" "))
     println("decode: " + decode(codeMes))
   }
 
   /** Шифрование данных */
-  private def code(message: Int) = {
-    modulPow(message, e, n)
+  private def encode(message: String) = {
+    val base64String = new BASE64Encoder().encode(message.getBytes)
+    println("base64: " + base64String)
+
+    base64String.getBytes.map { el =>
+      modulPow(el, e, n)
+    }.mkString(splitter)
   }
 
   /** Рашифрование данных */
-  private def decode(codeMessage: Int) = {
-    modulPow(codeMessage, d, n)
+  private def decode(codeMessage: String) = {
+    val base64String = new String(codeMessage.split(splitter).map { el =>
+      modulPow(el.toInt, d, n).toByte
+    })
+    println("base64: " + base64String)
+
+    new String(new BASE64Decoder().decodeBuffer(base64String))
   }
 
   /** Возводит число в степень и находит остаток от деления на каждой итерации */
