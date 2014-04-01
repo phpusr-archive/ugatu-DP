@@ -67,10 +67,7 @@ object Euclide {
    * http://www.e-olimp.com/articles/18
    */
   @tailrec
-  def nod(aInput: Int,bInput: Int): Int = {
-    if (bInput == 0) aInput
-    else nod(bInput, aInput % bInput)
-  }
+  def nod(a: Int,b: Int):Int = if (b == 0) a else nod(b, a % b)
 
   /** Расширенный алгоритм Евклида из конспкта */
   def evklid(d: Int, f: Int) = {
