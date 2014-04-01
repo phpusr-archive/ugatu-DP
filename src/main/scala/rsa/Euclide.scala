@@ -49,6 +49,44 @@ object Euclide {
 
   /**
    * Расширенный алгоритм Евклида
+   * http://algolist.manual.ru/maths/teornum/nod.php#4
+   */
+   def extEvklid(aIn: Int, bIn: Int) = {
+    var a = aIn
+    var b = bIn
+
+    var x = 0
+    var y = 0
+
+    /*if (a > b) {
+      println("a > b")
+    } else*/ if (b == 0) {
+      DXY(a, 1, 0)
+    } else {
+      var x1 = 0; var x2 = 1
+      var y1 = 1; var y2 = 0
+
+      while (b > 0) {
+        if (false) println(s"a: $a; b: $b")
+
+        val r = a % b
+        val q = a / b
+
+        a = b; b = r
+
+        x = x2 - q*x1; y = y2 - q*y1
+
+        x2 = x1; x1 = x
+        y2 = y1; y1 = y
+      }
+
+      DXY(a, x2, y2)
+    }
+  }
+
+
+  /**
+   * Расширенный алгоритм Евклида
    * http://www.e-olimp.com/articles/18
    */
   def gcdext(a: Int, b: Int, v: DXY) {
@@ -56,9 +94,9 @@ object Euclide {
       v.d = a; v.x = 1; v.y = 0
     } else {
       gcdext(b, a % b, v)
-      val swap = v.y
-      v.y = v.x - (a/b) * v.y
-      v.x = swap
+      val yCopy = v.y
+      v.y = v.x - (a/b * v.y)
+      v.x = yCopy
     }
   }
 

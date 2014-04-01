@@ -10,11 +10,12 @@ package rsa
  * Тестирование алгоритмов Евклида
  */
 object TestEuclide extends App {
-  val a = 512
-  val b = 1024
+  val a = 79
+  val b = 3220
 
   testExtendedEuclide()
   test_gcdext()
+  testExtEvklid()
 
   def testExtendedEuclide() {
     println("\ntestExtendedEuclide()")
@@ -31,5 +32,11 @@ object TestEuclide extends App {
     println(s"dxy: $dxy")
   }
 
+  def testExtEvklid() {
+    println("\ntestExtEvklid()")
+
+    val dxy = Euclide.extEvklid(a, b)
+    println(s"dxy: $dxy")
+  }
 
 }
