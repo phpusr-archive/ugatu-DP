@@ -24,26 +24,40 @@ object RSA extends App {
   /** Закрытый ключ */
   var d = 0
 
-  val a = fi
-  val b = e
-  println(s"a=$a; b=$b")
-
   ladrina()
+  eolimp()
+
+  /**
+   * Моя реализация, используя алгоритм из статьи
+   * http://www.e-olimp.com/articles/18
+   */
+  private def eolimp() {
+    println("\neolimp()")
+
+    val dxy = DXY(0,0,0)
+    Euclide.gcdext(e, fi, dxy)
+    println(s"dxy: $dxy")
+    d = dxy.x // x - оказывается надо было брать, а не d
+
+    testAlgorithm(e, fi, dxy)
+  }
 
   /**
    * Реализация RSA на основе статьи
    * http://landrina.ru/development/c-sharp-realizaciya-rsa/
    */
   private def ladrina() {
+    println("\nladrina()")
+
     val dxy = Euclide.extendedEuclide(e % fi, fi)
     println(s"dxy: $dxy")
     d = dxy.d
 
-    testAlgorithm(dxy)
+    testAlgorithm(e, fi, dxy)
   }
 
   /** Проверка используемого алгоритма */
-  private def testAlgorithm(dxy: DXY) {
+  private def testAlgorithm(a: Int, b: Int, dxy: DXY) {
     println(s"d: $d")
     println("ax + by: " + (a * dxy.x + b * dxy.y))
 
