@@ -37,6 +37,7 @@ object TestRSA extends App {
   }
 
   def testEncodeDecodeString() {
+    //TODO иногда глючит, пока не знаю в чем дело
     for (i <- 1 to 10) {
       val (n, publicKey, privateKey) = RSA.generateKeys()
       val message = "Hello"

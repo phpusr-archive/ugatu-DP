@@ -15,7 +15,7 @@ object Prime {
 
   /** Генерация простого числа */
   def generatePrime(maxNumber: Int) = {
-    var number = 2
+    var number = 0
     do {
       number = Math.round(Math.random()*maxNumber+1).toInt
     } while(!isPrime(number))

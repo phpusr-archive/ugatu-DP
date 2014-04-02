@@ -67,7 +67,13 @@ object RSA {
 
   /** Генерация чисел P и Q */
   def generatePQ(maxNumber: Int) = {
-    (Prime.generatePrime(maxNumber), Prime.generatePrime(maxNumber))
+    var (p, q) = (0, 0)
+    do {
+      p = Prime.generatePrime(maxNumber)
+      q = Prime.generatePrime(maxNumber)
+    } while(p == q)
+
+    (p, q)
   }
 
   /** Возвращает число Фи */
