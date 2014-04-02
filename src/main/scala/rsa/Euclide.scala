@@ -23,11 +23,9 @@ object Euclide {
    * Расширенный алгоритм Евклида из статьи
    * http://landrina.ru/development/c-realizaciya-rasshirennogo-algoritma-evklida/
    */
-  def extendedEuclide(aIn: Int, bIn: Int) = {
-    var x = 1
-    var a = aIn
-    var y = 0
-    var b = bIn
+  def gcdExtV2(aIn: Int, bIn: Int) = {
+    var (a, b) = (aIn, bIn)
+    var (x, y) = (1, 0)
 
     while (b > 0) {
       val q = a / b
@@ -41,47 +39,36 @@ object Euclide {
       b = r
     }
 
-    val tmp = a - x * aIn
-    val res = tmp / bIn
+    y = (a - x * aIn) / bIn
 
-    GCD(x, res, a)
+    GCD(a, x, y)
   }
 
   /**
    * Расширенный алгоритм Евклида
    * http://algolist.manual.ru/maths/teornum/nod.php#4
    */
-   def extEvklid(aIn: Int, bIn: Int) = {
-    var a = aIn
-    var b = bIn
+   def gcdExtV3(aIn: Int, bIn: Int) = {
+    var (a, b) = (aIn, bIn)
+    var (x, y) = (0, 0)
+    var (x1, x2) = (0, 1)
+    var (y1, y2) = (1, 0)
 
-    var x = 0
-    var y = 0
+    while (b > 0) {
+      if (false) println(s"a: $a; b: $b")
 
-    /*if (a > b) {
-      println("a > b")
-    } else*/ if (b == 0) {
-      GCD(a, 1, 0)
-    } else {
-      var x1 = 0; var x2 = 1
-      var y1 = 1; var y2 = 0
+      val r = a % b
+      val q = a / b
 
-      while (b > 0) {
-        if (false) println(s"a: $a; b: $b")
+      a = b; b = r
 
-        val r = a % b
-        val q = a / b
+      x = x2 - q*x1; y = y2 - q*y1
 
-        a = b; b = r
-
-        x = x2 - q*x1; y = y2 - q*y1
-
-        x2 = x1; x1 = x
-        y2 = y1; y1 = y
-      }
-
-      GCD(a, x2, y2)
+      x2 = x1; x1 = x
+      y2 = y1; y1 = y
     }
+
+    GCD(a, x2, y2)    
   }
 
 
@@ -105,14 +92,15 @@ object Euclide {
 
   /**
    * Нахождение наибольшего общего делителя
+   * Алгоритм Евклида
    * http://www.e-olimp.com/articles/18
    */
   @tailrec
-  def nod(a: Int,b: Int):Int = if (b == 0) a else nod(b, a % b)
+  def gcd(a: Int,b: Int):Int = if (b == 0) a else gcd(b, a % b)
 
   /** Расширенный алгоритм Евклида из конспкта */
-  def evklid(d: Int, f: Int) = {
-    if (nod(d, f) == 1) 1 //TODO
+  def gcdExtV4(d: Int, f: Int) = {
+    if (gcd(d, f) == 1) 1 //TODO
 
     val x1 = 1
     val x2 = 0
@@ -123,11 +111,11 @@ object Euclide {
     var y3 = d
 
     if (y3 == 0) {
-      x3 = nod(d, f) //TODO return
+      x3 = gcd(d, f) //TODO return
     }
 
     if (y3 == 1) {
-      y3 = nod(d, f)
+      y3 = gcd(d, f)
       y2 = d % f //TODO мульт. обр. d; return
     }
 

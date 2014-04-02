@@ -20,7 +20,7 @@ object TestEuclide extends App {
   def testExtendedEuclide() {
     println("\ntestExtendedEuclide()")
 
-    val dxy = Euclide.extendedEuclide(a, b)
+    val dxy = Euclide.gcdExtV2(a, b)
     println(s"dxy: $dxy")
   }
 
@@ -34,7 +34,7 @@ object TestEuclide extends App {
   def testExtEvklid() {
     println("\ntestExtEvklid()")
 
-    val dxy = Euclide.extEvklid(a, b)
+    val dxy = Euclide.gcdExtV3(a, b)
     println(s"dxy: $dxy")
   }
 

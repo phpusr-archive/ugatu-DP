@@ -53,7 +53,7 @@ object RSA extends App {
   private def ladrina() {
     println("\nladrina()")
 
-    val dxy = Euclide.extendedEuclide(e % fi, fi)
+    val dxy = Euclide.gcdExtV2(e % fi, fi)
     println(s"dxy: $dxy")
     d = dxy.d
 
