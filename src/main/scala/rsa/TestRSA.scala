@@ -1,5 +1,7 @@
 package rsa
 
+import euclide.Euclide
+
 /**
  * @author phpusr
  *         Date: 02.04.14
@@ -9,11 +11,21 @@ package rsa
 object TestRSA extends App {
 
   testGeneratePQ()
+  testGeneratePublicKey()
 
   def testGeneratePQ() {
     println(RSA.generatePQ(100))
     println(RSA.generatePQ(100))
     println(RSA.generatePQ(100))
+  }
+
+  def testGeneratePublicKey() {
+    for (i <- 1 to 10) {
+      val (p, q) = RSA.generatePQ(100)
+      val publicKey = RSA.generatePublicKey(p, q, 100)
+      println(s"publicKey: $publicKey")
+      assert(Euclide.gcd(publicKey, (p-1)*(q-1)) == 1)
+    }
   }
 
 }

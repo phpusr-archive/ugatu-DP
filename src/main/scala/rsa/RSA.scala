@@ -16,23 +16,34 @@ object RSA {
 
   /** Максимальное значение простого числа */
   private val PrimeMaxNumber = 100
+  /** Максимальное значение открытого ключа */
+  private val PublicKeyMaxNumber = 100
 
   /** Генерация ключей */
   def generateKeys() {
     val (p, q) = generatePQ(PrimeMaxNumber)
     val n = p * q
-    val phi = getPhi(p, q) //TODO
-    val publicKey = generatePublicKey()
+    val publicKey = generatePublicKey(p, q, PublicKeyMaxNumber)
     val privateKey = generatePrivateKey(p, q, publicKey)
 
     (n, publicKey, privateKey)
   }
 
-  def generatePublicKey() = {
-    10 //TODO
+  /** Генерация открытого ключа по известным p и q */
+  def generatePublicKey(p: Int, q: Int, maxNumber: Int) = {
+    val phi = getPhi(p, q)
+
+    var publicKey = 0
+    var suitableNumber = false
+    do {
+      publicKey = Math.round(Math.random()*maxNumber+1).toInt
+      suitableNumber = Euclide.gcd(publicKey, phi) == 1
+    } while(!suitableNumber)
+
+    publicKey
   }
 
-  /** Генерация открытого ключа по известным p и q */
+  /** Генерация закрытого ключа по известным p, q и e */
   def generatePrivateKey(p: Int, q: Int, e: Int) = {
     val phi = getPhi(p, q)
 
