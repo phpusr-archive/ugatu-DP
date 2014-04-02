@@ -1,4 +1,4 @@
-package rsa
+package euclide
 
 import scala.annotation.tailrec
 
