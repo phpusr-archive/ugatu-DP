@@ -11,7 +11,7 @@ import scala.annotation.tailrec
 /**
  * Выходндые значения расширенного алгоритма Евклида
  */
-case class DXY(var d: Int, var x: Int, var y: Int)
+case class GCD(d: Int, x: Int, y: Int)
 
 
 /**
@@ -44,7 +44,7 @@ object Euclide {
     val tmp = a - x * aIn
     val res = tmp / bIn
 
-    DXY(x, res, a)
+    GCD(x, res, a)
   }
 
   /**
@@ -61,7 +61,7 @@ object Euclide {
     /*if (a > b) {
       println("a > b")
     } else*/ if (b == 0) {
-      DXY(a, 1, 0)
+      GCD(a, 1, 0)
     } else {
       var x1 = 0; var x2 = 1
       var y1 = 1; var y2 = 0
@@ -80,23 +80,26 @@ object Euclide {
         y2 = y1; y1 = y
       }
 
-      DXY(a, x2, y2)
+      GCD(a, x2, y2)
     }
   }
 
 
   /**
    * Расширенный алгоритм Евклида
+   * Усовершенствованный мной (добавил возвращаемое значение)
    * http://www.e-olimp.com/articles/18
+   * Greatest common divisor (НОД)
    */
-  def gcdext(a: Int, b: Int, v: DXY) {
+  def gcdExt(a: Int, b: Int): GCD = {
     if (b == 0) {
-      v.d = a; v.x = 1; v.y = 0
+      GCD(a, 1, 0)
     } else {
-      gcdext(b, a % b, v)
-      val yCopy = v.y
-      v.y = v.x - (a/b * v.y)
-      v.x = yCopy
+      val res = gcdExt(b, a % b)
+      val x = res.y
+      val y = res.x - (a/b * res.y)
+
+      GCD(res.d, x, y)
     }
   }
 

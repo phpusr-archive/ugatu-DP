@@ -7,6 +7,10 @@ import sun.misc.{BASE64Decoder, BASE64Encoder}
  *         Date: 31.03.14
  *         Time: 22:26
  */
+
+/**
+ * TODO Нужно сделать отдельное шифрование для чисел, деля их на разряды
+ */
 object RSA extends App {
   /** Сообщение для шифрования */
   val m = "mr. President"
@@ -35,8 +39,7 @@ object RSA extends App {
   private def eolimp() {
     println("\neolimp()")
 
-    val dxy = DXY(0,0,0)
-    Euclide.gcdext(e, fi, dxy)
+    val dxy = Euclide.gcdExt(e, fi)
     println(s"dxy: $dxy")
     d = dxy.x // x - оказывается надо было брать, а не d
 
@@ -58,7 +61,7 @@ object RSA extends App {
   }
 
   /** Проверка используемого алгоритма */
-  private def testAlgorithm(a: Int, b: Int, dxy: DXY) {
+  private def testAlgorithm(a: Int, b: Int, dxy: GCD) {
     println(s"d: $d")
     println("ax + by: " + (a * dxy.x + b * dxy.y))
 
