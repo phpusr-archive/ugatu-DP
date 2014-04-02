@@ -121,10 +121,10 @@ object Euclide {
     val (t1, t2, t3) = (x1-q*y1, x2-q*y2, x3-q*y3)
 
     // Шаг 6
-    (x1, x2, x3) = (y1, y2, y3)
+    //(x1, x2, x3) = (y1, y2, y3)
 
     // Шаг 7
-    (y1, y2, y3) = (t1, t2, t3)
+    //(y1, y2, y3) = (t1, t2, t3)
 
     // Шаг 8
     // TODO goto 2
