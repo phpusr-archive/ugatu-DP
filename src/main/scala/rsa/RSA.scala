@@ -1,6 +1,7 @@
 package rsa
 
 import euclide.Euclide
+import prime.Prime
 
 /**
  * @author phpusr
@@ -13,9 +14,12 @@ import euclide.Euclide
  */
 object RSA {
 
+  /** Максимальное значение простого числа */
+  private val PrimeMaxNumber = 100
+
   /** Генерация ключей */
   def generateKeys() {
-    val (p, q) = generatePQ()
+    val (p, q) = generatePQ(PrimeMaxNumber)
     val n = p * q
     val phi = getPhi(p, q) //TODO
     val publicKey = generatePublicKey()
@@ -39,8 +43,8 @@ object RSA {
   }
 
   /** Генерация чисел P и Q */
-  def generatePQ() = {
-    (1, 2) //TODO
+  def generatePQ(maxNumber: Int) = {
+    (Prime.generatePrime(maxNumber), Prime.generatePrime(maxNumber))
   }
 
   /** Возвращает число Фи */
