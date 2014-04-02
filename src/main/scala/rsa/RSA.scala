@@ -20,7 +20,9 @@ object RSA {
   /** Максимальное значение открытого ключа */
   private val PublicKeyMaxNumber = 100
   /** Разделитель символов строк */
-  private val splitter = " "
+  private val Splitter = " "
+  /** Кодировка строк по умолчанию */
+  private val CharsetNameDefault = "utf8"
 
   /** Логирование */
   private val debugEnable = true
@@ -81,22 +83,27 @@ object RSA {
 
   /** Шифрование строки */
   def encode(message: String, n: Int, publicKey: Int) = {
-    val base64String = new BASE64Encoder().encode(message.getBytes)
+    val base64String = new BASE64Encoder().encode(message.getBytes(CharsetNameDefault))
     log("base64: " + base64String)
+    log("bytes: " + base64String.getBytes(CharsetNameDefault).mkString(" "))
 
     base64String.getBytes.map { el =>
       modulPow(el, publicKey, n)
-    }.mkString(splitter)
+    }.mkString(Splitter)
   }
 
   /** Рашифрование строки */
   def decode(codeMessage: String, n: Int, privateKey: Int) = {
-    val base64String = new String(codeMessage.split(splitter).map { el =>
+    val split = codeMessage.split(Splitter)
+    log(s"split: ${split.mkString(" ")}")
+    val bytes = split.map { el =>
       modulPow(el.toInt, privateKey, n).toByte
-    })
+    }
+    log(s"bytes: ${bytes.mkString(" ")}")
+    val base64String = new String(bytes, CharsetNameDefault)
     log("base64: " + base64String)
 
-    new String(new BASE64Decoder().decodeBuffer(base64String))
+    new String(new BASE64Decoder().decodeBuffer(base64String), CharsetNameDefault)
   }
 
   /** Возводит число в степень и находит остаток от деления на каждой итерации */
