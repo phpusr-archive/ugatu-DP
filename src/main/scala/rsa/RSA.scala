@@ -2,6 +2,7 @@ package rsa
 
 import euclide.Euclide
 import prime.Prime
+import sun.misc.{BASE64Decoder, BASE64Encoder}
 
 /**
  * @author phpusr
@@ -18,15 +19,24 @@ object RSA {
   private val PrimeMaxNumber = 100
   /** Максимальное значение открытого ключа */
   private val PublicKeyMaxNumber = 100
+  /** Разделитель символов строк */
+  private val splitter = " "
+
+  /** Логирование */
+  private val debugEnable = true
+  private def log(s: String) { if (debugEnable) println(s"LOG:: $s") }
 
   /** Генерация ключей */
-  def generateKeys() {
+  def generateKeys() = {
     val (p, q) = generatePQ(PrimeMaxNumber)
     val n = p * q
     val publicKey = generatePublicKey(p, q, PublicKeyMaxNumber)
     val privateKey = generatePrivateKey(p, q, publicKey)
 
-    (n, publicKey, privateKey)
+    val keys = (n, publicKey, privateKey)
+    log(s"keys: $keys")
+
+    keys
   }
 
   /** Генерация открытого ключа по известным p и q */
@@ -50,7 +60,7 @@ object RSA {
     val gcd = Euclide.gcdExt(e, phi)
     assert(e * gcd.x + phi * gcd.y == gcd.d, "Wrong d")
 
-    gcd.x
+    gcd.x //TODO если отрицательное
   }
 
   /** Генерация чисел P и Q */
@@ -60,5 +70,36 @@ object RSA {
 
   /** Возвращает число Фи */
   private def getPhi(p: Int, q: Int) = (p-1) * (q-1)
+
+  /** Шифрование строки */
+  def encode(message: String, n: Int, publicKey: Int) = {
+    val base64String = new BASE64Encoder().encode(message.getBytes)
+    log("base64: " + base64String)
+
+    base64String.getBytes.map { el =>
+      modulPow(el, publicKey, n)
+    }.mkString(splitter)
+  }
+
+  /** Рашифрование строки */
+  def decode(codeMessage: String, n: Int, privateKey: Int) = {
+    val base64String = new String(codeMessage.split(splitter).map { el =>
+      modulPow(el.toInt, privateKey, n).toByte
+    })
+    log("base64: " + base64String)
+
+    new String(new BASE64Decoder().decodeBuffer(base64String))
+  }
+
+  /** Возводит число в степень и находит остаток от деления на каждой итерации */
+  private def modulPow(value: Int, pow: Int, modulo: Int): Int = {
+    var res = value
+    for (i <- 2 to pow) {
+      res *= value
+      res %= modulo
+    }
+
+    res
+  }
 
 }

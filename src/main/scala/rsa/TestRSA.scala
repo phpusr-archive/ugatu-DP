@@ -10,8 +10,9 @@ import euclide.Euclide
 
 object TestRSA extends App {
 
-  testGeneratePQ()
-  testGeneratePublicKey()
+  //testGeneratePQ()
+  //testGeneratePublicKey()
+  testEncodeDecodeString()
 
   def testGeneratePQ() {
     println(RSA.generatePQ(100))
@@ -26,6 +27,18 @@ object TestRSA extends App {
       println(s"publicKey: $publicKey")
       assert(Euclide.gcd(publicKey, (p-1)*(q-1)) == 1)
     }
+  }
+
+  def testEncodeDecodeString() {
+    val (n, publicKey, privateKey) = RSA.generateKeys()
+    val message = "Hello"
+
+    val encodeString = RSA.encode(message, n, publicKey)
+    println(s"encodeString: $encodeString")
+    val decodeString = RSA.decode(encodeString, n, privateKey)
+    println(s"decodeString: $decodeString")
+
+    assert(message == decodeString)
   }
 
 }
