@@ -81,6 +81,24 @@ object RSA {
   /** Возвращает число Фи */
   private def getPhi(p: Int, q: Int) = (p-1) * (q-1)
 
+  /** Шифрование числа TODO test */
+  def encode(number: Int, n: Int, publicKey: Int) = {
+    val nStr = n.toString
+    val size = nStr.size - 1
+    val message = number.toString
+
+    if (message.size < size) modulPow(number, publicKey, n)
+    else {
+      val times = Math.round(Math.ceil(message.size / size)).toInt
+      val nums = for (i <- 0 until times) yield message.substring(i*size, (i+1)*size).toInt
+
+      nums.map { el: Int =>
+        modulPow(el, publicKey, n)
+      }.mkString(Splitter)
+    }
+
+  }
+
   /** Шифрование строки */
   def encode(message: String, n: Int, publicKey: Int) = {
     val base64String = new BASE64Encoder().encode(message.getBytes(CharsetNameDefault))

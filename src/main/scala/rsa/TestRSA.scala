@@ -13,7 +13,8 @@ object TestRSA extends App {
   //testGeneratePQ()
   //testGeneratePublicKey()
   //testGeneratePrivateKey()
-  testEncodeDecodeString()
+  //testEncodeDecodeString()
+  testEncodeDecodeNumbers()
 
   def testGeneratePQ() {
     println(RSA.generatePQ(100))
@@ -50,6 +51,14 @@ object TestRSA extends App {
 
       assert(message == decodeString)
     }
+  }
+
+  def testEncodeDecodeNumbers() {
+    val (n, publicKey, privateKey) = RSA.generateKeys()
+    val message = 123456
+
+    val encode = RSA.encode(message, n, publicKey)
+    println(s"encode: $encode")
   }
 
 }
