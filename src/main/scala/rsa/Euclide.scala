@@ -94,29 +94,42 @@ object Euclide {
     GCD(a, x2, y2)    
   }
 
-  /** Расширенный алгоритм Евклида из конспкта */
-  def gcdExtV4(d: Int, f: Int) = {
-    if (gcd(d, f) == 1) 1 //TODO
+  /**
+   * Расширенный алгоритм Евклида из конспкта
+   * !!! Не работает (непонятен его смысл)
+   */
+  private def gcdExtV4(d: Int, f: Int): Int = {
+    // Шаг 1
+    var (x1, x2, x3) = (1, 0, f)
+    var (y1, y2 ,y3) = (0, 1, d)
 
-    val x1 = 1
-    val x2 = 0
-    var x3 = f
-
-    val y1 = 0
-    var y2 = 1
-    var y3 = d
-
+    // Шаг 2
     if (y3 == 0) {
-      x3 = gcd(d, f) //TODO return
+      x3 = gcdExtV4(d, f) //TODO return (нет обратного)
     }
 
+    // Шаг 2
     if (y3 == 1) {
-      y3 = gcd(d, f)
+      y3 = gcdExtV4(d, f)
       y2 = d % f //TODO мульт. обр. d; return
     }
 
-    var q = x3 / y3
-    //TODO 5 шаг
+    // Шаг 4
+    val q = x3 / y3
+
+    // Шаг 5
+    val (t1, t2, t3) = (x1-q*y1, x2-q*y2, x3-q*y3)
+
+    // Шаг 6
+    (x1, x2, x3) = (y1, y2, y3)
+
+    // Шаг 7
+    (y1, y2, y3) = (t1, t2, t3)
+
+    // Шаг 8
+    // TODO goto 2
+
+    0
   }
 
 }
