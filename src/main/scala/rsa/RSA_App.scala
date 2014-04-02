@@ -11,7 +11,7 @@ import sun.misc.{BASE64Decoder, BASE64Encoder}
 /**
  * TODO Нужно сделать отдельное шифрование для чисел, деля их на разряды
  */
-object RSA extends App {
+object RSA_App extends App {
   /** Сообщение для шифрования */
   val m = "mr. President"
   val splitter = " "
