@@ -1,4 +1,4 @@
-package rsa
+package experiment.rsa
 
 import sun.misc.{BASE64Decoder, BASE64Encoder}
 import euclide.{Euclide, GCD}

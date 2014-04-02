@@ -1,4 +1,4 @@
-package rsa
+package experiment.rsa
 
 /**
  * @author phpusr
