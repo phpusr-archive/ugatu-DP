@@ -29,6 +29,7 @@ object RSA {
   /** Генерация ключей */
   def generateKeys() = {
     val (p, q) = generatePQ(PrimeMaxNumber)
+    log(s"p: $p; q: $q")
     val n = p * q
     val publicKey = generatePublicKey(p, q, PublicKeyMaxNumber)
     val privateKey = generatePrivateKey(p, q, publicKey)
@@ -60,7 +61,8 @@ object RSA {
     val gcd = Euclide.gcdExt(e, phi)
     assert(e * gcd.x + phi * gcd.y == gcd.d, "Wrong d")
 
-    gcd.x //TODO если отрицательное
+    if (gcd.x < 0) gcd.x + phi
+    else gcd.x
   }
 
   /** Генерация чисел P и Q */

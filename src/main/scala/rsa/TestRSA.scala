@@ -12,6 +12,7 @@ object TestRSA extends App {
 
   //testGeneratePQ()
   //testGeneratePublicKey()
+  //testGeneratePrivateKey()
   testEncodeDecodeString()
 
   def testGeneratePQ() {
@@ -29,16 +30,25 @@ object TestRSA extends App {
     }
   }
 
+  def testGeneratePrivateKey() {
+    val (p, q, e) = (7, 11, 23)
+    val privateKey = RSA.generatePrivateKey(p, q, e)
+    println("privateKey = " + privateKey)
+  }
+
   def testEncodeDecodeString() {
-    val (n, publicKey, privateKey) = RSA.generateKeys()
-    val message = "Hello"
+    for (i <- 1 to 10) {
+      val (n, publicKey, privateKey) = RSA.generateKeys()
+      val message = "Hello"
 
-    val encodeString = RSA.encode(message, n, publicKey)
-    println(s"encodeString: $encodeString")
-    val decodeString = RSA.decode(encodeString, n, privateKey)
-    println(s"decodeString: $decodeString")
+      val encodeString = RSA.encode(message, n, publicKey)
+      println(s"encodeString: $encodeString")
+      val decodeString = RSA.decode(encodeString, n, privateKey)
+      println(s"decodeString: $decodeString")
+      println()
 
-    assert(message == decodeString)
+      assert(message == decodeString)
+    }
   }
 
 }
