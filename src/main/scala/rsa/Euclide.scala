@@ -57,12 +57,11 @@ object Euclide {
       val q = a / b
       val r = a % b
 
+      a = b;  b = r
+
       val tmp = x - q*y
       x = y
       y = tmp
-
-      a = b
-      b = r
     }
 
     y = (a - x * aIn) / bIn
@@ -81,10 +80,8 @@ object Euclide {
     var (y1, y2) = (1, 0)
 
     while (b > 0) {
-      if (false) println(s"a: $a; b: $b")
-
-      val r = a % b
       val q = a / b
+      val r = a % b
 
       a = b; b = r
 
