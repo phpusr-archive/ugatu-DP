@@ -20,6 +20,32 @@ case class GCD(d: Int, x: Int, y: Int)
 object Euclide {
 
   /**
+   * Нахождение наибольшего общего делителя
+   * Алгоритм Евклида
+   * http://www.e-olimp.com/articles/18
+   */
+  @tailrec
+  def gcd(a: Int,b: Int):Int = if (b == 0) a else gcd(b, a % b)
+
+  /**
+   * Расширенный алгоритм Евклида
+   * Усовершенствованный мной (добавил возвращаемое значение)
+   * http://www.e-olimp.com/articles/18
+   * Greatest common divisor (НОД)
+   */
+  def gcdExt(a: Int, b: Int): GCD = {
+    if (b == 0) {
+      GCD(a, 1, 0)
+    } else {
+      val res = gcdExt(b, a % b)
+      val x = res.y
+      val y = res.x - (a/b * res.y)
+
+      GCD(res.d, x, y)
+    }
+  }
+
+  /**
    * Расширенный алгоритм Евклида из статьи
    * http://landrina.ru/development/c-realizaciya-rasshirennogo-algoritma-evklida/
    */
@@ -70,33 +96,6 @@ object Euclide {
 
     GCD(a, x2, y2)    
   }
-
-
-  /**
-   * Расширенный алгоритм Евклида
-   * Усовершенствованный мной (добавил возвращаемое значение)
-   * http://www.e-olimp.com/articles/18
-   * Greatest common divisor (НОД)
-   */
-  def gcdExt(a: Int, b: Int): GCD = {
-    if (b == 0) {
-      GCD(a, 1, 0)
-    } else {
-      val res = gcdExt(b, a % b)
-      val x = res.y
-      val y = res.x - (a/b * res.y)
-
-      GCD(res.d, x, y)
-    }
-  }
-
-  /**
-   * Нахождение наибольшего общего делителя
-   * Алгоритм Евклида
-   * http://www.e-olimp.com/articles/18
-   */
-  @tailrec
-  def gcd(a: Int,b: Int):Int = if (b == 0) a else gcd(b, a % b)
 
   /** Расширенный алгоритм Евклида из конспкта */
   def gcdExtV4(d: Int, f: Int) = {
