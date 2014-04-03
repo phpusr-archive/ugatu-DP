@@ -1,7 +1,7 @@
-package rsa
+package dataprotection.lab.three.rsa
 
-import euclide.Euclide
-import prime.Prime
+import dataprotection.lab.three.euclide.Euclide
+import dataprotection.lab.three.prime.Prime
 import sun.misc.{BASE64Decoder, BASE64Encoder}
 import org.dyndns.phpusr.util.log.Logger
 

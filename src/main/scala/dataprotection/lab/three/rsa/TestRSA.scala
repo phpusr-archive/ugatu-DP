@@ -1,6 +1,6 @@
-package rsa
+package dataprotection.lab.three.rsa
 
-import euclide.Euclide
+import dataprotection.lab.three.euclide.Euclide
 
 /**
  * @author phpusr

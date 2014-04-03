@@ -1,4 +1,4 @@
-package prime
+package dataprotection.lab.three.prime
 
 /**
  * @author phpusr

@@ -1,7 +1,7 @@
 package experiment.rsa
 
 import sun.misc.{BASE64Decoder, BASE64Encoder}
-import euclide.{Euclide, GCD}
+import dataprotection.lab.three.euclide.{Euclide, GCD}
 
 /**
  * @author phpusr
@@ -49,7 +49,7 @@ object RSA_App extends App {
 
   /**
    * Реализация RSA на основе статьи
-   * http://landrina.ru/development/c-sharp-realizaciya-rsa/
+   * http://landrina.ru/development/c-sharp-realizaciya-dataprotection.lab.three.rsa/
    */
   private def ladrina() {
     println("\nladrina()")

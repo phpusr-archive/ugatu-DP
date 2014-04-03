@@ -1,4 +1,4 @@
-package euclide
+package dataprotection.lab.three.euclide
 
 /**
  * @author phpusr
