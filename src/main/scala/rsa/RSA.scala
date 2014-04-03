@@ -81,12 +81,12 @@ object RSA {
   /** Возвращает число Фи */
   private def getPhi(p: Int, q: Int) = (p-1) * (q-1)
 
-  /** Шифрование числа TODO test */
+  /** Шифрование числа TODO test, rename */
   def encode(number: Int, n: Int, publicKey: Int) = {
     val blockSize = n.toString.size - 1
     val message = number.toString
 
-    if (message.size <= blockSize) modulPow(number, publicKey, n)
+    if (message.size <= blockSize) modulPow(number, publicKey, n).toString
     else {
       // Разбиваем строку, на подстроки по blockSize-символов
       val nums = message.split(s"(?<=\\G.{$blockSize})")
@@ -97,6 +97,18 @@ object RSA {
         modulPow(el.toInt, publicKey, n)
       }.mkString(Splitter)
     }
+  }
+
+  /** Расшифрование числа */
+  def decodeNumber(encodeNumber: String, n: Int, privateKey: Int) = {
+    // Разбиение шифрованной строки на части и расшифровка частей, с последующей склейкой
+    val decodeNumberStr = encodeNumber.split(Splitter).map { el =>
+      log(s"el: $el")
+      modulPow(el.toInt, privateKey, n).toString
+    }.mkString
+    log(s"decodeNumberStr: $decodeNumberStr")
+
+    decodeNumberStr.toInt
   }
 
   /** Шифрование строки */

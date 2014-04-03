@@ -59,6 +59,9 @@ object TestRSA extends App {
 
     val encode = RSA.encode(message, n, publicKey)
     println(s"encode: $encode")
+
+    val decodeNumber = RSA.decodeNumber(encode, n, privateKey)
+    println(s"encode: $decodeNumber")
   }
 
 }
