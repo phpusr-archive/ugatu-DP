@@ -54,14 +54,19 @@ object TestRSA extends App {
   }
 
   def testEncodeDecodeNumbers() {
-    val (n, publicKey, privateKey) = RSA.generateKeys()
-    val message = 12345678
+    var i = 0
+    while (i < 10) {
+      val (n, publicKey, privateKey) = RSA.generateKeys()
+      val message = Math.round(Math.random() * 10000000 + 1).toString
 
-    val encode = RSA.encode(message, n, publicKey)
-    println(s"encode: $encode")
+      val encodeMessage = RSA.encodeNumber(message, n, publicKey)
+      val decodeMessage = RSA.decodeNumber(encodeMessage, n, privateKey)
 
-    val decodeNumber = RSA.decodeNumber(encode, n, privateKey)
-    println(s"encode: $decodeNumber")
+      if (message != decodeMessage) {
+        System.err.println(s"$message != $decodeMessage")
+      }
+      i += 1
+    }
   }
 
 }

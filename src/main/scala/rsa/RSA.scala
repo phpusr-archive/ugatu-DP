@@ -26,7 +26,10 @@ object RSA {
 
   /** Логирование */
   private val debugEnable = true
+  private val traceEnable = false
   private def log(s: String) { if (debugEnable) println(s"LOG:: $s") }
+  private def trace(s: String) { if (traceEnable) println(s"TRACE:: $s") }
+  private def title(s: String) { if (debugEnable) println(s"\n----- $s -----") }
 
   /** Генерация ключей */
   def generateKeys() = {
@@ -82,33 +85,37 @@ object RSA {
   private def getPhi(p: Int, q: Int) = (p-1) * (q-1)
 
   /** Шифрование числа TODO test, rename */
-  def encode(number: Int, n: Int, publicKey: Int) = {
+  def encodeNumber(message: String, n: Int, publicKey: Int) = {
+    title(s"encodeNumber($message)")
+    
+    // Размер блока числа
     val blockSize = n.toString.size - 1
-    val message = number.toString
 
-    if (message.size <= blockSize) modulPow(number, publicKey, n).toString
-    else {
-      // Разбиваем строку, на подстроки по blockSize-символов
-      val nums = message.split(s"(?<=\\G.{$blockSize})")
+    // Разбиваем строку, на подстроки по blockSize-символов
+    val blocks = message.split(s"(?<=\\G.{$blockSize})")
 
-      // Шифрует каждый блок цифр, результаты склеивает
-      nums.map { el =>
-        log(s"el: $el")
-        modulPow(el.toInt, publicKey, n)
-      }.mkString(Splitter)
-    }
+    // Шифрует каждый блок цифр, результаты склеивает
+    val encodeMessage = blocks.map { block =>
+      trace(s"block: $block")
+      modulPow(block.toInt, publicKey, n)
+    }.mkString(Splitter)
+    log(s"encodeMessage: $encodeMessage")
+
+    encodeMessage
   }
 
   /** Расшифрование числа */
-  def decodeNumber(encodeNumber: String, n: Int, privateKey: Int) = {
-    // Разбиение шифрованной строки на части и расшифровка частей, с последующей склейкой
-    val decodeNumberStr = encodeNumber.split(Splitter).map { el =>
-      log(s"el: $el")
-      modulPow(el.toInt, privateKey, n).toString
-    }.mkString
-    log(s"decodeNumberStr: $decodeNumberStr")
+  def decodeNumber(encodeMessage: String, n: Int, privateKey: Int) = {
+    title(s"decodeNumber($encodeMessage)")
 
-    decodeNumberStr.toInt
+    // Разбиение шифрованной строки на части и расшифровка частей, с последующей склейкой
+    val decodeMessage = encodeMessage.split(Splitter).map { el =>
+      trace(s"el: $el")
+      modulPow(el.toInt, privateKey, n).toString //TODO fix lost 0
+    }.mkString
+    log(s"decodeMessage: $decodeMessage")
+
+    decodeMessage
   }
 
   /** Шифрование строки */
