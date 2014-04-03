@@ -83,20 +83,20 @@ object RSA {
 
   /** Шифрование числа TODO test */
   def encode(number: Int, n: Int, publicKey: Int) = {
-    val nStr = n.toString
-    val size = nStr.size - 1
+    val blockSize = n.toString.size - 1
     val message = number.toString
 
-    if (message.size < size) modulPow(number, publicKey, n)
+    if (message.size <= blockSize) modulPow(number, publicKey, n)
     else {
-      val times = Math.round(Math.ceil(message.size / size)).toInt
-      val nums = for (i <- 0 until times) yield message.substring(i*size, (i+1)*size).toInt
+      // Разбиваем строку, на подстроки по blockSize-символов
+      val nums = message.split(s"(?<=\\G.{$blockSize})")
 
-      nums.map { el: Int =>
-        modulPow(el, publicKey, n)
+      // Шифрует каждый блок цифр, результаты склеивает
+      nums.map { el =>
+        log(s"el: $el")
+        modulPow(el.toInt, publicKey, n)
       }.mkString(Splitter)
     }
-
   }
 
   /** Шифрование строки */

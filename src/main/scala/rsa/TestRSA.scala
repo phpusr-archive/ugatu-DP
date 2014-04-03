@@ -55,7 +55,7 @@ object TestRSA extends App {
 
   def testEncodeDecodeNumbers() {
     val (n, publicKey, privateKey) = RSA.generateKeys()
-    val message = 123456
+    val message = 12345678
 
     val encode = RSA.encode(message, n, publicKey)
     println(s"encode: $encode")
