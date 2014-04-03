@@ -32,13 +32,13 @@ object RSA {
   def generateKeys() = {
     l.title("generateKeys")
     val (p, q) = generatePQ(PrimeMaxNumber)
-    l.log(s"p: $p; q: $q")
+    l.debug(s"p: $p; q: $q")
     val n = p * q
     val publicKey = generatePublicKey(p, q, PublicKeyMaxNumber)
     val privateKey = generatePrivateKey(p, q, publicKey)
 
     val keys = (n, publicKey, privateKey)
-    l.log(s"keys: $keys")
+    l.debug(s"keys: $keys")
 
     keys
   }
@@ -97,7 +97,7 @@ object RSA {
       l.trace(s"block: $block")
       modulPow(block.toInt, publicKey, n)
     }.mkString(Splitter)
-    l.log(s"encodeMessage: $encodeMessage")
+    l.debug(s"encodeMessage: $encodeMessage")
 
     encodeMessage
   }
@@ -116,7 +116,7 @@ object RSA {
       val format = s"%0${blockSize}d"
       decodeBlock formatted format
     }.mkString
-    l.log(s"decodeMessage: $decodeMessage")
+    l.debug(s"decodeMessage: $decodeMessage")
 
     decodeMessage
   }
@@ -132,7 +132,7 @@ object RSA {
     val encodeMessage = base64String.getBytes(CharsetNameDefault).map { el =>
       modulPow(el, publicKey, n)
     }.mkString(Splitter)
-    l.log(s"encodeMessage: $encodeMessage")
+    l.debug(s"encodeMessage: $encodeMessage")
 
     encodeMessage
   }
@@ -151,7 +151,7 @@ object RSA {
     l.trace("base64: " + base64String)
 
     val decodeMessage = new String(new BASE64Decoder().decodeBuffer(base64String), CharsetNameDefault)
-    l.log(s"decodeMessage: $decodeMessage")
+    l.debug(s"decodeMessage: $decodeMessage")
 
     decodeMessage
   }

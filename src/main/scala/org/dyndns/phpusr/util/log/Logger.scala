@@ -15,7 +15,7 @@ trait LoggerMixin {
   private val traceEnable = false
 
   def title(s: String) { if (infoEnable) println(s"\n----- $s -----") }
-  def log(s: String) { if (debugEnable) println(s"LOG:: $s") }
+  def debug(s: String) { if (debugEnable) println(s"LOG:: $s") }
   def trace(s: String) { if (traceEnable) println(s"TRACE:: $s") }
 }
 
