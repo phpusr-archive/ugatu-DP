@@ -10,10 +10,12 @@ package org.dyndns.phpusr.util.log
  * Логгер
  */
 trait LoggerMixin {
+  // Log levels
   private val infoEnable = true
   private val debugEnable = true
   private val traceEnable = false
 
+  // Methods logging
   def title(s: String) { if (infoEnable) println(s"\n----- $s -----") }
   def debug(s: String) { if (debugEnable) println(s"LOG:: $s") }
   def trace(s: String) { if (traceEnable) println(s"TRACE:: $s") }
