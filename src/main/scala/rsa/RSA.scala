@@ -33,6 +33,7 @@ object RSA {
 
   /** Генерация ключей */
   def generateKeys() = {
+    title("generateKeys")
     val (p, q) = generatePQ(PrimeMaxNumber)
     log(s"p: $p; q: $q")
     val n = p * q
@@ -108,10 +109,15 @@ object RSA {
   def decodeNumber(encodeMessage: String, n: Int, privateKey: Int) = {
     title(s"decodeNumber($encodeMessage)")
 
+    // Размер блока числа
+    val blockSize = n.toString.size - 1
+
     // Разбиение шифрованной строки на части и расшифровка частей, с последующей склейкой
     val decodeMessage = encodeMessage.split(Splitter).map { el =>
       trace(s"el: $el")
-      modulPow(el.toInt, privateKey, n).toString //TODO fix lost 0
+      val decodeBlock = modulPow(el.toInt, privateKey, n)
+      val format = s"%0${blockSize}d"
+      decodeBlock formatted format
     }.mkString
     log(s"decodeMessage: $decodeMessage")
 

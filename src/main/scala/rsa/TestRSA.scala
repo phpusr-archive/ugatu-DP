@@ -54,8 +54,8 @@ object TestRSA extends App {
   }
 
   def testEncodeDecodeNumbers() {
-    var i = 0
-    while (i < 10) {
+    //TODO иногда глючит, пока не знаю в чем дело
+    for (i <- 1 to 10) {
       val (n, publicKey, privateKey) = RSA.generateKeys()
       val message = Math.round(Math.random() * 10000000 + 1).toString
 
@@ -65,7 +65,6 @@ object TestRSA extends App {
       if (message != decodeMessage) {
         System.err.println(s"$message != $decodeMessage")
       }
-      i += 1
     }
   }
 
