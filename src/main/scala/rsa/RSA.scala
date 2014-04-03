@@ -125,28 +125,38 @@ object RSA {
   }
 
   /** Шифрование строки */
-  def encode(message: String, n: Int, publicKey: Int) = {
-    val base64String = new BASE64Encoder().encode(message.getBytes(CharsetNameDefault))
-    log("base64: " + base64String)
-    log("bytes: " + base64String.getBytes(CharsetNameDefault).mkString(" "))
+  def encodeString(message: String, n: Int, publicKey: Int) = {
+    title(s"encodeString($message)")
 
-    base64String.getBytes.map { el =>
+    val base64String = new BASE64Encoder().encode(message.getBytes(CharsetNameDefault))
+    trace("base64: " + base64String)
+    trace("bytes: " + base64String.getBytes(CharsetNameDefault).mkString(" "))
+
+    val encodeMessage = base64String.getBytes(CharsetNameDefault).map { el =>
       modulPow(el, publicKey, n)
     }.mkString(Splitter)
+    log(s"encodeMessage: $encodeMessage")
+
+    encodeMessage
   }
 
   /** Рашифрование строки */
-  def decode(codeMessage: String, n: Int, privateKey: Int) = {
-    val split = codeMessage.split(Splitter)
-    log(s"split: ${split.mkString(" ")}")
+  def decodeString(encodeMessage: String, n: Int, privateKey: Int) = {
+    title(s"decodeString($encodeMessage)")
+
+    val split = encodeMessage.split(Splitter)
+    trace(s"split: ${split.mkString(" ")}")
     val bytes = split.map { el =>
       modulPow(el.toInt, privateKey, n).toByte
     }
-    log(s"bytes: ${bytes.mkString(" ")}")
+    trace(s"bytes: ${bytes.mkString(" ")}")
     val base64String = new String(bytes, CharsetNameDefault)
-    log("base64: " + base64String)
+    trace("base64: " + base64String)
 
-    new String(new BASE64Decoder().decodeBuffer(base64String), CharsetNameDefault)
+    val decodeMessage = new String(new BASE64Decoder().decodeBuffer(base64String), CharsetNameDefault)
+    log(s"decodeMessage: $decodeMessage")
+
+    decodeMessage
   }
 
   /** Возводит число в степень и находит остаток от деления на каждой итерации */
