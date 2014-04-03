@@ -3,6 +3,7 @@ package rsa
 import euclide.Euclide
 import prime.Prime
 import sun.misc.{BASE64Decoder, BASE64Encoder}
+import org.dyndns.phpusr.util.log.Logger
 
 /**
  * @author phpusr
@@ -25,23 +26,19 @@ object RSA {
   private val CharsetNameDefault = "utf8"
 
   /** Логирование */
-  private val debugEnable = true
-  private val traceEnable = false
-  private def log(s: String) { if (debugEnable) println(s"LOG:: $s") }
-  private def trace(s: String) { if (traceEnable) println(s"TRACE:: $s") }
-  private def title(s: String) { if (debugEnable) println(s"\n----- $s -----") }
+  private val l = Logger()
 
   /** Генерация ключей */
   def generateKeys() = {
-    title("generateKeys")
+    l.title("generateKeys")
     val (p, q) = generatePQ(PrimeMaxNumber)
-    log(s"p: $p; q: $q")
+    l.log(s"p: $p; q: $q")
     val n = p * q
     val publicKey = generatePublicKey(p, q, PublicKeyMaxNumber)
     val privateKey = generatePrivateKey(p, q, publicKey)
 
     val keys = (n, publicKey, privateKey)
-    log(s"keys: $keys")
+    l.log(s"keys: $keys")
 
     keys
   }
@@ -87,7 +84,7 @@ object RSA {
 
   /** Шифрование числа TODO test, rename */
   def encodeNumber(message: String, n: Int, publicKey: Int) = {
-    title(s"encodeNumber($message)")
+    l.title(s"encodeNumber($message)")
     
     // Размер блока числа
     val blockSize = n.toString.size - 1
@@ -97,64 +94,64 @@ object RSA {
 
     // Шифрует каждый блок цифр, результаты склеивает
     val encodeMessage = blocks.map { block =>
-      trace(s"block: $block")
+      l.trace(s"block: $block")
       modulPow(block.toInt, publicKey, n)
     }.mkString(Splitter)
-    log(s"encodeMessage: $encodeMessage")
+    l.log(s"encodeMessage: $encodeMessage")
 
     encodeMessage
   }
 
   /** Расшифрование числа */
   def decodeNumber(encodeMessage: String, n: Int, privateKey: Int) = {
-    title(s"decodeNumber($encodeMessage)")
+    l.title(s"decodeNumber($encodeMessage)")
 
     // Размер блока числа
     val blockSize = n.toString.size - 1
 
     // Разбиение шифрованной строки на части и расшифровка частей, с последующей склейкой
     val decodeMessage = encodeMessage.split(Splitter).map { el =>
-      trace(s"el: $el")
+      l.trace(s"el: $el")
       val decodeBlock = modulPow(el.toInt, privateKey, n)
       val format = s"%0${blockSize}d"
       decodeBlock formatted format
     }.mkString
-    log(s"decodeMessage: $decodeMessage")
+    l.log(s"decodeMessage: $decodeMessage")
 
     decodeMessage
   }
 
   /** Шифрование строки */
   def encodeString(message: String, n: Int, publicKey: Int) = {
-    title(s"encodeString($message)")
+    l.title(s"encodeString($message)")
 
     val base64String = new BASE64Encoder().encode(message.getBytes(CharsetNameDefault))
-    trace("base64: " + base64String)
-    trace("bytes: " + base64String.getBytes(CharsetNameDefault).mkString(" "))
+    l.trace("base64: " + base64String)
+    l.trace("bytes: " + base64String.getBytes(CharsetNameDefault).mkString(" "))
 
     val encodeMessage = base64String.getBytes(CharsetNameDefault).map { el =>
       modulPow(el, publicKey, n)
     }.mkString(Splitter)
-    log(s"encodeMessage: $encodeMessage")
+    l.log(s"encodeMessage: $encodeMessage")
 
     encodeMessage
   }
 
   /** Рашифрование строки */
   def decodeString(encodeMessage: String, n: Int, privateKey: Int) = {
-    title(s"decodeString($encodeMessage)")
+    l.title(s"decodeString($encodeMessage)")
 
     val split = encodeMessage.split(Splitter)
-    trace(s"split: ${split.mkString(" ")}")
+    l.trace(s"split: ${split.mkString(" ")}")
     val bytes = split.map { el =>
       modulPow(el.toInt, privateKey, n).toByte
     }
-    trace(s"bytes: ${bytes.mkString(" ")}")
+    l.trace(s"bytes: ${bytes.mkString(" ")}")
     val base64String = new String(bytes, CharsetNameDefault)
-    trace("base64: " + base64String)
+    l.trace("base64: " + base64String)
 
     val decodeMessage = new String(new BASE64Decoder().decodeBuffer(base64String), CharsetNameDefault)
-    log(s"decodeMessage: $decodeMessage")
+    l.log(s"decodeMessage: $decodeMessage")
 
     decodeMessage
   }
