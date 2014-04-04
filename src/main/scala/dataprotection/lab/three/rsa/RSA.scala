@@ -4,6 +4,7 @@ import dataprotection.lab.three.euclide.Euclide
 import dataprotection.lab.three.prime.Prime
 import sun.misc.{BASE64Decoder, BASE64Encoder}
 import org.dyndns.phpusr.util.log.Logger
+import scala.annotation.tailrec
 
 /**
  * @author phpusr
@@ -117,24 +118,20 @@ object RSA {
       val format = s"%0${blockSize}d"
       decodeBlock formatted format
     }.mkString
+    l.trace(s"decodeMessageWithZeros: $decodeMessageWithZeros")
 
     // Избавление от нулей в начале
-    val decodeMessage = removeZeros(decodeMessageWithZeros)
+    val decodeMessage = removeFirstZeros(decodeMessageWithZeros)
     l.debug(s"decodeMessage: $decodeMessage")
 
     decodeMessage
   }
 
   /** Избавление от нулей в начале */
-  private def removeZeros(decodeMessageWithZeros: String) {
-    l.trace(s"decodeMessageWithZeros: $decodeMessageWithZeros")
-    var sym = '0'
-    var countZero = -1
-    do {
-      countZero += 1
-      sym = decodeMessageWithZeros.charAt(countZero)
-    } while(sym == '0')
-    decodeMessageWithZeros.substring(countZero)
+  @tailrec
+  private def removeFirstZeros(str: String): String = {
+    if (str.size == 0 || str.head != '0') str
+    else removeFirstZeros(str.tail)
   }
 
   /** Шифрование строки */
