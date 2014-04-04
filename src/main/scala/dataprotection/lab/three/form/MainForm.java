@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
  *         Time: 11:31
  */
 
-public class TestForm extends JFrame {
+public class MainForm extends JFrame {
     private JPanel rootPanel;
     private JPanel keysPanel;
     private JPanel btnsPanel;
@@ -32,7 +32,7 @@ public class TestForm extends JFrame {
     private JButton decodeButton;
     private JButton exitButton;
 
-    public TestForm () {
+    public MainForm() {
         super("RSA");
         setContentPane(rootPanel);
         setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
@@ -122,6 +122,6 @@ public class TestForm extends JFrame {
 
 
     public static void main(String[] args) {
-        new TestForm();
+        new MainForm();
     }
 }
