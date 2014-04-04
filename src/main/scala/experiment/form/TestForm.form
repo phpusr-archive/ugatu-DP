@@ -27,7 +27,7 @@
               <text value="Public Key"/>
             </properties>
           </component>
-          <component id="66742" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+          <component id="66742" class="javax.swing.JTextField" binding="publicKeyTextField">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -35,7 +35,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="4715d" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+          <component id="4715d" class="javax.swing.JTextField" binding="nTextField">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -52,7 +52,7 @@
               <text value="n"/>
             </properties>
           </component>
-          <component id="fc593" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+          <component id="fc593" class="javax.swing.JTextField" binding="privateKeyTextField">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -125,19 +125,9 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="96106" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+          <component id="96106" class="javax.swing.JTextArea" binding="decodeMessagetextArea">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="50"/>
-              </grid>
-            </constraints>
-            <properties>
-              <lineWrap value="true"/>
-            </properties>
-          </component>
-          <component id="68b5d" class="javax.swing.JTextArea" binding="textArea2" default-binding="true">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="50"/>
               </grid>
             </constraints>
@@ -177,6 +167,16 @@
             <properties>
               <font size="12" style="1"/>
               <text value="Encode message"/>
+            </properties>
+          </component>
+          <component id="68b5d" class="javax.swing.JTextArea" binding="encodeMessagetextArea">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <lineWrap value="true"/>
             </properties>
           </component>
         </children>

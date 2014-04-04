@@ -1,6 +1,11 @@
 package experiment.form;
 
+import dataprotection.lab.three.rsa.RSA;
+import scala.Tuple3;
+
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author phpusr
@@ -10,30 +15,109 @@ import javax.swing.*;
 
 public class TestForm extends JFrame {
     private JPanel rootPanel;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
     private JPanel keysPanel;
     private JPanel btnsPanel;
     private JPanel messagePanel;
-    private JTextArea textArea1;
-    private JTextArea textArea2;
+
+    private JTextField publicKeyTextField;
+    private JTextField nTextField;
+    private JTextField privateKeyTextField;
+    private JTextArea decodeMessagetextArea;
+    private JTextArea encodeMessagetextArea;
+
+    private JCheckBox numberCheckBox;
+
     private JButton generateKeysButton;
     private JButton encodeButton;
     private JButton decodeButton;
-    private JCheckBox numberCheckBox;
     private JButton exitButton;
 
     public TestForm () {
-        super("Main Form" );
+        super("RSA");
         setContentPane(rootPanel);
         setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
         pack();
-        //setSize(600, 500);
+        setLocationRelativeTo(null);
 
-        // Actions...
+        initListeners();
 
-        setVisible (true);
+        setVisible(true);
+    }
+
+    // Инициализация обработчиков событий
+    private void initListeners() {
+        // Генерация ключей
+        generateKeysButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Tuple3<Object,Object,Object> keys = RSA.generateKeys();
+                publicKeyTextField.setText(keys._1().toString());
+                nTextField.setText(keys._2().toString());
+                privateKeyTextField.setText(keys._3().toString());
+            }
+        });
+
+        // Шифрование
+        encodeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String encodeMessage = null;
+                if (isNumberMessage()) {
+                    encodeMessage = RSA.encodeNumber(getDecodeMessage(), getN(), getPublicKey());
+                } else {
+                    encodeMessage = RSA.encodeString(getDecodeMessage(), getN(), getPublicKey());
+                }
+
+                encodeMessagetextArea.setText(encodeMessage);
+            }
+        });
+
+        // Расшифрование
+        decodeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String decodeMessage = null;
+                if (isNumberMessage()) {
+                    decodeMessage = RSA.decodeNumber(getEncodeMessage(), getN(), getPrivateKey());
+                } else {
+                    decodeMessage = RSA.decodeString(getEncodeMessage(), getN(), getPrivateKey());
+                }
+
+                decodeMessagetextArea.setText(decodeMessage);
+            }
+        });
+
+        // Выход из программы
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+
+    private boolean isNumberMessage() {
+        return numberCheckBox.isSelected();
+    }
+
+    private String getDecodeMessage() {
+        return decodeMessagetextArea.getText();
+    }
+
+    private String getEncodeMessage() {
+        return encodeMessagetextArea.getText();
+    }
+
+    private int getPublicKey() {
+        return Integer.parseInt(publicKeyTextField.getText());
+    }
+
+    private int getN() {
+        return Integer.parseInt(nTextField.getText());
+    }
+
+    private int getPrivateKey() {
+        return Integer.parseInt(privateKeyTextField.getText());
     }
 
 
