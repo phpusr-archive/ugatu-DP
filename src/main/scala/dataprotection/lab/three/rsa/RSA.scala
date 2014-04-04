@@ -90,7 +90,8 @@ object RSA {
     val blockSize = n.toString.size - 1
 
     // Разбиваем строку, на подстроки по blockSize-символов
-    val blocks = message.split(s"(?<=\\G.{$blockSize})")
+    val reverseblocks = message.reverse.split(s"(?<=\\G.{$blockSize})")
+    val blocks = reverseblocks.reverse.map {el => el.reverse}
 
     // Шифрует каждый блок цифр, результаты склеивает
     val encodeMessage = blocks.map { block =>
@@ -110,15 +111,30 @@ object RSA {
     val blockSize = n.toString.size - 1
 
     // Разбиение шифрованной строки на части и расшифровка частей, с последующей склейкой
-    val decodeMessage = encodeMessage.split(Splitter).map { el =>
+    val decodeMessageWithZeros = encodeMessage.split(Splitter).map { el =>
       l.trace(s"el: $el")
       val decodeBlock = modulPow(el.toInt, privateKey, n)
       val format = s"%0${blockSize}d"
       decodeBlock formatted format
     }.mkString
+
+    // Избавление от нулей в начале
+    val decodeMessage = removeZeros(decodeMessageWithZeros)
     l.debug(s"decodeMessage: $decodeMessage")
 
     decodeMessage
+  }
+
+  /** Избавление от нулей в начале */
+  private def removeZeros(decodeMessageWithZeros: String) {
+    l.trace(s"decodeMessageWithZeros: $decodeMessageWithZeros")
+    var sym = '0'
+    var countZero = -1
+    do {
+      countZero += 1
+      sym = decodeMessageWithZeros.charAt(countZero)
+    } while(sym == '0')
+    decodeMessageWithZeros.substring(countZero)
   }
 
   /** Шифрование строки */
