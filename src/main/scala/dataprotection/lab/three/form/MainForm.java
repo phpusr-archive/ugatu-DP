@@ -13,6 +13,9 @@ import java.awt.event.ActionListener;
  *         Time: 11:31
  */
 
+/**
+ * Главная форма Шифратора/Дешифратора
+ */
 public class MainForm extends JFrame {
     private JPanel rootPanel;
     private JPanel keysPanel;
