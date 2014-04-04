@@ -49,7 +49,7 @@ object RSA_App extends App {
 
   /**
    * Реализация RSA на основе статьи
-   * http://landrina.ru/development/c-sharp-realizaciya-dataprotection.lab.three.rsa/
+   * <a href="http://landrina.ru/development/c-sharp-realizaciya-rsa/">link</a>
    */
   private def ladrina() {
     println("\nladrina()")
