@@ -51,8 +51,8 @@ public class TestForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Tuple3<Object,Object,Object> keys = RSA.generateKeys();
-                publicKeyTextField.setText(keys._1().toString());
-                nTextField.setText(keys._2().toString());
+                nTextField.setText(keys._1().toString());
+                publicKeyTextField.setText(keys._2().toString());
                 privateKeyTextField.setText(keys._3().toString());
             }
         });
@@ -108,12 +108,12 @@ public class TestForm extends JFrame {
         return encodeMessagetextArea.getText();
     }
 
-    private int getPublicKey() {
-        return Integer.parseInt(publicKeyTextField.getText());
-    }
-
     private int getN() {
         return Integer.parseInt(nTextField.getText());
+    }
+
+    private int getPublicKey() {
+        return Integer.parseInt(publicKeyTextField.getText());
     }
 
     private int getPrivateKey() {
