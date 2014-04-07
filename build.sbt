@@ -25,6 +25,6 @@ packageOptions in (Compile, packageBin) +=  {
   val manifest = new Manifest
   val mainAttributes = manifest.getMainAttributes
   mainAttributes.put(Attributes.Name.MAIN_CLASS, "experiment.form.MainForm")
-  mainAttributes.put("Author", "phpusr") // TODO выяснить почему нельзя поставить
+  //mainAttributes.put("Author", "phpusr") // TODO выяснить почему нельзя поставить
   Package.JarManifest( manifest )
 }
