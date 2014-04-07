@@ -1,8 +1,6 @@
 package experiment.form
 
 import scala.swing._
-import java.awt.Color
-import javax.swing.SpringLayout.Constraints
 import scala.swing.event.ButtonClicked
 import dataprotection.lab.three.rsa.RSA
 
@@ -22,11 +20,22 @@ object MainForm extends SimpleSwingApplication {
   private val exitButton = new Button("Exit") {
     preferredSize = new Dimension(150, 25)
   }
+  /** Кнопка шифрования сообщения */
+  private val encodeButton = new Button("Encode")
+  /** Кнопка рашифрования сообщения */
+  private val decodeButton = new Button("Decode")
 
   // Поля ввода ключей
   private val nTextField = defaultTextField
   private val publicKeyTextField = defaultTextField
   private val privateKeyTextField = defaultTextField
+
+  // Поля ввода сообщений
+  private val decodeMessageTextArea = new TextArea
+  private val encodeMessageTextArea = new TextArea
+
+  /** Является-ли сообщение числом */
+  private val numberCheckBox = new CheckBox("Number")
 
   /** Генерация текстового поля по умолчанию */
   private def defaultTextField = new TextField {
@@ -69,13 +78,13 @@ object MainForm extends SimpleSwingApplication {
         c.gridy = 1
         c.weighty = 1
         c.fill = GridBagPanel.Fill.Both
-        layout(new TextArea) = c
-        layout(new TextArea) = c
+        layout(decodeMessageTextArea) = c
+        layout(encodeMessageTextArea) = c
 
         c.gridy = 2
         c.weighty = 0
-        layout(new Button("Encode")) = c
-        layout(new Button("Decode")) = c
+        layout(encodeButton) = c
+        layout(decodeButton) = c
       }) = Center
 
       // Нижняя панель
@@ -97,6 +106,8 @@ object MainForm extends SimpleSwingApplication {
 
   listenTo(generateKeysButton)
   listenTo(exitButton)
+  listenTo(encodeButton, decodeButton)
+
   reactions += {
     case ButtonClicked(`generateKeysButton`) =>
       val (n, publicKey, privateKey) = RSA.generateKeys()
@@ -104,6 +115,21 @@ object MainForm extends SimpleSwingApplication {
       publicKeyTextField.text = publicKey.toString
       privateKeyTextField.text = privateKey.toString
 
+    // Шифрование
+    case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
+      encodeMessageTextArea.text = RSA.encodeNumber(decodeMessageTextArea.text, nTextField.text.toInt, publicKeyTextField.text.toInt)
+    } else {
+      encodeMessageTextArea.text = RSA.encodeString(decodeMessageTextArea.text, nTextField.text.toInt, publicKeyTextField.text.toInt)
+    }
+
+    // Расшифрование
+    case ButtonClicked(`decodeButton`) => if (numberCheckBox.selected) {
+      decodeMessageTextArea.text = RSA.decodeNumber(encodeMessageTextArea.text, nTextField.text.toInt, privateKeyTextField.text.toInt)
+    } else {
+      decodeMessageTextArea.text = RSA.decodeString(encodeMessageTextArea.text, nTextField.text.toInt, privateKeyTextField.text.toInt)
+    }
+
+    // Выход
     case ButtonClicked(`exitButton`) => System.exit(0)
   }
 
