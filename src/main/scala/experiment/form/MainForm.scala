@@ -1,17 +1,37 @@
 package experiment.form
 
 import scala.swing._
-import javax.swing.BorderFactory
-import java.awt.{Color, Paint}
-import com.sun.javafx.sg.Border
+import java.awt.Color
 import javax.swing.SpringLayout.Constraints
+import scala.swing.event.ButtonClicked
+import dataprotection.lab.three.rsa.RSA
 
 /**
  * @author phpusr
  *         Date: 05.04.14
  *         Time: 13:24
  */
+
+/**
+ * Главная форма
+ */
 object MainForm extends SimpleSwingApplication {
+  /** Кнопка генерации ключей */
+  private val generateKeysButton = new Button("Generate Keys")
+  /** Кнопка выхода из программы */
+  private val exitButton = new Button("Exit") {
+    preferredSize = new Dimension(150, 25)
+  }
+
+  // Поля ввода ключей
+  private val nTextField = defaultTextField
+  private val publicKeyTextField = defaultTextField
+  private val privateKeyTextField = defaultTextField
+
+  /** Генерация текстового поля по умолчанию */
+  private def defaultTextField = new TextField {
+    preferredSize = new Dimension(150, 20)
+  }
 
   def top = new MainFrame {
 
@@ -24,20 +44,17 @@ object MainForm extends SimpleSwingApplication {
         c.insets = new Insets(5, 5, 5, 5)
         c.weightx = 0.333
         layout(new Label("Public Key")) = c
-        layout(new Label("Public Key")) = c
-        layout(new Label("Public Key")) = c
+        layout(new Label("n")) = c
+        layout(new Label("Private Key")) = c
 
         c.gridy = 1
-        def text = new TextField {
-          preferredSize = new Dimension(150, 20)
-        }
-        layout(text) = c
-        layout(text) = c
-        layout(text) = c
+        layout(publicKeyTextField) = c
+        layout(nTextField) = c
+        layout(privateKeyTextField) = c
 
         c.gridx = 1
         c.gridy = 2
-        layout(new Button("Generate Keys")) = c
+        layout(generateKeysButton) = c
       }) = North
 
       // Центральная панель
@@ -70,14 +87,24 @@ object MainForm extends SimpleSwingApplication {
         layout(new CheckBox("Number")) = c
 
         c.anchor = GridBagPanel.Anchor.East
-        layout(new Button("Exit") {
-          preferredSize = new Dimension(150, 25)
-        }) = c
+        layout(exitButton) = c
       }) = South
     }
 
     peer.setLocationRelativeTo(null)
     size = new Dimension(600, 400)
+  }
+
+  listenTo(generateKeysButton)
+  listenTo(exitButton)
+  reactions += {
+    case ButtonClicked(`generateKeysButton`) =>
+      val (n, publicKey, privateKey) = RSA.generateKeys()
+      nTextField.text = n.toString
+      publicKeyTextField.text = publicKey.toString
+      privateKeyTextField.text = privateKey.toString
+
+    case ButtonClicked(`exitButton`) => System.exit(0)
   }
 
 }
