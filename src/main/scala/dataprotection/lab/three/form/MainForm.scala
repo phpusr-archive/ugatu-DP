@@ -26,8 +26,11 @@ object MainForm extends SimpleSwingApplication {
   private val decodeButton = new Button("Decode")
 
   // Поля ввода ключей
-  private val nTextField = defaultTextField
+  private val generatePublicKeyButton = defaultGenerateButton
   private val publicKeyTextField = defaultTextField
+  private val generateNButton = defaultGenerateButton
+  private val nTextField = defaultTextField
+  private val generatePrivateKeyButton = defaultGenerateButton
   private val privateKeyTextField = defaultTextField
 
   // Поля ввода сообщений
@@ -43,6 +46,12 @@ object MainForm extends SimpleSwingApplication {
   }
   private def defaultTextArea = new TextArea {
     lineWrap = true
+    preferredSize = new Dimension(1, 200)
+  }
+  private def defaultGenerateButton = new Button("Gen")
+  private def defaultGeneratePanel(button: Button, textField: TextField) = new FlowPanel {
+    contents += button
+    contents += textField
   }
 
   def top = new MainFrame {
@@ -53,19 +62,21 @@ object MainForm extends SimpleSwingApplication {
       // Верхняя панель
       layout(new GridBagPanel {
         val c = new Constraints
-        c.insets = new Insets(5, 5, 5, 5)
+        c.insets = new Insets(20, 5, 0, 5)
         c.weightx = 0.333
         layout(new Label("Public Key")) = c
         layout(new Label("n")) = c
         layout(new Label("Private Key")) = c
 
         c.gridy = 1
-        layout(publicKeyTextField) = c
-        layout(nTextField) = c
-        layout(privateKeyTextField) = c
+        c.insets = new Insets(0, 5, 0, 5)
+        layout(defaultGeneratePanel(generatePublicKeyButton, publicKeyTextField)) = c
+        layout(defaultGeneratePanel(generateNButton, nTextField)) = c
+        layout(defaultGeneratePanel(generatePrivateKeyButton, privateKeyTextField)) = c
 
         c.gridx = 1
         c.gridy = 2
+        c.insets = new Insets(5, 5, 5, 5)
         layout(generateKeysButton) = c
       }) = North
 
@@ -104,7 +115,6 @@ object MainForm extends SimpleSwingApplication {
     }
 
     peer.setLocationRelativeTo(null)
-    size = new Dimension(600, 400)
   }
 
   listenTo(generateKeysButton)
