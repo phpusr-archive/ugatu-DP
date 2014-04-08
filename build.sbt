@@ -1,16 +1,6 @@
-import sbt.Package._
 import scala.Some
 
-// Notes on syntax
-//  - settings are initialized with :=
-//  - dependency paths given by %
-//  - dependency paths against specific scala versions are given by %%
-
 name := "RSA"
-
-//organization := "org.dyndns.phpusr"
-
-//version := "1.0"
 
 val runClass = "experiment.form.MainForm"
 
@@ -30,17 +20,3 @@ libraryDependencies += "org.scala-lang" % "scala-swing" % scalaVersion.value
 lazy val runApp = TaskKey[Unit]("run-app", "A custom run task.")
 
 fullRunTask(runApp, Test, runClass)
-
-// Additional manifest attributes
-packageOptions := Seq(ManifestAttributes(
-  ("Main-Class", "Googoosha1"),
-  ("Author", "phpusr")
-))
-
-// Set Main-Class in jar
-packageOptions in (Compile, packageBin) +=  {
-  import java.util.jar.{Attributes, Manifest}
-  val manifest = new Manifest
-  manifest.getMainAttributes.put(Attributes.Name.MAIN_CLASS, "Googoosha2")
-  Package.JarManifest(manifest)
-}
