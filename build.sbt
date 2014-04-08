@@ -11,7 +11,10 @@ name := "RSA"
 
 val runClass = "experiment.form.MainForm"
 
-mainClass := Some(runClass)
+// sbt-onejar (https://github.com/sbt/sbt-onejar)
+com.github.retronym.SbtOneJar.oneJarSettings
+
+mainClass in Compile := Some(runClass)
 
 scalaVersion := "2.10.3"
 
