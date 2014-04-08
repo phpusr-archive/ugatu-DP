@@ -93,7 +93,7 @@ object MainForm extends SimpleSwingApplication {
         c.insets = new Insets(5, 5, 5, 5)
         c.anchor = GridBagPanel.Anchor.West
         c.weightx = 0.5
-        layout(new CheckBox("Number")) = c
+        layout(numberCheckBox) = c
 
         c.anchor = GridBagPanel.Anchor.East
         layout(exitButton) = c
