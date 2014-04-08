@@ -11,23 +11,14 @@ name := "RSA"
 
 val runClass = "experiment.form.MainForm"
 
+mainClass := Some(runClass)
+
 scalaVersion := "2.10.3"
 
 javacOptions ++= Seq("-encoding", "UTF-8")
- 
+
 //libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.0" % "test" TODO тесты
-libraryDependencies += "org.scala-lang" % "scala-swing" % "2.10.3"
-
-exportJars := true
-
-packageOptions in (Compile, packageBin) +=  {
-  import java.util.jar.{Attributes, Manifest}
-  val manifest = new Manifest
-  val mainAttributes = manifest.getMainAttributes
-  mainAttributes.put(Attributes.Name.MAIN_CLASS, runClass)
-  //mainAttributes.put("Author", "phpusr") // TODO выяснить почему нельзя поставить
-  Package.JarManifest(manifest) //TODO засунуть либы, чтобы запускался через jar
-}
+libraryDependencies += "org.scala-lang" % "scala-swing" % scalaVersion.value
 
 // Run task
 lazy val runapp = taskKey[Unit]("A custom run task.")
