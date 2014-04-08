@@ -1,4 +1,4 @@
-package experiment.form
+package dataprotection.lab.three.form
 
 import scala.swing._
 import scala.swing.event.ButtonClicked
