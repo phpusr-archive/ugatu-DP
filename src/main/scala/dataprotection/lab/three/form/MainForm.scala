@@ -46,12 +46,18 @@ object MainForm extends SimpleSwingApplication {
   }
   private def defaultTextArea = new TextArea {
     lineWrap = true
-    preferredSize = new Dimension(1, 200)
+    preferredSize = new Dimension(300, 200)
   }
   private def defaultGenerateButton = new Button("Gen")
-  private def defaultGeneratePanel(button: Button, textField: TextField) = new FlowPanel {
-    contents += button
-    contents += textField
+  private def defaultGeneratePanel(labelText: String, button: Button, textField: TextField) = new GridBagPanel {
+    val c = new Constraints
+    c.insets = new Insets(0, 5, 0, 5)
+    c.gridwidth = 2
+    layout(new Label(labelText)) = c
+    c.gridy = 1
+    c.gridwidth = 1
+    layout(button) = c
+    layout(textField) = c
   }
 
   def top = new MainFrame {
@@ -62,21 +68,21 @@ object MainForm extends SimpleSwingApplication {
       // Верхняя панель
       layout(new GridBagPanel {
         val c = new Constraints
-        c.insets = new Insets(20, 5, 0, 5)
-        c.weightx = 0.333
-        layout(new Label("Public Key")) = c
-        layout(new Label("n")) = c
-        layout(new Label("Private Key")) = c
+        c.insets = new Insets(15, 5, 5, 5)
+        c.weightx = 0.5
+        layout(defaultGeneratePanel("n", generateNButton, nTextField)) = c
+        layout(defaultGeneratePanel("Public Key", generatePublicKeyButton, publicKeyTextField)) = c
 
-        c.gridy = 1
-        c.insets = new Insets(0, 5, 0, 5)
-        layout(defaultGeneratePanel(generatePublicKeyButton, publicKeyTextField)) = c
-        layout(defaultGeneratePanel(generateNButton, nTextField)) = c
-        layout(defaultGeneratePanel(generatePrivateKeyButton, privateKeyTextField)) = c
-
-        c.gridx = 1
-        c.gridy = 2
         c.insets = new Insets(5, 5, 5, 5)
+        c.gridx = 1
+        c.gridy = 1
+        layout(defaultGeneratePanel("Private Key", generatePrivateKeyButton, privateKeyTextField)) = c
+
+        // Кнопка: Generate Keys
+        c.gridx = 0
+        c.gridy = 2
+        c.gridwidth = 2
+        c.insets = new Insets(10, 5, 5, 5)
         layout(generateKeysButton) = c
       }) = North
 
@@ -127,6 +133,12 @@ object MainForm extends SimpleSwingApplication {
       nTextField.text = n.toString
       publicKeyTextField.text = publicKey.toString
       privateKeyTextField.text = privateKey.toString
+
+    case ButtonClicked(`generatePublicKeyButton`) =>
+      publicKeyTextField.text = RSA.generatePublicKey().toString
+
+    case ButtonClicked(`generateNButton`) =>
+
 
     // Шифрование
     case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
