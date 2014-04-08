@@ -136,6 +136,8 @@ object MainForm extends SimpleSwingApplication {
   listenTo(generateKeysButton)
   listenTo(exitButton)
   listenTo(encodeButton, decodeButton)
+  listenTo(generatePButton, generateQButton, generateNButton)
+  listenTo(generatePublicKeyButton, generatePrivateKeyButton)
 
   reactions += {
     case ButtonClicked(`generateKeysButton`) =>
@@ -145,10 +147,12 @@ object MainForm extends SimpleSwingApplication {
       privateKeyTextField.text = privateKey.toString
 
     case ButtonClicked(`generatePublicKeyButton`) =>
-      publicKeyTextField.text = RSA.generatePublicKey().toString
+      val p = pTextField.text.toInt
+      val q = qTextField.text.toInt
+      publicKeyTextField.text = RSA.generatePublicKey(p, q, RSA.PublicKeyMaxNumber).toString
 
     case ButtonClicked(`generateNButton`) =>
-
+      // TODO continue
 
     // Шифрование
     case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
