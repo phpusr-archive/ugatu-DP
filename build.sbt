@@ -2,7 +2,7 @@ import scala.Some
 
 name := "RSA"
 
-val runClass = "experiment.form.MainForm"
+val runClass = "dataprotection.lab.three.run.Main"
 
 scalaVersion := "2.10.3"
 
