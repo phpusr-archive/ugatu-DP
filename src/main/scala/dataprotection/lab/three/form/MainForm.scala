@@ -15,7 +15,9 @@ import dataprotection.lab.three.rsa.RSA
  */
 object MainForm extends SimpleSwingApplication {
   /** Кнопка генерации ключей */
-  private val generateKeysButton = new Button("Generate Keys")
+  private val generateKeysButton = new Button("Generate Keys") {
+    preferredSize = new Dimension(200, 30)
+  }
   /** Кнопка выхода из программы */
   private val exitButton = new Button("Exit") {
     preferredSize = new Dimension(150, 25)
@@ -25,11 +27,17 @@ object MainForm extends SimpleSwingApplication {
   /** Кнопка рашифрования сообщения */
   private val decodeButton = new Button("Decode")
 
+  // Поля ввода: p, q, n
+  private val generatePButton = defaultGenerateButton
+  private val pTextField = defaultTextField
+  private val generateQButton = defaultGenerateButton
+  private val qTextField = defaultTextField
+  private val generateNButton = defaultGenerateButton
+  private val nTextField = defaultTextField
+
   // Поля ввода ключей
   private val generatePublicKeyButton = defaultGenerateButton
   private val publicKeyTextField = defaultTextField
-  private val generateNButton = defaultGenerateButton
-  private val nTextField = defaultTextField
   private val generatePrivateKeyButton = defaultGenerateButton
   private val privateKeyTextField = defaultTextField
 
@@ -50,10 +58,13 @@ object MainForm extends SimpleSwingApplication {
   }
   private def defaultGenerateButton = new Button("Gen")
   private def defaultGeneratePanel(labelText: String, button: Button, textField: TextField) = new GridBagPanel {
+    // Лейбл
     val c = new Constraints
     c.insets = new Insets(0, 5, 0, 5)
     c.gridwidth = 2
     layout(new Label(labelText)) = c
+
+    // Кнопка и текстовое поле
     c.gridy = 1
     c.gridwidth = 1
     layout(button) = c
@@ -74,15 +85,14 @@ object MainForm extends SimpleSwingApplication {
         layout(defaultGeneratePanel("Public Key", generatePublicKeyButton, publicKeyTextField)) = c
 
         c.insets = new Insets(5, 5, 5, 5)
-        c.gridx = 1
         c.gridy = 1
+        layout(defaultGeneratePanel("p", generatePButton, pTextField)) = c
         layout(defaultGeneratePanel("Private Key", generatePrivateKeyButton, privateKeyTextField)) = c
 
-        // Кнопка: Generate Keys
-        c.gridx = 0
+        c.insets = new Insets(5, 5, 15, 5)
         c.gridy = 2
-        c.gridwidth = 2
-        c.insets = new Insets(10, 5, 5, 5)
+        layout(defaultGeneratePanel("q", generateQButton, qTextField)) = c
+        c.anchor = GridBagPanel.Anchor.South
         layout(generateKeysButton) = c
       }) = North
 
