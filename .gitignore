@@ -2,10 +2,8 @@
 /*.iml
 /out
 
-/.gradle
-/build
-/gradle
-/gradlew
-/gradlew.bat
+/target
+/project/target
+/project/project
 
 *.sc
