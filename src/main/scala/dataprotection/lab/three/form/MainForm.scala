@@ -31,15 +31,18 @@ object MainForm extends SimpleSwingApplication {
   private val privateKeyTextField = defaultTextField
 
   // Поля ввода сообщений
-  private val decodeMessageTextArea = new TextArea
-  private val encodeMessageTextArea = new TextArea
+  private val decodeMessageTextArea = defaultTextArea
+  private val encodeMessageTextArea = defaultTextArea
 
   /** Является-ли сообщение числом */
   private val numberCheckBox = new CheckBox("Number")
 
-  /** Генерация текстового поля по умолчанию */
+  // Генерация компонентов по умолчанию
   private def defaultTextField = new TextField {
-    preferredSize = new Dimension(150, 20)
+    preferredSize = new Dimension(150, 30)
+  }
+  private def defaultTextArea = new TextArea {
+    lineWrap = true
   }
 
   def top = new MainFrame {
