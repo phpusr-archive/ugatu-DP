@@ -1,3 +1,6 @@
+import sbt.Package._
+import scala.Some
+
 // Notes on syntax
 //  - settings are initialized with :=
 //  - dependency paths given by %
@@ -23,7 +26,21 @@ javacOptions ++= Seq("-encoding", "UTF-8")
 //libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.0" % "test" TODO тесты
 libraryDependencies += "org.scala-lang" % "scala-swing" % scalaVersion.value
 
-// Run task
-lazy val runapp = taskKey[Unit]("A custom run task.")
+// Run task (run-app, runApp)
+lazy val runApp = TaskKey[Unit]("run-app", "A custom run task.")
 
-fullRunTask(runapp, Test, runClass)
+fullRunTask(runApp, Test, runClass)
+
+// Additional manifest attributes
+packageOptions := Seq(ManifestAttributes(
+  ("Main-Class", "Googoosha1"),
+  ("Author", "phpusr")
+))
+
+// Set Main-Class in jar
+packageOptions in (Compile, packageBin) +=  {
+  import java.util.jar.{Attributes, Manifest}
+  val manifest = new Manifest
+  manifest.getMainAttributes.put(Attributes.Name.MAIN_CLASS, "Googoosha2")
+  Package.JarManifest(manifest)
+}
