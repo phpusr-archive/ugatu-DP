@@ -5,6 +5,7 @@ import dataprotection.lab.three.prime.Prime
 import sun.misc.{BASE64Decoder, BASE64Encoder}
 import org.dyndns.phpusr.util.log.Logger
 import scala.annotation.tailrec
+import scala.util.Random
 
 /**
  * @author phpusr
@@ -51,7 +52,8 @@ object RSA {
     var publicKey = 0
     var suitableNumber = false
     do {
-      publicKey = Math.round(Math.random()*maxNumber+1).toInt
+      publicKey = Random.nextInt(maxNumber) + 2
+      // Проверка, подходит ли число
       suitableNumber = Euclide.gcd(publicKey, phi) == 1
     } while(!suitableNumber)
 
