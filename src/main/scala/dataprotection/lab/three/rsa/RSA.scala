@@ -72,16 +72,15 @@ object RSA {
   }
 
   /** Генерация чисел P и Q */
-  def generatePQ(maxNumber: Int) = {
+  @tailrec
+  def generatePQ(maxNumber: Int) : (Int, Int) = {
     // p и q должны быть больше этого числа, иначе могут быть косяки
     val FixNumber = 13
-    var (p, q) = (0, 0)
-    do {
-      p = Prime.generatePrime(maxNumber)
-      q = Prime.generatePrime(maxNumber)
-    } while(p == q || p < FixNumber || q < FixNumber)
+    val p = Prime.generatePrime(maxNumber)
+    val q = Prime.generatePrime(maxNumber)
 
-    (p, q)
+    if (p != q && p >= FixNumber && q >= FixNumber) (p, q)
+    else generatePQ(maxNumber)
   }
 
   /** Возвращает число Фи */
