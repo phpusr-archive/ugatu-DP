@@ -15,18 +15,6 @@ import dataprotection.lab.three.prime.Prime
  * Главная форма
  */
 object MainForm extends SimpleSwingApplication {
-  /** Кнопка генерации ключей */
-  private val generateKeysButton = new Button("Generate Keys") {
-    preferredSize = new Dimension(200, 30)
-  }
-  /** Кнопка выхода из программы */
-  private val exitButton = new Button("Exit") {
-    preferredSize = new Dimension(150, 25)
-  }
-  /** Кнопка шифрования сообщения */
-  private val encodeButton = new Button("Encode")
-  /** Кнопка рашифрования сообщения */
-  private val decodeButton = new Button("Decode")
 
   // Поля ввода: p, q, n
   private val generatePButton = defaultGenerateButton
@@ -42,12 +30,29 @@ object MainForm extends SimpleSwingApplication {
   private val generatePrivateKeyButton = defaultGenerateButton
   private val privateKeyTextField = defaultTextField
 
+  /** Кнопка генерации ключей */
+  private val generateKeysButton = new Button("Generate Keys") {
+    preferredSize = new Dimension(200, 30)
+  }
+
   // Поля ввода сообщений
   private val decodeMessageTextArea = defaultTextArea
   private val encodeMessageTextArea = defaultTextArea
 
+  /** Кнопка шифрования сообщения */
+  private val encodeButton = new Button("Encode")
+  /** Кнопка рашифрования сообщения */
+  private val decodeButton = new Button("Decode")
+
   /** Является-ли сообщение числом */
   private val numberCheckBox = new CheckBox("Number")
+
+  /** Кнопка выхода из программы */
+  private val exitButton = new Button("Exit") {
+    preferredSize = new Dimension(150, 25)
+  }
+
+  ///////////////////////////////////////////////////////////////////
 
   // Генерация компонентов по умолчанию
   private def defaultTextField = new TextField {
@@ -141,20 +146,7 @@ object MainForm extends SimpleSwingApplication {
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
 
   reactions += {
-    case ButtonClicked(`generateKeysButton`) =>
-      val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
-      pTextField.text = p.toString
-      qTextField.text = q.toString
-      nTextField.text = n.toString
-      publicKeyTextField.text = publicKey.toString
-      privateKeyTextField.text = privateKey.toString
-
-    case ButtonClicked(`generatePublicKeyButton`) =>
-      publicKeyTextField.text = RSA.generatePublicKey(p, q, RSA.PublicKeyMaxNumber).toString
-
-    case ButtonClicked(`generatePrivateKeyButton`) =>
-      privateKeyTextField.text = RSA.generatePrivateKey(p, q, publicKey).toString
-
+    // Генерация чисел: p, q, n
     case ButtonClicked(`generatePButton`) =>
       pTextField.text = Prime.generatePrime(RSA.PrimeMaxNumber).toString
 
@@ -163,6 +155,22 @@ object MainForm extends SimpleSwingApplication {
 
     case ButtonClicked(`generateNButton`) =>
       nTextField.text = (p * q).toString
+
+    // Генерация ключей
+    case ButtonClicked(`generatePublicKeyButton`) =>
+      publicKeyTextField.text = RSA.generatePublicKey(p, q, RSA.PublicKeyMaxNumber).toString
+
+    case ButtonClicked(`generatePrivateKeyButton`) =>
+      privateKeyTextField.text = RSA.generatePrivateKey(p, q, publicKey).toString
+
+    // Генерация всех числе и ключей
+    case ButtonClicked(`generateKeysButton`) =>
+      val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
+      pTextField.text = p.toString
+      qTextField.text = q.toString
+      nTextField.text = n.toString
+      publicKeyTextField.text = publicKey.toString
+      privateKeyTextField.text = privateKey.toString
 
     // Шифрование
     case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
