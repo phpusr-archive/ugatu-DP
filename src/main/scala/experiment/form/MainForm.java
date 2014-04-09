@@ -1,7 +1,7 @@
 package experiment.form;
 
 import dataprotection.lab.three.rsa.RSA;
-import scala.Tuple3;
+import scala.Tuple5;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -53,10 +53,10 @@ public class MainForm extends JFrame {
         generateKeysButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Tuple3<Object,Object,Object> keys = RSA.generateKeys();
-                nTextField.setText(keys._1().toString());
-                publicKeyTextField.setText(keys._2().toString());
-                privateKeyTextField.setText(keys._3().toString());
+                Tuple5<Object,Object,Object,Object,Object> keys = RSA.generateKeys();
+                nTextField.setText(keys._3().toString());
+                publicKeyTextField.setText(keys._4().toString());
+                privateKeyTextField.setText(keys._5().toString());
             }
         });
 

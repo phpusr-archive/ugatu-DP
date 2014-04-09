@@ -141,7 +141,9 @@ object MainForm extends SimpleSwingApplication {
 
   reactions += {
     case ButtonClicked(`generateKeysButton`) =>
-      val (n, publicKey, privateKey) = RSA.generateKeys()
+      val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
+      pTextField.text = p.toString
+      qTextField.text = q.toString
       nTextField.text = n.toString
       publicKeyTextField.text = publicKey.toString
       privateKeyTextField.text = privateKey.toString

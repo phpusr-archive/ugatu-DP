@@ -39,7 +39,7 @@ object RSA {
     val publicKey = generatePublicKey(p, q, PublicKeyMaxNumber)
     val privateKey = generatePrivateKey(p, q, publicKey)
 
-    val keys = (n, publicKey, privateKey)
+    val keys = (p, q, n, publicKey, privateKey)
     l.debug(s"keys: $keys")
 
     keys
