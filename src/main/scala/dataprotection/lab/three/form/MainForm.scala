@@ -4,6 +4,8 @@ import scala.swing._
 import scala.swing.event.ButtonClicked
 import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
+import java.awt.Font
+import scala.swing.Font
 
 /**
  * @author phpusr
@@ -67,12 +69,15 @@ object MainForm extends SimpleSwingApplication {
     preferredSize = new Dimension(300, 200)
   }
   private def defaultGenerateButton = new Button("Gen")
+  private def defaultLabel = (title: String) => new Label(title) {
+    font = new Font("Arial", Font.BOLD, 12)
+  }
   private def defaultGeneratePanel(labelText: String, button: Button, textField: TextField) = new GridBagPanel {
     // Лейбл
     val c = new Constraints
     c.insets = new Insets(0, 2, 0, 2)
     c.gridwidth = 3
-    layout(new Label(labelText)) = c
+    layout(defaultLabel(labelText)) = c
 
     // Кнопка генерации и текстовое поле
     c.gridy = 1
@@ -95,21 +100,22 @@ object MainForm extends SimpleSwingApplication {
       // Верхняя панель
       layout(new GridBagPanel {
         val c = new Constraints
-        c.insets = new Insets(15, 5, 5, 5)
-        c.weightx = 0.5
+        val insetsLeft = 50
+        val insetsRight = 50
+        c.insets = new Insets(15, insetsLeft, 5, insetsRight)
         layout(defaultGeneratePanel("p", generatePButton, pTextField)) = c
         layout(defaultGeneratePanel("Public Key", generatePublicKeyButton, publicKeyTextField)) = c
 
-        c.insets = new Insets(5, 5, 5, 5)
         c.gridy = 1
+        c.insets = new Insets(5, insetsLeft, 5, insetsRight)
         layout(defaultGeneratePanel("q", generateQButton, qTextField)) = c
         layout(defaultGeneratePanel("Private Key", generatePrivateKeyButton, privateKeyTextField)) = c
 
-        c.insets = new Insets(5, 5, 15, 5)
         c.gridy = 2
+        c.insets = new Insets(5, insetsLeft, 15, insetsRight)
         layout(defaultGeneratePanel("n", generateNButton, nTextField)) = c
 
-        c.insets = new Insets(5, 5, 10, 5)
+        c.insets = new Insets(5, insetsLeft, 10, insetsRight)
         c.anchor = GridBagPanel.Anchor.South
         layout(new FlowPanel {
           contents += generateKeysButton
@@ -120,14 +126,15 @@ object MainForm extends SimpleSwingApplication {
       // Центральная панель
       layout(new GridBagPanel {
         val c = new Constraints
-        c.insets = new Insets(5, 5, 5, 5)
         c.weightx = 0.5
         c.weighty = 0
-        layout(new Label("Decode Message")) = c
-        layout(new Label("Encode Message")) = c
+        c.insets = new Insets(5, 5, 0, 5)
+        layout(defaultLabel("Decode Message")) = c
+        layout(defaultLabel("Encode Message")) = c
 
         c.gridy = 1
         c.weighty = 1
+        c.insets = new Insets(0, 5, 5, 5)
         c.fill = GridBagPanel.Fill.Both
         layout(decodeMessageTextArea) = c
         layout(encodeMessageTextArea) = c
