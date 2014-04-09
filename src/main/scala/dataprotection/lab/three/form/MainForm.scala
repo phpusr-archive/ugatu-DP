@@ -121,6 +121,13 @@ object MainForm extends SimpleSwingApplication {
           contents += generateKeysButton
           contents += clearAllButton
         }) = c
+
+        // Разделитель
+        c.gridy = 3
+        c.gridwidth = 2
+        c.fill = GridBagPanel.Fill.Horizontal
+        c.insets = new Insets(5, 0, 10, 0)
+        layout(new Separator) = c
       }) = North
 
       // Центральная панель
@@ -143,6 +150,13 @@ object MainForm extends SimpleSwingApplication {
         c.weighty = 0
         layout(encodeButton) = c
         layout(decodeButton) = c
+
+        // Разделитель
+        c.gridy = 3
+        c.gridwidth = 2
+        c.fill = GridBagPanel.Fill.Horizontal
+        c.insets = new Insets(20, 0, 5, 0)
+        layout(new Separator) = c
       }) = Center
 
       // Нижняя панель
@@ -158,7 +172,7 @@ object MainForm extends SimpleSwingApplication {
       }) = South
     }
 
-    peer.setLocationRelativeTo(null)
+    centerOnScreen()
   }
 
   // Обработчики событий формы
