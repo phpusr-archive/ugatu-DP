@@ -186,7 +186,7 @@ object MainForm extends SimpleSwingApplication {
   listenTo(generatePButton, generateQButton, generateNButton)
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
   listenTo(generateKeysButton, clearAllButton)
-  listenTo(clearEncodeMessageButton, clearDecodeMessageButton) //TODO
+  listenTo(clearEncodeMessageButton, clearDecodeMessageButton)
   listenTo(encodeButton, decodeButton)
   listenTo(exitButton)
 
@@ -221,9 +221,11 @@ object MainForm extends SimpleSwingApplication {
       publicKeyTextField.text = publicKey.toString
       privateKeyTextField.text = privateKey.toString
 
-    // Очистка всех полей ввода
+    // Очистка полей ввода
     case ButtonClicked(`clearAllButton`) =>
       clearP(); clearQ(); clearN(); clearPublicKey(); clearPrivateKey()
+    case ButtonClicked(`clearDecodeMessageButton`) => clearDecodeMessage()
+    case ButtonClicked(`clearEncodeMessageButton`) => clearEncodeMessage()
 
     // Шифрование
     case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
@@ -243,7 +245,7 @@ object MainForm extends SimpleSwingApplication {
     case ButtonClicked(`exitButton`) => System.exit(0)
   }
 
-  // Получение значений из формы
+  // Получение и установка значений на форме
   private def p = pTextField.text.toInt
   private def clearP() = pTextField.text = ""
   private def q = qTextField.text.toInt
@@ -257,6 +259,8 @@ object MainForm extends SimpleSwingApplication {
   private def clearPrivateKey() = privateKeyTextField.text = ""
 
   private def decodeMessage = decodeMessageTextArea.text
+  private def clearDecodeMessage() = decodeMessageTextArea.text = ""
   private def encodeMessage = encodeMessageTextArea.text
+  private def clearEncodeMessage() = encodeMessageTextArea.text = ""
 
 }
