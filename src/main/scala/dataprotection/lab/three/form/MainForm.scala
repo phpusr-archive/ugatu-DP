@@ -20,8 +20,10 @@ object MainForm extends SimpleSwingApplication with Form {
   listenTo(generatePButton, generateQButton, generateNButton)
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
   listenTo(generateKeysButton, clearAllButton)
+
   listenTo(clearEncodeMessageButton, clearDecodeMessageButton)
   listenTo(encodeButton, decodeButton)
+
   listenTo(exitButton)
 
   reactions += {

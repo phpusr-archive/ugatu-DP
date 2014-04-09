@@ -58,7 +58,7 @@ trait TopPanel extends Default {
     layout(clearButton) = c
   }
 
-  val topPanel = new GridBagPanel {
+  protected val TopPanel = new GridBagPanel {
     val c = new Constraints
     val insetsLeft = 50
     val insetsRight = 50
