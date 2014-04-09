@@ -73,11 +73,13 @@ object RSA {
 
   /** Генерация чисел P и Q */
   def generatePQ(maxNumber: Int) = {
+    // p и q должны быть больше этого числа, иначе могут быть косяки
+    val FixNumber = 13
     var (p, q) = (0, 0)
     do {
       p = Prime.generatePrime(maxNumber)
       q = Prime.generatePrime(maxNumber)
-    } while(p == q)
+    } while(p == q || p < FixNumber || q < FixNumber)
 
     (p, q)
   }

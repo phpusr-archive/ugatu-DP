@@ -1,6 +1,7 @@
 package dataprotection.lab.three.rsa
 
 import dataprotection.lab.three.euclide.Euclide
+import scala.util.Random
 
 /**
  * @author phpusr
@@ -38,17 +39,14 @@ object TestRSA extends App {
   }
 
   def testEncodeDecodeString() {
-    //TODO иногда глючит, пока не знаю в чем дело
     for (i <- 1 to 10) {
       val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
-      val message = "Hello"
+      val message = Random.nextString(10)
 
       val encodeMessage = RSA.encodeString(message, n, publicKey)
       val decodeMessage = RSA.decodeString(encodeMessage, n, privateKey)
 
-      if (message != decodeMessage) {
-        System.err.println(s"$message != $decodeMessage")
-      }
+      assert(message == decodeMessage)
     }
   }
 
