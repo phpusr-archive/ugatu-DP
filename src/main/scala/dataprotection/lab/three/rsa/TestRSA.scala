@@ -11,16 +11,15 @@ import scala.util.Random
 
 object TestRSA extends App {
 
-  //testGeneratePQ()
-  //testGeneratePublicKey()
-  //testGeneratePrivateKey()
-  //testEncodeDecodeString()
+  testGeneratePQ()
+  testGeneratePublicKey()
+  testGeneratePrivateKey()
+  testEncodeDecodeString()
   testEncodeDecodeNumbers()
 
   def testGeneratePQ() {
-    println(RSA.generatePQ(100))
-    println(RSA.generatePQ(100))
-    println(RSA.generatePQ(100))
+    for (i <- 1 to 10)
+      println(RSA.generatePQ(100))
   }
 
   def testGeneratePublicKey() {
@@ -28,6 +27,7 @@ object TestRSA extends App {
       val (p, q) = RSA.generatePQ(100)
       val publicKey = RSA.generatePublicKey(p, q, 100)
       println(s"publicKey: $publicKey")
+
       assert(Euclide.gcd(publicKey, (p-1)*(q-1)) == 1)
     }
   }
@@ -35,7 +35,7 @@ object TestRSA extends App {
   def testGeneratePrivateKey() {
     val (p, q, e) = (7, 11, 23)
     val privateKey = RSA.generatePrivateKey(p, q, e)
-    println("privateKey = " + privateKey)
+    println(s"privateKey: $privateKey")
   }
 
   def testEncodeDecodeString() {
