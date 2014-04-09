@@ -10,6 +10,9 @@ import org.scalatest.FlatSpec
  *         Time: 13:21
  */
 
+/**
+ * Тестирование класса RSA
+ */
 class RSA_Spec extends FlatSpec {
 
   "RSA" should "generate p & q without exception" in {
