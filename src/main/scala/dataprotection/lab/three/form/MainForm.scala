@@ -82,17 +82,17 @@ object MainForm extends SimpleSwingApplication {
         val c = new Constraints
         c.insets = new Insets(15, 5, 5, 5)
         c.weightx = 0.5
-        layout(defaultGeneratePanel("n", generateNButton, nTextField)) = c
+        layout(defaultGeneratePanel("p", generatePButton, pTextField)) = c
         layout(defaultGeneratePanel("Public Key", generatePublicKeyButton, publicKeyTextField)) = c
 
         c.insets = new Insets(5, 5, 5, 5)
         c.gridy = 1
-        layout(defaultGeneratePanel("p", generatePButton, pTextField)) = c
+        layout(defaultGeneratePanel("q", generateQButton, qTextField)) = c
         layout(defaultGeneratePanel("Private Key", generatePrivateKeyButton, privateKeyTextField)) = c
 
         c.insets = new Insets(5, 5, 15, 5)
         c.gridy = 2
-        layout(defaultGeneratePanel("q", generateQButton, qTextField)) = c
+        layout(defaultGeneratePanel("n", generateNButton, nTextField)) = c
         c.anchor = GridBagPanel.Anchor.South
         layout(generateKeysButton) = c
       }) = North
@@ -152,14 +152,14 @@ object MainForm extends SimpleSwingApplication {
     case ButtonClicked(`generatePublicKeyButton`) =>
       publicKeyTextField.text = RSA.generatePublicKey(p, q, RSA.PublicKeyMaxNumber).toString
 
-    case ButtonClicked(`generateNButton`) =>
-      nTextField.text = (p * q).toString
-
     case ButtonClicked(`generatePButton`) =>
       pTextField.text = Prime.generatePrime(RSA.PrimeMaxNumber).toString
 
     case ButtonClicked(`generateQButton`) =>
       qTextField.text = Prime.generatePrime(RSA.PrimeMaxNumber).toString
+
+    case ButtonClicked(`generateNButton`) =>
+      nTextField.text = (p * q).toString
 
     // Шифрование
     case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
