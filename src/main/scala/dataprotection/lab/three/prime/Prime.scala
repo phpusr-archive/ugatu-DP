@@ -1,5 +1,7 @@
 package dataprotection.lab.three.prime
 
+import scala.util.Random
+
 /**
  * @author phpusr
  *         Date: 02.04.14
@@ -17,7 +19,7 @@ object Prime {
   def generatePrime(maxNumber: Int) = {
     var number = 0
     do {
-      number = Math.round(Math.random()*maxNumber+1).toInt
+      number = Random.nextInt(maxNumber)
     } while(!isPrime(number))
 
     number
@@ -25,7 +27,7 @@ object Prime {
 
   /** Проверка, является ли число простым */
   def isPrime(number: Int) = {
-    if (number == 1) false
+    if (number <= 1) false
     else {
       val res = for (i <- 2 to number/2 if number % i == 0) yield i
       if (debugEnable) println(number + ": " + res.mkString(", "))
