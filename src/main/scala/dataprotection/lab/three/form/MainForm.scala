@@ -32,7 +32,11 @@ object MainForm extends SimpleSwingApplication {
 
   /** Кнопка генерации ключей */
   private val generateKeysButton = new Button("Generate Keys") {
-    preferredSize = new Dimension(200, 30)
+    preferredSize = new Dimension(170, 30)
+  }
+  /** Кнопка очистки текстовых полей */
+  private val clearAllButton = new Button("Clear all") {
+    preferredSize = new Dimension(preferredSize.width, generateKeysButton.preferredSize.height)
   }
 
   // Поля ввода сообщений
@@ -66,17 +70,22 @@ object MainForm extends SimpleSwingApplication {
   private def defaultGeneratePanel(labelText: String, button: Button, textField: TextField) = new GridBagPanel {
     // Лейбл
     val c = new Constraints
-    c.insets = new Insets(0, 5, 0, 5)
-    c.gridwidth = 2
+    c.insets = new Insets(0, 2, 0, 2)
+    c.gridwidth = 3
     layout(new Label(labelText)) = c
 
-    // Кнопка и текстовое поле
+    // Кнопка генерации и текстовое поле
     c.gridy = 1
     c.gridwidth = 1
     layout(button) = c
     layout(textField) = c
+
+    // Кнопка очистки текстового поля
+    val clearButton = new Button(Action("X") { textField.text = "" })
+    layout(clearButton) = c
   }
 
+  /** Форма */
   def top = new MainFrame {
     title = "RSA"
 
@@ -99,8 +108,13 @@ object MainForm extends SimpleSwingApplication {
         c.insets = new Insets(5, 5, 15, 5)
         c.gridy = 2
         layout(defaultGeneratePanel("n", generateNButton, nTextField)) = c
+
+        c.insets = new Insets(5, 5, 10, 5)
         c.anchor = GridBagPanel.Anchor.South
-        layout(generateKeysButton) = c
+        layout(new FlowPanel {
+          contents += generateKeysButton
+          contents += clearAllButton
+        }) = c
       }) = North
 
       // Центральная панель
@@ -140,31 +154,36 @@ object MainForm extends SimpleSwingApplication {
     peer.setLocationRelativeTo(null)
   }
 
-  listenTo(generateKeysButton)
-  listenTo(exitButton)
-  listenTo(encodeButton, decodeButton)
+  // Обработчики событий формы
   listenTo(generatePButton, generateQButton, generateNButton)
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
+  listenTo(generateKeysButton, clearAllButton)
+  listenTo(encodeButton, decodeButton)
+  listenTo(exitButton)
 
   reactions += {
     // Генерация чисел: p, q, n
     case ButtonClicked(`generatePButton`) =>
+      clearN(); clearPublicKey(); clearPrivateKey()
       pTextField.text = Prime.generatePrime(RSA.PrimeMaxNumber).toString
 
     case ButtonClicked(`generateQButton`) =>
+      clearN(); clearPublicKey(); clearPrivateKey()
       qTextField.text = Prime.generatePrime(RSA.PrimeMaxNumber).toString
 
     case ButtonClicked(`generateNButton`) =>
+      clearPublicKey(); clearPrivateKey()
       nTextField.text = (p * q).toString
 
     // Генерация ключей
     case ButtonClicked(`generatePublicKeyButton`) =>
+      clearPrivateKey()
       publicKeyTextField.text = RSA.generatePublicKey(p, q, RSA.PublicKeyMaxNumber).toString
 
     case ButtonClicked(`generatePrivateKeyButton`) =>
       privateKeyTextField.text = RSA.generatePrivateKey(p, q, publicKey).toString
 
-    // Генерация всех числе и ключей
+    // Генерация всех чисел и ключей
     case ButtonClicked(`generateKeysButton`) =>
       val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
       pTextField.text = p.toString
@@ -172,6 +191,10 @@ object MainForm extends SimpleSwingApplication {
       nTextField.text = n.toString
       publicKeyTextField.text = publicKey.toString
       privateKeyTextField.text = privateKey.toString
+
+    // Очистка всех полей ввода
+    case ButtonClicked(`clearAllButton`) =>
+      clearP(); clearQ(); clearN(); clearPublicKey(); clearPrivateKey()
 
     // Шифрование
     case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
@@ -193,10 +216,16 @@ object MainForm extends SimpleSwingApplication {
 
   // Получение значений из формы
   private def p = pTextField.text.toInt
+  private def clearP() = pTextField.text = ""
   private def q = qTextField.text.toInt
+  private def clearQ() = qTextField.text = ""
   private def n = nTextField.text.toInt
+  private def clearN() = nTextField.text = ""
+
   private def publicKey = publicKeyTextField.text.toInt
+  private def clearPublicKey() = publicKeyTextField.text = ""
   private def privateKey = privateKeyTextField.text.toInt
+  private def clearPrivateKey() = privateKeyTextField.text = ""
 
   private def decodeMessage = decodeMessageTextArea.text
   private def encodeMessage = encodeMessageTextArea.text
