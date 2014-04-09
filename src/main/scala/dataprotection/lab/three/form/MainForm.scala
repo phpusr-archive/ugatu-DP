@@ -19,18 +19,18 @@ import scala.swing.Font
 object MainForm extends SimpleSwingApplication {
 
   // Поля ввода: p, q, n
-  private val generatePButton = defaultGenerateButton
-  private val pTextField = defaultTextField
-  private val generateQButton = defaultGenerateButton
-  private val qTextField = defaultTextField
-  private val generateNButton = defaultGenerateButton
-  private val nTextField = defaultTextField
+  private val generatePButton = defaultGenerateButton()
+  private val pTextField = defaultTextField()
+  private val generateQButton = defaultGenerateButton()
+  private val qTextField = defaultTextField()
+  private val generateNButton = defaultGenerateButton()
+  private val nTextField = defaultTextField()
 
   // Поля ввода ключей
-  private val generatePublicKeyButton = defaultGenerateButton
-  private val publicKeyTextField = defaultTextField
-  private val generatePrivateKeyButton = defaultGenerateButton
-  private val privateKeyTextField = defaultTextField
+  private val generatePublicKeyButton = defaultGenerateButton()
+  private val publicKeyTextField = defaultTextField()
+  private val generatePrivateKeyButton = defaultGenerateButton()
+  private val privateKeyTextField = defaultTextField()
 
   /** Кнопка генерации ключей */
   private val generateKeysButton = new Button("Generate Keys") {
@@ -42,8 +42,8 @@ object MainForm extends SimpleSwingApplication {
   }
 
   // Поля ввода сообщений
-  private val decodeMessageTextArea = defaultTextArea
-  private val encodeMessageTextArea = defaultTextArea
+  private val decodeMessageTextArea = defaultTextArea()
+  private val encodeMessageTextArea = defaultTextArea()
 
   /** Кнопка шифрования сообщения */
   private val encodeButton = new Button("Encode")
@@ -61,18 +61,18 @@ object MainForm extends SimpleSwingApplication {
   ///////////////////////////////////////////////////////////////////
 
   // Генерация компонентов по умолчанию
-  private def defaultTextField = new TextField {
+  private def defaultTextField = () => new TextField {
     preferredSize = new Dimension(150, 30)
   }
-  private def defaultTextArea = new TextArea {
+  private def defaultTextArea = () => new TextArea {
     lineWrap = true
     preferredSize = new Dimension(300, 200)
   }
-  private def defaultGenerateButton = new Button("Gen")
+  private def defaultGenerateButton = () =>  new Button("Gen")
   private def defaultLabel = (title: String) => new Label(title) {
     font = new Font("Arial", Font.BOLD, 12)
   }
-  private def defaultGeneratePanel(labelText: String, button: Button, textField: TextField) = new GridBagPanel {
+  private def defaultGeneratePanel = (labelText: String, button: Button, textField: TextField) => new GridBagPanel {
     // Лейбл
     val c = new Constraints
     c.insets = new Insets(0, 2, 0, 2)
