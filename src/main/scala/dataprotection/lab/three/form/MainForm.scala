@@ -78,6 +78,7 @@ object MainForm extends SimpleSwingApplication {
   }
 
   def top = new MainFrame {
+    title = "RSA"
 
     contents = new BorderPanel {
       import BorderPanel.Position._
@@ -174,24 +175,30 @@ object MainForm extends SimpleSwingApplication {
 
     // Шифрование
     case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
-      encodeMessageTextArea.text = RSA.encodeNumber(decodeMessageTextArea.text, nTextField.text.toInt, publicKeyTextField.text.toInt)
+      encodeMessageTextArea.text = RSA.encodeNumber(decodeMessage, n, publicKey)
     } else {
-      encodeMessageTextArea.text = RSA.encodeString(decodeMessageTextArea.text, nTextField.text.toInt, publicKeyTextField.text.toInt)
+      encodeMessageTextArea.text = RSA.encodeString(decodeMessage, n, publicKey)
     }
 
     // Расшифрование
     case ButtonClicked(`decodeButton`) => if (numberCheckBox.selected) {
-      decodeMessageTextArea.text = RSA.decodeNumber(encodeMessageTextArea.text, nTextField.text.toInt, privateKeyTextField.text.toInt)
+      decodeMessageTextArea.text = RSA.decodeNumber(encodeMessage, n, privateKey)
     } else {
-      decodeMessageTextArea.text = RSA.decodeString(encodeMessageTextArea.text, nTextField.text.toInt, privateKeyTextField.text.toInt)
+      decodeMessageTextArea.text = RSA.decodeString(encodeMessage, n, privateKey)
     }
 
     // Выход
     case ButtonClicked(`exitButton`) => System.exit(0)
   }
-  
-  private def p =  pTextField.text.toInt
-  private def q =  qTextField.text.toInt
+
+  // Получение значений из формы
+  private def p = pTextField.text.toInt
+  private def q = qTextField.text.toInt
+  private def n = nTextField.text.toInt
   private def publicKey = publicKeyTextField.text.toInt
+  private def privateKey = privateKeyTextField.text.toInt
+
+  private def decodeMessage = decodeMessageTextArea.text
+  private def encodeMessage = encodeMessageTextArea.text
 
 }
