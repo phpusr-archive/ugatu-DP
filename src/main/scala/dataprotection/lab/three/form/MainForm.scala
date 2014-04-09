@@ -3,6 +3,7 @@ package dataprotection.lab.three.form
 import scala.swing._
 import scala.swing.event.ButtonClicked
 import dataprotection.lab.three.rsa.RSA
+import dataprotection.lab.three.prime.Prime
 
 /**
  * @author phpusr
@@ -149,12 +150,16 @@ object MainForm extends SimpleSwingApplication {
       privateKeyTextField.text = privateKey.toString
 
     case ButtonClicked(`generatePublicKeyButton`) =>
-      val p = pTextField.text.toInt
-      val q = qTextField.text.toInt
       publicKeyTextField.text = RSA.generatePublicKey(p, q, RSA.PublicKeyMaxNumber).toString
 
     case ButtonClicked(`generateNButton`) =>
-      // TODO continue
+      nTextField.text = (p * q).toString
+
+    case ButtonClicked(`generatePButton`) =>
+      pTextField.text = Prime.generatePrime(RSA.PrimeMaxNumber).toString
+
+    case ButtonClicked(`generateQButton`) =>
+      qTextField.text = Prime.generatePrime(RSA.PrimeMaxNumber).toString
 
     // Шифрование
     case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
@@ -173,5 +178,8 @@ object MainForm extends SimpleSwingApplication {
     // Выход
     case ButtonClicked(`exitButton`) => System.exit(0)
   }
+  
+  private def p =  pTextField.text.toInt
+  private def q =  qTextField.text.toInt
 
 }

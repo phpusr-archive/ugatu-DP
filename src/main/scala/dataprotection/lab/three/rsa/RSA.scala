@@ -19,7 +19,7 @@ import scala.util.Random
 object RSA {
 
   /** Максимальное значение простого числа */
-  private val PrimeMaxNumber = 100
+  val PrimeMaxNumber = 100
   /** Максимальное значение открытого ключа */
   val PublicKeyMaxNumber = 100
   /** Разделитель символов строк */
