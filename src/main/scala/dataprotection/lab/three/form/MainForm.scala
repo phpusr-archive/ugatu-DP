@@ -41,6 +41,10 @@ object MainForm extends SimpleSwingApplication {
     preferredSize = new Dimension(preferredSize.width, generateKeysButton.preferredSize.height)
   }
 
+  // Кнопки очистки сообщений
+  private val clearDecodeMessageButton = new Button("X")
+  private val clearEncodeMessageButton = new Button("X")
+
   // Поля ввода сообщений
   private val decodeMessageTextArea = defaultTextArea()
   private val encodeMessageTextArea = defaultTextArea()
@@ -62,6 +66,7 @@ object MainForm extends SimpleSwingApplication {
 
   // Генерация компонентов по умолчанию
   private def defaultTextField = () => new TextField {
+    minimumSize = new Dimension(50, 30)
     preferredSize = new Dimension(150, 30)
   }
   private def defaultTextArea = () => new TextArea {
@@ -133,14 +138,24 @@ object MainForm extends SimpleSwingApplication {
       // Центральная панель
       layout(new GridBagPanel {
         val c = new Constraints
-        c.weightx = 0.5
+        c.weightx = 0.25
         c.weighty = 0
         c.insets = new Insets(5, 5, 0, 5)
+        c.anchor = GridBagPanel.Anchor.East
         layout(defaultLabel("Decode Message")) = c
+
+        c.anchor = GridBagPanel.Anchor.West
+        layout(clearDecodeMessageButton) = c
+
+        c.anchor = GridBagPanel.Anchor.East
         layout(defaultLabel("Encode Message")) = c
+
+        c.anchor = GridBagPanel.Anchor.West
+        layout(clearEncodeMessageButton) = c
 
         c.gridy = 1
         c.weighty = 1
+        c.gridwidth = 2
         c.insets = new Insets(0, 5, 5, 5)
         c.fill = GridBagPanel.Fill.Both
         layout(decodeMessageTextArea) = c
@@ -179,6 +194,7 @@ object MainForm extends SimpleSwingApplication {
   listenTo(generatePButton, generateQButton, generateNButton)
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
   listenTo(generateKeysButton, clearAllButton)
+  listenTo(clearEncodeMessageButton, clearDecodeMessageButton) //TODO
   listenTo(encodeButton, decodeButton)
   listenTo(exitButton)
 
