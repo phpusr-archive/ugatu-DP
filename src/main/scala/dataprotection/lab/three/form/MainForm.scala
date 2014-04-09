@@ -71,7 +71,7 @@ object MainForm extends SimpleSwingApplication {
   }
   private def defaultTextArea = () => new TextArea {
     lineWrap = true
-    preferredSize = new Dimension(300, 200)
+    preferredSize = new Dimension(350, 200)
   }
   private def defaultGenerateButton = () =>  new Button("Gen")
   private def defaultLabel = (title: String) => new Label(title) {
@@ -107,20 +107,25 @@ object MainForm extends SimpleSwingApplication {
         val c = new Constraints
         val insetsLeft = 50
         val insetsRight = 50
-        c.insets = new Insets(15, insetsLeft, 5, insetsRight)
+        c.weightx = 1 //TODO
+        c.insets = new Insets(15, 0, 5, insetsRight)
         layout(defaultGeneratePanel("p", generatePButton, pTextField)) = c
+
+        c.insets = new Insets(15, insetsLeft, 5, 0)
         layout(defaultGeneratePanel("Public Key", generatePublicKeyButton, publicKeyTextField)) = c
 
         c.gridy = 1
-        c.insets = new Insets(5, insetsLeft, 5, insetsRight)
+        c.insets = new Insets(5, 0, 5, insetsRight)
         layout(defaultGeneratePanel("q", generateQButton, qTextField)) = c
+
+        c.insets = new Insets(5, insetsLeft, 5, 0)
         layout(defaultGeneratePanel("Private Key", generatePrivateKeyButton, privateKeyTextField)) = c
 
         c.gridy = 2
-        c.insets = new Insets(5, insetsLeft, 15, insetsRight)
+        c.insets = new Insets(5, 0, 15, insetsRight)
         layout(defaultGeneratePanel("n", generateNButton, nTextField)) = c
 
-        c.insets = new Insets(5, insetsLeft, 10, insetsRight)
+        c.insets = new Insets(5, insetsLeft, 10, 0)
         c.anchor = GridBagPanel.Anchor.South
         layout(new FlowPanel {
           contents += generateKeysButton
@@ -168,7 +173,7 @@ object MainForm extends SimpleSwingApplication {
 
         // Разделитель
         c.gridy = 3
-        c.gridwidth = 2
+        c.gridwidth = 4
         c.fill = GridBagPanel.Fill.Horizontal
         c.insets = new Insets(20, 0, 5, 0)
         layout(new Separator) = c
