@@ -152,6 +152,9 @@ object MainForm extends SimpleSwingApplication {
     case ButtonClicked(`generatePublicKeyButton`) =>
       publicKeyTextField.text = RSA.generatePublicKey(p, q, RSA.PublicKeyMaxNumber).toString
 
+    case ButtonClicked(`generatePrivateKeyButton`) =>
+      privateKeyTextField.text = RSA.generatePrivateKey(p, q, publicKey).toString
+
     case ButtonClicked(`generatePButton`) =>
       pTextField.text = Prime.generatePrime(RSA.PrimeMaxNumber).toString
 
@@ -181,5 +184,6 @@ object MainForm extends SimpleSwingApplication {
   
   private def p =  pTextField.text.toInt
   private def q =  qTextField.text.toInt
+  private def publicKey = publicKeyTextField.text.toInt
 
 }
