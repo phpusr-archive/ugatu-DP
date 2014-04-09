@@ -107,7 +107,6 @@ object MainForm extends SimpleSwingApplication {
         val c = new Constraints
         val insetsLeft = 50
         val insetsRight = 50
-        c.weightx = 1 //TODO
         c.insets = new Insets(15, 0, 5, insetsRight)
         layout(defaultGeneratePanel("p", generatePButton, pTextField)) = c
 
@@ -131,17 +130,12 @@ object MainForm extends SimpleSwingApplication {
           contents += generateKeysButton
           contents += clearAllButton
         }) = c
-
-        // Разделитель
-        c.gridy = 3
-        c.gridwidth = 2
-        c.fill = GridBagPanel.Fill.Horizontal
-        c.insets = new Insets(5, 0, 10, 0)
-        layout(new Separator) = c
       }) = North
 
       // Центральная панель
       layout(new GridBagPanel {
+        border = Swing.EtchedBorder
+
         val c = new Constraints
         c.weightx = 0.25
         c.weighty = 0
@@ -170,13 +164,6 @@ object MainForm extends SimpleSwingApplication {
         c.weighty = 0
         layout(encodeButton) = c
         layout(decodeButton) = c
-
-        // Разделитель
-        c.gridy = 3
-        c.gridwidth = 4
-        c.fill = GridBagPanel.Fill.Horizontal
-        c.insets = new Insets(20, 0, 5, 0)
-        layout(new Separator) = c
       }) = Center
 
       // Нижняя панель
