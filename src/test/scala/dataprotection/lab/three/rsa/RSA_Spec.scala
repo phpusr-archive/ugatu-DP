@@ -2,6 +2,7 @@ package dataprotection.lab.three.rsa
 
 import dataprotection.lab.three.euclide.Euclide
 import scala.util.Random
+import org.scalatest.FlatSpec
 
 /**
  * @author phpusr
@@ -9,20 +10,14 @@ import scala.util.Random
  *         Time: 13:21
  */
 
-object TestRSA extends App {
+class RSA_Spec extends FlatSpec {
 
-  testGeneratePQ()
-  testGeneratePublicKey()
-  testGeneratePrivateKey()
-  testEncodeDecodeString()
-  testEncodeDecodeNumbers()
-
-  def testGeneratePQ() {
+  "RSA" should "generate p & q without exception" in {
     for (i <- 1 to 10)
       println(RSA.generatePQ(100))
   }
 
-  def testGeneratePublicKey() {
+  "RSA" should "generate normal p, q and Public Key" in {
     for (i <- 1 to 10) {
       val (p, q) = RSA.generatePQ(100)
       val publicKey = RSA.generatePublicKey(p, q, 100)
@@ -32,13 +27,13 @@ object TestRSA extends App {
     }
   }
 
-  def testGeneratePrivateKey() {
+  "RSA" should "generate Private Key without exception" in {
     val (p, q, e) = (7, 11, 23)
     val privateKey = RSA.generatePrivateKey(p, q, e)
     println(s"privateKey: $privateKey")
   }
 
-  def testEncodeDecodeString() {
+  it should "encode and decode message as string" in {
     for (i <- 1 to 10) {
       val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
       val message = Random.nextString(10)
@@ -50,7 +45,7 @@ object TestRSA extends App {
     }
   }
 
-  def testEncodeDecodeNumbers() {
+  it should "encode and decode message as number" in {
     for (i <- 1 to 10) {
       val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
       val message = Random.nextInt(10000000).toString
@@ -58,9 +53,7 @@ object TestRSA extends App {
       val encodeMessage = RSA.encodeNumber(message, n, publicKey)
       val decodeMessage = RSA.decodeNumber(encodeMessage, n, privateKey)
 
-      if (message != decodeMessage) {
-        System.err.println(s"$message != $decodeMessage")
-      }
+      assert(message == decodeMessage)
     }
   }
 
