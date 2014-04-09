@@ -14,7 +14,27 @@ import dataprotection.lab.three.prime.Prime
 /**
  * Главная форма
  */
-object MainForm extends SimpleSwingApplication with Form {
+object MainForm extends SimpleSwingApplication with TopPanel with CenterPanel with BottomPanel {
+
+  /** Форма */
+  def top = new MainFrame {
+    title = "RSA"
+
+    contents = new BorderPanel {
+      import BorderPanel.Position._
+
+      // Верхняя панель
+      layout(TopPanel) = North
+
+      // Центральная панель
+      layout(CenterPanel) = Center
+
+      // Нижняя панель
+      layout(BottomPanel) = South
+    }
+
+    centerOnScreen()
+  }
 
   // Обработчики событий формы
   listenTo(generatePButton, generateQButton, generateNButton)
