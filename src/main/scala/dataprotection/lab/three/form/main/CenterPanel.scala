@@ -1,4 +1,4 @@
-package dataprotection.lab.three.form
+package dataprotection.lab.three.form.main
 
 import scala.swing.{TextArea, Button, Swing, GridBagPanel}
 import java.awt.{Dimension, Insets}
