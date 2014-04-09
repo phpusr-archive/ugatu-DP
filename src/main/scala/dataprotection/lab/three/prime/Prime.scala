@@ -1,6 +1,7 @@
 package dataprotection.lab.three.prime
 
 import scala.util.Random
+import scala.annotation.tailrec
 
 /**
  * @author phpusr
@@ -16,13 +17,11 @@ object Prime {
   private val debugEnable = false
 
   /** Генерация простого числа */
-  def generatePrime(maxNumber: Int) = {
-    var number = 0
-    do {
-      number = Random.nextInt(maxNumber)
-    } while(!isPrime(number))
-
-    number
+  @tailrec
+  def generatePrime(maxNumber: Int): Int = {
+    val number = Random.nextInt(maxNumber)
+    if (isPrime(number)) number
+    else generatePrime(maxNumber)
   }
 
   /** Проверка, является ли число простым */
