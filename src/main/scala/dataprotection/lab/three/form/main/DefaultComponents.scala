@@ -9,9 +9,13 @@ import java.awt.Font
  *         Time: 16:30
  */
 
-trait Default {
-  // Генерация компонентов по умолчанию
+/**
+ * Генерация компонентов по умолчанию
+ */
+trait DefaultComponents {
+  
   protected def defaultLabel = (title: String) => new Label(title) {
     font = new Font("Arial", Font.BOLD, 12)
   }
+  
 }

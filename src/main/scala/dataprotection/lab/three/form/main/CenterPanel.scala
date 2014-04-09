@@ -9,7 +9,10 @@ import java.awt.{Dimension, Insets}
  *         Time: 16:44
  */
 
-trait CenterPanel extends Default {
+/**
+ * Средняя панель
+ */
+trait CenterPanel extends DefaultComponents {
 
   // Кнопки очистки сообщений
   protected val clearDecodeMessageButton = new Button("X")
@@ -23,6 +26,10 @@ trait CenterPanel extends Default {
   protected val encodeButton = new Button("Encode")
   /** Кнопка рашифрования сообщения */
   protected val decodeButton = new Button("Decode")
+
+
+  //////////////////////////////////////////////////////////////
+
 
   // Генерация компонентов по умолчанию
   private def defaultTextArea = () => new TextArea {

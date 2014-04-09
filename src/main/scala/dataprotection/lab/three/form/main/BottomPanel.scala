@@ -8,6 +8,10 @@ import java.awt.{Insets, Dimension}
  *         Date: 09.04.14
  *         Time: 16:51
  */
+
+/**
+ * Нижняя панель
+ */
 trait BottomPanel {
 
   /** Является-ли сообщение числом */
@@ -17,6 +21,10 @@ trait BottomPanel {
   protected val exitButton = new Button("Exit") {
     preferredSize = new Dimension(150, 25)
   }
+
+
+  //////////////////////////////////////////////////////////////
+
 
   protected val BottomPanel = new GridBagPanel {
     val c = new Constraints

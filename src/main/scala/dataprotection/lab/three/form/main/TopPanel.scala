@@ -8,7 +8,11 @@ import java.awt.{Dimension, Insets}
  *         Date: 09.04.14
  *         Time: 16:21
  */
-trait TopPanel extends Default {
+
+/**
+ * Верхняя панель
+ */
+trait TopPanel extends DefaultComponents {
 
   // Поля ввода: p, q, n
   protected val generatePButton = defaultGenerateButton()
@@ -33,6 +37,10 @@ trait TopPanel extends Default {
   protected val publicKeyTextField = defaultTextField()
   protected val generatePrivateKeyButton = defaultGenerateButton()
   protected val privateKeyTextField = defaultTextField()
+
+
+  //////////////////////////////////////////////////////////////
+
 
   // Генерация компонентов по умолчанию
   private def defaultTextField = () => new TextField {
