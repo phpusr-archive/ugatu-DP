@@ -105,13 +105,13 @@ object Euclide {
 
     // Шаг 2
     if (y3 == 0) {
-      x3 = gcdExtV4(d, f) //TODO return (нет обратного)
+      x3 = gcdExtV4(d, f) //return (нет обратного)
     }
 
     // Шаг 2
     if (y3 == 1) {
       y3 = gcdExtV4(d, f)
-      y2 = d % f //TODO мульт. обр. d; return
+      y2 = d % f //мульт. обр. d; return
     }
 
     // Шаг 4
@@ -127,7 +127,7 @@ object Euclide {
     //(y1, y2, y3) = (t1, t2, t3)
 
     // Шаг 8
-    // TODO goto 2
+    // goto 2
 
     0
   }
