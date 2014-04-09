@@ -14,8 +14,8 @@ object TestRSA extends App {
   //testGeneratePQ()
   //testGeneratePublicKey()
   //testGeneratePrivateKey()
-  testEncodeDecodeString()
-  //testEncodeDecodeNumbers()
+  //testEncodeDecodeString()
+  testEncodeDecodeNumbers()
 
   def testGeneratePQ() {
     println(RSA.generatePQ(100))
@@ -51,10 +51,9 @@ object TestRSA extends App {
   }
 
   def testEncodeDecodeNumbers() {
-    //TODO иногда глючит, пока не знаю в чем дело
     for (i <- 1 to 10) {
       val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
-      val message = Math.round(Math.random() * 10000000 + 1).toString
+      val message = Random.nextInt(10000000).toString
 
       val encodeMessage = RSA.encodeNumber(message, n, publicKey)
       val decodeMessage = RSA.decodeNumber(encodeMessage, n, privateKey)
