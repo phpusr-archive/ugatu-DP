@@ -46,18 +46,16 @@ object RSA {
   }
 
   /** Генерация открытого ключа по известным p и q */
-  def generatePublicKey(p: Int, q: Int, maxNumber: Int) = {
+  @tailrec
+  def generatePublicKey(p: Int, q: Int, maxNumber: Int): Int = {
     val phi = getPhi(p, q)
+    val startValue = 2
+    val publicKey = Random.nextInt(maxNumber-startValue) + startValue
 
-    var publicKey = 0
-    var suitableNumber = false
-    do {
-      publicKey = Random.nextInt(maxNumber) + 2
-      // Проверка, подходит ли число
-      suitableNumber = Euclide.gcd(publicKey, phi) == 1
-    } while(!suitableNumber)
-
-    publicKey
+    // Проверка, удовлетворяет ли число равенству
+    //  Открытый ключ не должен иметь общих делителей (кроме 1) с Фи
+    if (Euclide.gcd(publicKey, phi) == 1) publicKey
+    else generatePublicKey(p, q, maxNumber)
   }
 
   /** Генерация закрытого ключа по известным p, q и e */
