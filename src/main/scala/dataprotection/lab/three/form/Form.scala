@@ -1,7 +1,7 @@
 package dataprotection.lab.three.form
 
 import scala.swing._
-import java.awt.{Insets, Dimension}
+import java.awt.Dimension
 
 /**
  * @author phpusr
@@ -12,16 +12,8 @@ import java.awt.{Insets, Dimension}
 /**
  * TODO Форма
  */
-trait Form extends TopPanel with CenterPanel {
+trait Form extends TopPanel with CenterPanel with BottomPanel {
 
-
-  /** Является-ли сообщение числом */
-  protected val numberCheckBox = new CheckBox("Number")
-
-  /** Кнопка выхода из программы */
-  protected val exitButton = new Button("Exit") {
-    preferredSize = new Dimension(150, 25)
-  }
 
   ///////////////////////////////////////////////////////////////////
 
@@ -39,16 +31,7 @@ trait Form extends TopPanel with CenterPanel {
       layout(CenterPanel) = Center
 
       // Нижняя панель
-      layout(new GridBagPanel {
-        val c = new Constraints
-        c.insets = new Insets(5, 5, 5, 5)
-        c.anchor = GridBagPanel.Anchor.West
-        c.weightx = 0.5
-        layout(numberCheckBox) = c
-
-        c.anchor = GridBagPanel.Anchor.East
-        layout(exitButton) = c
-      }) = South
+      layout(BottomPanel) = South
     }
 
     centerOnScreen()
