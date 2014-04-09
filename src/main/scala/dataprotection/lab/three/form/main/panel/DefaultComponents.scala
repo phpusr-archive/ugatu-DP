@@ -1,4 +1,4 @@
-package dataprotection.lab.three.form.main
+package dataprotection.lab.three.form.main.panel
 
 import scala.swing.Label
 import java.awt.Font

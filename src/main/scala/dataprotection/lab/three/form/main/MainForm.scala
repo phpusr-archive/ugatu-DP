@@ -4,6 +4,7 @@ import scala.swing._
 import scala.swing.event.ButtonClicked
 import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
+import dataprotection.lab.three.form.main.panel._
 
 /**
  * @author phpusr
