@@ -12,7 +12,7 @@ import org.scalatest.FlatSpec
  */
 class PrimeSpec extends FlatSpec {
 
-  "This numbers dont't" should "be prime" in {
+  "This numbers don't" should "be prime" in {
     assert(!Prime.isPrime(100))
     assert(!Prime.isPrime(21))
     assert(!Prime.isPrime(25))
