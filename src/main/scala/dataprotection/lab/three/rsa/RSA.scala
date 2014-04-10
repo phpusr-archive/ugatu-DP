@@ -5,8 +5,8 @@ import dataprotection.lab.three.prime.Prime
 import sun.misc.{BASE64Decoder, BASE64Encoder}
 import org.dyndns.phpusr.util.log.Logger
 import scala.annotation.tailrec
-import scala.util.Random
 import dataprotection.lab.three.types.RsaType.RsaNumber
+import dataprotection.lab.three.types.RsaType
 
 /**
  * @author phpusr
@@ -51,11 +51,11 @@ object RSA {
   def generatePublicKey(p: RsaNumber, q: RsaNumber, maxNumber: Int): Int = {
     val phi = getPhi(p, q)
     val startValue = 2
-    val publicKey = Random.nextInt(maxNumber-startValue) + startValue
+    val publicKey = RsaType.getRandom(maxNumber-startValue) + startValue
 
     // Проверка, удовлетворяет ли число равенству
     //  Открытый ключ не должен иметь общих делителей (кроме 1) с Фи
-    if (Euclide.gcd(publicKey, phi) == 1L) publicKey
+    if (Euclide.gcd(publicKey, phi) == RsaType.One) publicKey
     else generatePublicKey(p, q, maxNumber)
   }
 

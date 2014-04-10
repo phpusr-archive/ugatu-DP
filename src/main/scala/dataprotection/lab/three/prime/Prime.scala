@@ -1,8 +1,8 @@
 package dataprotection.lab.three.prime
 
-import scala.util.Random
 import scala.annotation.tailrec
 import dataprotection.lab.three.types.RsaType.RsaNumber
+import dataprotection.lab.three.types.RsaType
 
 /**
  * @author phpusr
@@ -20,7 +20,7 @@ object Prime {
   /** Генерация простого числа */
   @tailrec
   def generatePrime(maxNumber: RsaNumber): RsaNumber = {
-    val number = Random.nextLong() % maxNumber
+    val number = RsaType.getRandom(maxNumber)
     if (isPrime(number)) number
     else generatePrime(maxNumber)
   }

@@ -5,6 +5,8 @@ import scala.swing.event.ButtonClicked
 import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
 import dataprotection.lab.three.form.main.panel._
+import dataprotection.lab.three.types.RsaType
+import dataprotection.lab.three.types.RsaType.RsaNumber
 
 /**
  * @author phpusr
@@ -102,17 +104,23 @@ object MainForm extends SimpleSwingApplication with TopPanel with CenterPanel wi
     case ButtonClicked(`exitButton`) => System.exit(0)
   }
 
+  /** Неявное добавление метода к строке */
+  implicit class ExtendString(string: String) {
+    /** String -> RsaNumber */
+    def toRsaNumber: RsaNumber =  RsaType.stringToRsaType(string)
+  }
+
   // Получение и установка значений на форме
-  private def p = pTextField.text.toLong
+  private def p = pTextField.text.toRsaNumber
   private def clearP() = pTextField.text = ""
-  private def q = qTextField.text.toLong
+  private def q = qTextField.text.toRsaNumber
   private def clearQ() = qTextField.text = ""
-  private def n = nTextField.text.toLong
+  private def n = nTextField.text.toRsaNumber
   private def clearN() = nTextField.text = ""
 
-  private def publicKey = publicKeyTextField.text.toLong
+  private def publicKey = publicKeyTextField.text.toRsaNumber
   private def clearPublicKey() = publicKeyTextField.text = ""
-  private def privateKey = privateKeyTextField.text.toLong
+  private def privateKey = privateKeyTextField.text.toRsaNumber
   private def clearPrivateKey() = privateKeyTextField.text = ""
 
   private def decodeMessage = decodeMessageTextArea.text
