@@ -20,9 +20,9 @@ import dataprotection.lab.three.types.RsaType
 object RSA {
 
   /** Максимальное значение простого числа */
-  val PrimeMaxNumber = 10000
+  val PrimeMaxNumber = 100
   /** Максимальное значение открытого ключа */
-  val PublicKeyMaxNumber = 10000
+  val PublicKeyMaxNumber = 100
   /** Разделитель символов строк */
   private val Splitter = " "
   /** Кодировка строк по умолчанию */

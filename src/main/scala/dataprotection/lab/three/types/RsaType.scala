@@ -14,7 +14,7 @@ object RsaType {
 
   def stringToRsaType(string: String): RsaNumber = string.toInt
 
-  def getRandom(maxNumber: RsaNumber): RsaNumber = Random.nextInt() % maxNumber
+  def getRandom(maxNumber: RsaNumber): RsaNumber = Random.nextInt().abs % maxNumber
 
   val Zero: RsaNumber = 0
   val One: RsaNumber = 1
