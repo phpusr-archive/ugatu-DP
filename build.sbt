@@ -17,12 +17,23 @@ testOptions in Test += Tests.Argument("-oDS", "-h", "target/report")
 
 javacOptions ++= Seq("-encoding", "UTF-8")
 
+
+
 // sbt-onejar (https://github.com/sbt/sbt-onejar)
 com.github.retronym.SbtOneJar.oneJarSettings
 
+// Main-Class for jar
 mainClass in Compile := Some(runClass)
+
+// Package depends on tests
+packageBin in Compile <<= (packageBin in Compile) dependsOn (test in Test)
+
+
 
 // Run task (run-app, runApp)
 lazy val runApp = TaskKey[Unit]("run-app", "A custom run task.")
 
 fullRunTask(runApp, Test, runClass)
+
+// Run app depends on tests
+runApp <<= runApp dependsOn (test in Test)
