@@ -16,6 +16,7 @@ object RsaType {
 
   def getRandom(maxNumber: RsaNumber): RsaNumber = Random.nextInt() % maxNumber
 
+  val Zero: RsaNumber = 0
   val One: RsaNumber = 1
   val Two: RsaNumber = 2
 

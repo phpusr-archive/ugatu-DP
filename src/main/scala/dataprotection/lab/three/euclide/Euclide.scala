@@ -1,7 +1,7 @@
 package dataprotection.lab.three.euclide
 
 import scala.annotation.tailrec
-import dataprotection.lab.three.types.RsaType.RsaNumber
+import dataprotection.lab.three.types.RsaType._
 
 /**
  * @author phpusr
@@ -26,7 +26,7 @@ object Euclide {
    * http://www.e-olimp.com/articles/18
    */
   @tailrec
-  def gcd(a: RsaNumber,b: RsaNumber): RsaNumber = if (b == 0L) a else gcd(b, a % b)
+  def gcd(a: RsaNumber,b: RsaNumber): RsaNumber = if (b == Zero) a else gcd(b, a % b)
 
   /**
    * Расширенный алгоритм Евклида
@@ -35,7 +35,7 @@ object Euclide {
    * Greatest common divisor (НОД)
    */
   def gcdExt(a: RsaNumber, b: RsaNumber): GCD = {
-    if (b == 0L) {
+    if (b == Zero) {
       GCD(a, 1, 0)
     } else {
       val res = gcdExt(b, a % b)

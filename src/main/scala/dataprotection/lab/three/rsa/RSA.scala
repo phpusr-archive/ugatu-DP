@@ -174,7 +174,7 @@ object RSA {
   /** Возводит число в степень и находит остаток от деления на каждой итерации */
   private def modulPow(value: RsaNumber, pow: RsaNumber, modulo: RsaNumber): RsaNumber = {
     var res = value
-    for (i <- 2L to pow) {
+    for (i <- RsaType.Two to pow) {
       res *= value
       res %= modulo
     }
