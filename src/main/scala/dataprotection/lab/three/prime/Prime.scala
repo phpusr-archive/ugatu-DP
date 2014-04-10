@@ -27,12 +27,20 @@ object Prime {
 
   /** Проверка, является ли число простым */
   def isPrime(number: RsaNumber) = {
-    if (number <= 1) false
+    // Число <= 1 не простые
+    if (number <= One) false
+    // Поиск простых чисел, находя их делителей от 2 до половины самого числа
     else {
-      val res = for (i <- Two to (number/Two) if number % i == 0) yield i
-      if (debugEnable) println(number + ": " + res.mkString(", "))
+      var prime = true
+      var divider = Two
+      val endNumber = number / Two
+      while(prime && divider <= endNumber) {
+        prime = number % divider != 0
+        if (debugEnable) println(s"num: $number; diveder: $divider - $prime")
+        divider += One
+      }
 
-      res.size == 0
+      prime
     }
   }
 
