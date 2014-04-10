@@ -5,8 +5,7 @@ import scala.swing.event.ButtonClicked
 import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
 import dataprotection.lab.three.form.main.panel._
-import dataprotection.lab.three.types.RsaType
-import dataprotection.lab.three.types.RsaType.RsaNumber
+import dataprotection.lab.three.types.RsaTrait
 
 /**
  * @author phpusr
@@ -17,7 +16,7 @@ import dataprotection.lab.three.types.RsaType.RsaNumber
 /**
  * Главная форма
  */
-object MainForm extends SimpleSwingApplication with TopPanel with CenterPanel with BottomPanel {
+object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with CenterPanel with BottomPanel {
 
   /** Форма */
   def top = new MainFrame {
@@ -102,12 +101,6 @@ object MainForm extends SimpleSwingApplication with TopPanel with CenterPanel wi
 
     // Выход
     case ButtonClicked(`exitButton`) => System.exit(0)
-  }
-
-  /** Неявное добавление метода к строке */
-  implicit class ExtendString(string: String) {
-    /** String -> RsaNumber */
-    def toRsaNumber: RsaNumber =  RsaType.stringToRsaType(string)
   }
 
   // Получение и установка значений на форме

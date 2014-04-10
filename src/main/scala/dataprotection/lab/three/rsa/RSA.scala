@@ -6,7 +6,7 @@ import sun.misc.{BASE64Decoder, BASE64Encoder}
 import org.dyndns.phpusr.util.log.Logger
 import scala.annotation.tailrec
 import dataprotection.lab.three.types.RsaType.RsaNumber
-import dataprotection.lab.three.types.RsaType
+import dataprotection.lab.three.types.{RsaTrait, RsaType}
 
 /**
  * @author phpusr
@@ -17,7 +17,7 @@ import dataprotection.lab.three.types.RsaType
 /**
  * Алгоритм шифрования RSA (Rivest, Shamir и Adleman)
  */
-object RSA {
+object RSA extends RsaTrait {
 
   /** Максимальное значение простого числа */
   val PrimeMaxNumber = 100
@@ -48,7 +48,7 @@ object RSA {
 
   /** Генерация открытого ключа по известным p и q */
   @tailrec
-  def generatePublicKey(p: RsaNumber, q: RsaNumber, maxNumber: Int): Int = {
+  def generatePublicKey(p: RsaNumber, q: RsaNumber, maxNumber: RsaNumber): RsaNumber = {
     val phi = getPhi(p, q)
     val startValue = 2
     val publicKey = RsaType.getRandom(maxNumber-startValue) + startValue
@@ -99,7 +99,7 @@ object RSA {
     // Шифрует каждый блок цифр, результаты склеивает
     val encodeMessage = blocks.map { block =>
       logger.trace(s"block: $block")
-      modulPow(block.toInt, publicKey, n)
+      modulPow(block.toRsaNumber, publicKey, n)
     }.mkString(Splitter)
     logger.debug(s"encodeMessage: $encodeMessage")
 
@@ -116,7 +116,7 @@ object RSA {
     // Разбиение шифрованной строки на части и расшифровка частей, с последующей склейкой
     val decodeMessageWithZeros = encodeMessage.split(Splitter).map { el =>
       logger.trace(s"el: $el")
-      val decodeBlock = modulPow(el.toInt, privateKey, n)
+      val decodeBlock = modulPow(el.toRsaNumber, privateKey, n)
       val format = s"%0${blockSize}d"
       decodeBlock formatted format
     }.mkString
@@ -159,7 +159,7 @@ object RSA {
     val split = encodeMessage.split(Splitter)
     logger.trace(s"split: ${split.mkString(" ")}")
     val bytes = split.map { el =>
-      modulPow(el.toInt, privateKey, n).toByte
+      modulPow(el.toRsaNumber, privateKey, n).toByte
     }
     logger.trace(s"bytes: ${bytes.mkString(" ")}")
     val base64String = new String(bytes, CharsetNameDefault)
