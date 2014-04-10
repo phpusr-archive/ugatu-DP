@@ -21,6 +21,7 @@ class PrimeSpec extends FlatSpec {
 
 
   "This number" should "be prime" in {
+    assert(Prime.isPrime(2))
     assert(Prime.isPrime(23))
     assert(Prime.isPrime(3))
     assert(Prime.isPrime(103))

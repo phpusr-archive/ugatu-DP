@@ -3,6 +3,7 @@ package dataprotection.lab.three.rsa
 import dataprotection.lab.three.euclide.Euclide
 import scala.util.Random
 import org.scalatest.FlatSpec
+import dataprotection.lab.three.types.RsaType
 
 /**
  * @author phpusr
@@ -20,17 +21,17 @@ class RSA_Spec extends FlatSpec {
       println(RSA.generatePQ(100))
   }
 
-  "RSA" should "generate normal p, q and Public Key" in {
+  it should "generate normal p, q and Public Key" in {
     for (i <- 1 to 10) {
       val (p, q) = RSA.generatePQ(100)
       val publicKey = RSA.generatePublicKey(p, q, 100)
       println(s"publicKey: $publicKey")
 
-      assert(Euclide.gcd(publicKey, (p-1)*(q-1)) == 1L)
+      assert(Euclide.gcd(publicKey, (p-1)*(q-1)) == RsaType.One)
     }
   }
 
-  "RSA" should "generate Private Key without exception" in {
+  it should "generate Private Key without exception" in {
     val (p, q, e) = (7, 11, 23)
     val privateKey = RSA.generatePrivateKey(p, q, e)
     println(s"privateKey: $privateKey")

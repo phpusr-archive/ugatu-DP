@@ -27,10 +27,13 @@ object Prime {
 
   /** Проверка, является ли число простым */
   def isPrime(number: RsaNumber) = {
-    // Число <= 1 не простые
+    // Числа <= 1 не простые
     if (number <= One) false
     // Поиск простых чисел, находя их делителей от 2 до половины самого числа
     else {
+      // По умолчанию число простое
+      //  как только будет найден делитель от 2 до number/2
+      //  число не простое
       var prime = true
       var divider = Two
       val endNumber = number / Two
