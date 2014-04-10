@@ -1,7 +1,7 @@
 package dataprotection.lab.three.euclide
 
 import scala.annotation.tailrec
-import dataprotection.lab.three.prime.Prime._
+import dataprotection.lab.three.types.RsaType.RsaNumber
 
 /**
  * @author phpusr
@@ -12,7 +12,7 @@ import dataprotection.lab.three.prime.Prime._
 /**
  * Выходндые значения расширенного алгоритма Евклида
  */
-case class GCD(d: PrimeType, x: PrimeType, y: PrimeType)
+case class GCD(d: RsaNumber, x: RsaNumber, y: RsaNumber)
 
 
 /**
@@ -26,7 +26,7 @@ object Euclide {
    * http://www.e-olimp.com/articles/18
    */
   @tailrec
-  def gcd(a: PrimeType,b: PrimeType): PrimeType = if (b == 0L) a else gcd(b, a % b)
+  def gcd(a: RsaNumber,b: RsaNumber): RsaNumber = if (b == 0L) a else gcd(b, a % b)
 
   /**
    * Расширенный алгоритм Евклида
@@ -34,7 +34,7 @@ object Euclide {
    * http://www.e-olimp.com/articles/18
    * Greatest common divisor (НОД)
    */
-  def gcdExt(a: PrimeType, b: PrimeType): GCD = {
+  def gcdExt(a: RsaNumber, b: RsaNumber): GCD = {
     if (b == 0L) {
       GCD(a, 1, 0)
     } else {

@@ -6,7 +6,7 @@ import sun.misc.{BASE64Decoder, BASE64Encoder}
 import org.dyndns.phpusr.util.log.Logger
 import scala.annotation.tailrec
 import scala.util.Random
-import dataprotection.lab.three.prime.Prime.PrimeType
+import dataprotection.lab.three.types.RsaType.RsaNumber
 
 /**
  * @author phpusr
@@ -48,7 +48,7 @@ object RSA {
 
   /** Генерация открытого ключа по известным p и q */
   @tailrec
-  def generatePublicKey(p: PrimeType, q: PrimeType, maxNumber: Int): Int = {
+  def generatePublicKey(p: RsaNumber, q: RsaNumber, maxNumber: Int): Int = {
     val phi = getPhi(p, q)
     val startValue = 2
     val publicKey = Random.nextInt(maxNumber-startValue) + startValue
@@ -60,7 +60,7 @@ object RSA {
   }
 
   /** Генерация закрытого ключа по известным p, q и e */
-  def generatePrivateKey(p: PrimeType, q: PrimeType, e: PrimeType) = {
+  def generatePrivateKey(p: RsaNumber, q: RsaNumber, e: RsaNumber) = {
     val phi = getPhi(p, q)
 
     val gcd = Euclide.gcdExt(e, phi)
@@ -72,7 +72,7 @@ object RSA {
 
   /** Генерация чисел P и Q */
   @tailrec
-  def generatePQ(maxNumber: PrimeType) : (PrimeType, PrimeType) = {
+  def generatePQ(maxNumber: RsaNumber) : (RsaNumber, RsaNumber) = {
     // p и q должны быть больше этого числа, иначе могут быть косяки
     val FixNumber = 13
     val p = Prime.generatePrime(maxNumber)
@@ -83,10 +83,10 @@ object RSA {
   }
 
   /** Возвращает число Фи */
-  private def getPhi(p: PrimeType, q: PrimeType) = (p-1) * (q-1)
+  private def getPhi(p: RsaNumber, q: RsaNumber) = (p-1) * (q-1)
 
   /** Шифрование числа TODO test, rename */
-  def encodeNumber(message: String, n: PrimeType, publicKey: PrimeType) = {
+  def encodeNumber(message: String, n: RsaNumber, publicKey: RsaNumber) = {
     l.title(s"encodeNumber($message)")
     
     // Размер блока числа
@@ -107,7 +107,7 @@ object RSA {
   }
 
   /** Расшифрование числа */
-  def decodeNumber(encodeMessage: String, n: PrimeType, privateKey: PrimeType) = {
+  def decodeNumber(encodeMessage: String, n: RsaNumber, privateKey: RsaNumber) = {
     l.title(s"decodeNumber($encodeMessage)")
 
     // Размер блока числа
@@ -137,7 +137,7 @@ object RSA {
   }
 
   /** Шифрование строки */
-  def encodeString(message: String, n: PrimeType, publicKey: PrimeType) = {
+  def encodeString(message: String, n: RsaNumber, publicKey: RsaNumber) = {
     l.title(s"encodeString($message)")
 
     val base64String = new BASE64Encoder().encode(message.getBytes(CharsetNameDefault))
@@ -153,7 +153,7 @@ object RSA {
   }
 
   /** Рашифрование строки */
-  def decodeString(encodeMessage: String, n: PrimeType, privateKey: PrimeType) = {
+  def decodeString(encodeMessage: String, n: RsaNumber, privateKey: RsaNumber) = {
     l.title(s"decodeString($encodeMessage)")
 
     val split = encodeMessage.split(Splitter)
@@ -172,7 +172,7 @@ object RSA {
   }
 
   /** Возводит число в степень и находит остаток от деления на каждой итерации */
-  private def modulPow(value: PrimeType, pow: PrimeType, modulo: PrimeType): PrimeType = {
+  private def modulPow(value: RsaNumber, pow: RsaNumber, modulo: RsaNumber): RsaNumber = {
     var res = value
     for (i <- 2L to pow) {
       res *= value

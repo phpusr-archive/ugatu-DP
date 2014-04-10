@@ -2,8 +2,8 @@ package experiment.rsa
 
 import sun.misc.{BASE64Decoder, BASE64Encoder}
 import dataprotection.lab.three.euclide.Euclide
-import dataprotection.lab.three.prime.Prime._
 import dataprotection.lab.three.euclide.GCD
+import dataprotection.lab.three.types.RsaType.RsaNumber
 
 /**
  * @author phpusr
@@ -94,7 +94,7 @@ object RSA_App extends App {
   }
 
   /** Возводит число в степень и находит остаток от деления на каждой итерации */
-  def modulPow(value: PrimeType, pow: PrimeType, modulo: PrimeType): PrimeType = {
+  def modulPow(value: RsaNumber, pow: RsaNumber, modulo: RsaNumber): RsaNumber = {
     if (pow == 0L) 1
     else (value * modulPow(value, pow-1, modulo)) % modulo
   }
