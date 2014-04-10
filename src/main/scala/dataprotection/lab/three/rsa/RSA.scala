@@ -29,19 +29,19 @@ object RSA {
   private val CharsetNameDefault = "utf8"
 
   /** Логирование */
-  private val l = Logger()
+  private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 
   /** Генерация ключей */
   def generateKeys() = {
-    l.title("generateKeys")
+    logger.title("generateKeys")
     val (p, q) = generatePQ(PrimeMaxNumber)
-    l.debug(s"p: $p; q: $q")
+    logger.debug(s"p: $p; q: $q")
     val n = p * q
     val publicKey = generatePublicKey(p, q, PublicKeyMaxNumber)
     val privateKey = generatePrivateKey(p, q, publicKey)
 
     val keys = (p, q, n, publicKey, privateKey)
-    l.debug(s"keys: $keys")
+    logger.debug(s"keys: $keys")
 
     keys
   }
@@ -87,7 +87,7 @@ object RSA {
 
   /** Шифрование числа TODO test, rename */
   def encodeNumber(message: String, n: RsaNumber, publicKey: RsaNumber) = {
-    l.title(s"encodeNumber($message)")
+    logger.title(s"encodeNumber($message)")
     
     // Размер блока числа
     val blockSize = n.toString.size - 1
@@ -98,33 +98,33 @@ object RSA {
 
     // Шифрует каждый блок цифр, результаты склеивает
     val encodeMessage = blocks.map { block =>
-      l.trace(s"block: $block")
+      logger.trace(s"block: $block")
       modulPow(block.toInt, publicKey, n)
     }.mkString(Splitter)
-    l.debug(s"encodeMessage: $encodeMessage")
+    logger.debug(s"encodeMessage: $encodeMessage")
 
     encodeMessage
   }
 
   /** Расшифрование числа */
   def decodeNumber(encodeMessage: String, n: RsaNumber, privateKey: RsaNumber) = {
-    l.title(s"decodeNumber($encodeMessage)")
+    logger.title(s"decodeNumber($encodeMessage)")
 
     // Размер блока числа
     val blockSize = n.toString.size - 1
 
     // Разбиение шифрованной строки на части и расшифровка частей, с последующей склейкой
     val decodeMessageWithZeros = encodeMessage.split(Splitter).map { el =>
-      l.trace(s"el: $el")
+      logger.trace(s"el: $el")
       val decodeBlock = modulPow(el.toInt, privateKey, n)
       val format = s"%0${blockSize}d"
       decodeBlock formatted format
     }.mkString
-    l.trace(s"decodeMessageWithZeros: $decodeMessageWithZeros")
+    logger.trace(s"decodeMessageWithZeros: $decodeMessageWithZeros")
 
     // Избавление от нулей в начале
     val decodeMessage = removeFirstZeros(decodeMessageWithZeros)
-    l.debug(s"decodeMessage: $decodeMessage")
+    logger.debug(s"decodeMessage: $decodeMessage")
 
     decodeMessage
   }
@@ -138,35 +138,35 @@ object RSA {
 
   /** Шифрование строки */
   def encodeString(message: String, n: RsaNumber, publicKey: RsaNumber) = {
-    l.title(s"encodeString($message)")
+    logger.title(s"encodeString($message)")
 
     val base64String = new BASE64Encoder().encode(message.getBytes(CharsetNameDefault))
-    l.trace("base64: " + base64String)
-    l.trace("bytes: " + base64String.getBytes(CharsetNameDefault).mkString(" "))
+    logger.trace("base64: " + base64String)
+    logger.trace("bytes: " + base64String.getBytes(CharsetNameDefault).mkString(" "))
 
     val encodeMessage = base64String.getBytes(CharsetNameDefault).map { el =>
       modulPow(el, publicKey, n)
     }.mkString(Splitter)
-    l.debug(s"encodeMessage: $encodeMessage")
+    logger.debug(s"encodeMessage: $encodeMessage")
 
     encodeMessage
   }
 
   /** Рашифрование строки */
   def decodeString(encodeMessage: String, n: RsaNumber, privateKey: RsaNumber) = {
-    l.title(s"decodeString($encodeMessage)")
+    logger.title(s"decodeString($encodeMessage)")
 
     val split = encodeMessage.split(Splitter)
-    l.trace(s"split: ${split.mkString(" ")}")
+    logger.trace(s"split: ${split.mkString(" ")}")
     val bytes = split.map { el =>
       modulPow(el.toInt, privateKey, n).toByte
     }
-    l.trace(s"bytes: ${bytes.mkString(" ")}")
+    logger.trace(s"bytes: ${bytes.mkString(" ")}")
     val base64String = new String(bytes, CharsetNameDefault)
-    l.trace("base64: " + base64String)
+    logger.trace("base64: " + base64String)
 
     val decodeMessage = new String(new BASE64Decoder().decodeBuffer(base64String), CharsetNameDefault)
-    l.debug(s"decodeMessage: $decodeMessage")
+    logger.debug(s"decodeMessage: $decodeMessage")
 
     decodeMessage
   }

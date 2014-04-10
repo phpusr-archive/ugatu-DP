@@ -9,20 +9,16 @@ package org.dyndns.phpusr.util.log
 /**
  * Логгер
  */
-trait LoggerMixin {
-  // Log levels
-  private val infoEnable = true
-  private val debugEnable = true
-  private val traceEnable = false
-
+case class Logger(infoEnable: Boolean, debugEnable: Boolean, traceEnable: Boolean) {
   // Methods logging
   def title(s: String) { if (infoEnable) println(s"\n----- $s -----") }
   def debug(s: String) { if (debugEnable) println(s"LOG:: $s") }
   def trace(s: String) { if (traceEnable) println(s"TRACE:: $s") }
 }
 
-class Logger extends LoggerMixin
-
-object Logger {
-  def apply() = new Logger
+/**
+ * Ленивое логирование
+ */
+trait LazyLogging {
+  val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 }
