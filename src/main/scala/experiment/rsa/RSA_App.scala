@@ -1,7 +1,9 @@
 package experiment.rsa
 
 import sun.misc.{BASE64Decoder, BASE64Encoder}
-import dataprotection.lab.three.euclide.{Euclide, GCD}
+import dataprotection.lab.three.euclide.Euclide
+import dataprotection.lab.three.prime.Prime._
+import dataprotection.lab.three.euclide.GCD
 
 /**
  * @author phpusr
@@ -28,7 +30,7 @@ object RSA_App extends App {
   /** Открытый ключ */
   val e = 79
   /** Закрытый ключ */
-  var d = 0
+  var d = 0L
 
   //ladrina()
   eolimp()
@@ -92,8 +94,8 @@ object RSA_App extends App {
   }
 
   /** Возводит число в степень и находит остаток от деления на каждой итерации */
-  def modulPow(value: Int, pow: Int, modulo: Int): Int = {
-    if (pow == 0) 1
+  def modulPow(value: PrimeType, pow: PrimeType, modulo: PrimeType): PrimeType = {
+    if (pow == 0L) 1
     else (value * modulPow(value, pow-1, modulo)) % modulo
   }
 

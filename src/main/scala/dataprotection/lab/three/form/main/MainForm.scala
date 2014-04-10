@@ -103,16 +103,16 @@ object MainForm extends SimpleSwingApplication with TopPanel with CenterPanel wi
   }
 
   // Получение и установка значений на форме
-  private def p = pTextField.text.toInt
+  private def p = pTextField.text.toLong
   private def clearP() = pTextField.text = ""
-  private def q = qTextField.text.toInt
+  private def q = qTextField.text.toLong
   private def clearQ() = qTextField.text = ""
-  private def n = nTextField.text.toInt
+  private def n = nTextField.text.toLong
   private def clearN() = nTextField.text = ""
 
-  private def publicKey = publicKeyTextField.text.toInt
+  private def publicKey = publicKeyTextField.text.toLong
   private def clearPublicKey() = publicKeyTextField.text = ""
-  private def privateKey = privateKeyTextField.text.toInt
+  private def privateKey = privateKeyTextField.text.toLong
   private def clearPrivateKey() = privateKeyTextField.text = ""
 
   private def decodeMessage = decodeMessageTextArea.text

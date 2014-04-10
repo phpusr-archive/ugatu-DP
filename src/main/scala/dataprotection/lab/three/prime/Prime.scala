@@ -14,21 +14,23 @@ import scala.annotation.tailrec
  */
 object Prime {
 
+  type PrimeType = Long
+
   private val debugEnable = false
 
   /** Генерация простого числа */
   @tailrec
-  def generatePrime(maxNumber: Int): Int = {
-    val number = Random.nextInt(maxNumber)
+  def generatePrime(maxNumber: PrimeType): PrimeType = {
+    val number = Random.nextLong() % maxNumber
     if (isPrime(number)) number
     else generatePrime(maxNumber)
   }
 
   /** Проверка, является ли число простым */
-  def isPrime(number: Int) = {
+  def isPrime(number: PrimeType) = {
     if (number <= 1) false
     else {
-      val res = for (i <- 2 to number/2 if number % i == 0) yield i
+      val res = for (i <- 2L to (number/2) if number % i == 0) yield i
       if (debugEnable) println(number + ": " + res.mkString(", "))
 
       res.size == 0

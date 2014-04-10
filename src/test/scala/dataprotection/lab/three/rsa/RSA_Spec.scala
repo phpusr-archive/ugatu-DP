@@ -26,7 +26,7 @@ class RSA_Spec extends FlatSpec {
       val publicKey = RSA.generatePublicKey(p, q, 100)
       println(s"publicKey: $publicKey")
 
-      assert(Euclide.gcd(publicKey, (p-1)*(q-1)) == 1)
+      assert(Euclide.gcd(publicKey, (p-1)*(q-1)) == 1L)
     }
   }
 
