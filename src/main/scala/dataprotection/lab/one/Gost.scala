@@ -111,7 +111,7 @@ class Gost(keyHexString: String) {
   private def debugSMod(rightPart: Int, partKey: Int, sMod: Int) {
     logger.title("Debug sMod")
 
-    println("partKey: " + partKey.toBinaryString)
+    logger.debug("partKey: " + partKey.toBinaryString)
 
     val sum64: Long = rightPart.toLong + partKey.toLong
     logger.debug("sum64: " + sum64.toBinaryString)
@@ -134,16 +134,16 @@ class Gost(keyHexString: String) {
   private def debugLeftPart(block: Long, leftPart: Int) {
     logger.title("Debug left part")
 
-    println(block)
+    logger.debug("" + block)
     val blockBin = block.toBinaryString
     // Правая часть числа
     val blockRight = blockBin.substring(BlockPartSize)
     val blockLeft = blockBin.substring(0, BlockPartSize)
 
-    println(s"block: $blockLeft $blockRight")
+    logger.debug(s"block: $blockLeft $blockRight")
 
     val leftPartBin = leftPart.toBinaryString
-    println(s"lpart: $leftPartBin")
+    logger.debug(s"lpart: $leftPartBin")
 
     assert(leftPartBin == blockLeft)
   }
@@ -152,17 +152,17 @@ class Gost(keyHexString: String) {
   private def debugRightPart(block: Long, rightPart: Int) {
     logger.title("Debug right part")
 
-    println(block)
+    logger.debug("" + block)
     val blockBin = block.toBinaryString
     // Правая часть числа
     val blockRight = blockBin.substring(BlockPartSize)
     // Правая часть без незначащих нолей
     val blocRightWithoutZeros = blockRight.substring(blockRight.indexOf("1"))
 
-    println(s"block: ${blockBin.substring(0, BlockPartSize)} $blocRightWithoutZeros")
+    logger.debug(s"block: ${blockBin.substring(0, BlockPartSize)} $blocRightWithoutZeros")
 
     val rightPartBin = rightPart.toBinaryString
-    println(f"rpart: ${0 formatted s"%0${BlockPartSize}d"} $rightPartBin")
+    logger.debug(f"rpart: ${0 formatted s"%0${BlockPartSize}d"} $rightPartBin")
 
     assert(rightPartBin == blocRightWithoutZeros)
   }
