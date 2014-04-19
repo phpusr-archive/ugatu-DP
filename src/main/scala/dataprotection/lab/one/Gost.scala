@@ -2,6 +2,7 @@ package dataprotection.lab.one
 
 import scala.util.Random
 import org.dyndns.phpusr.util.log.Logger
+import scala.collection.mutable.ListBuffer
 
 /**
  * @author phpusr
@@ -23,6 +24,11 @@ object Gost {
   /** Разделитель блоков при выводе ключа */
   private val KeySplitter = " "
 
+
+  /** Размер блока шифрования в битах */
+  private val BlockPartSize = 32
+
+
   //---------------------------------------------//
 
   /** Генерирует 32-битное число */
@@ -39,7 +45,6 @@ object Gost {
     val keySeq = for (i <- 1 to KeyBlocksCount) yield generate32BitNumber()
 
     val keyHex = keySeq.map(e => Integer.toHexString(e)).mkString(KeySplitter)
-    logger.debug("Key hex: " + keyHex)
 
     (keySeq, keyHex)
   }
@@ -49,9 +54,17 @@ object Gost {
     keyHex.split(KeySplitter).map(java.lang.Long.parseLong(_, KeyOutputNotation).toInt)
   }
 
+  /** Возвращает левую часть 64-битного числа */
+  def getLeftPart64BitNumber = (block: Long) => (block >>> BlockPartSize).toInt
+
+  /** Возвращает правую часть 64-битного числа */
+  def getRightPart64BitNumber = (block: Long) => (block << BlockPartSize >>> BlockPartSize).toInt
+
 }
 
 class Gost(keyHexString: String) {
+
+  import Gost.BlockPartSize
 
   /** Логирование */
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
@@ -59,28 +72,69 @@ class Gost(keyHexString: String) {
   /** Ключ */
   private val key = Gost.keyHexToKeyArray(keyHexString)
 
-  /** Размер блока шифрования в битах */
-  private val BlockPartSize = 32
+  /** Число для нахождения остатка от деления */
+  private val NumberForMod = Math.pow(2, BlockPartSize).toInt
 
   //---------------------------------------------//
 
   /** Основной шаг криптопреобразования */
-  private def basicStep(block: Long) {
+  def basicStep(block: Long) { //TODO private
 
     // Левая часть
-    val leftPart = (block >>> BlockPartSize).toInt
+    val leftPart = Gost.getLeftPart64BitNumber(block)
     debugLeftPart(block, leftPart)
 
     // Правая часть
-    val rightPart = (block << BlockPartSize >>> BlockPartSize).toInt
+    val rightPart = Gost.getRightPart64BitNumber(block)
     debugRightPart(block, rightPart)
+
+    val partKey = key(0) //TODO
+
+    // Остаток от деления
+    val sMod = (rightPart + partKey) % NumberForMod
+    debugSMod(rightPart, partKey, sMod)
+
+    val SBlockBitSize = 4
+    val list = ListBuffer[Int]()
+    for (i <- 1 to 8) {
+      val sBlock = (sMod % Math.pow(2, SBlockBitSize)).toInt
+      list += sBlock
+
+      sMod >>> SBlockBitSize
+    }
 
   }
 
   //---------------------DEBUG---------------------//
 
+  /** Отладка сложение по модулю 2 в 32 */
+  private def debugSMod(rightPart: Int, partKey: Int, sMod: Int) {
+    logger.title("Debug sMod")
+
+    println("partKey: " + partKey.toBinaryString)
+
+    val sum64: Long = rightPart.toLong + partKey.toLong
+    logger.debug("sum64: " + sum64.toBinaryString)
+    val sum32 = Gost.getRightPart64BitNumber(sum64)
+    logger.debug("sum32: " + sum32.toBinaryString)
+
+    val sModTest32 = sum32 % NumberForMod
+    logger.debug("sModT: " + sModTest32.toBinaryString)
+
+    // Проверка равенства правой части суммы и остатка от деления на (2^32)
+    assert(sum32 == sModTest32)
+
+    logger.debug("sModO: " + sMod.toBinaryString)
+
+    // Проверка числа подсчитанного на Int и на Long
+    assert(sMod == sModTest32)
+  }
+
   /** Отладка левой части числа */
   private def debugLeftPart(block: Long, leftPart: Int) {
+    logger.title("Debug left part")
+
+    println(block)
     val blockBin = block.toBinaryString
     // Правая часть числа
     val blockRight = blockBin.substring(BlockPartSize)
@@ -96,6 +150,9 @@ class Gost(keyHexString: String) {
 
   /** Отладка правой части числа */
   private def debugRightPart(block: Long, rightPart: Int) {
+    logger.title("Debug right part")
+
+    println(block)
     val blockBin = block.toBinaryString
     // Правая часть числа
     val blockRight = blockBin.substring(BlockPartSize)
@@ -107,7 +164,7 @@ class Gost(keyHexString: String) {
     val rightPartBin = rightPart.toBinaryString
     println(f"rpart: ${0 formatted s"%0${BlockPartSize}d"} $rightPartBin")
 
-    assert(rightPartBin == blockRight)
+    assert(rightPartBin == blocRightWithoutZeros)
   }
 
 }
