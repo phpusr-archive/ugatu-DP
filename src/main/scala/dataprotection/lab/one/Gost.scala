@@ -28,6 +28,8 @@ object Gost {
   /** Размер блока шифрования в битах */
   private val BlockPartSize = 32
 
+  /** Размер элементов блока S в битах */
+  private val SBlockBitSize = 4
 
   //---------------------------------------------//
 
@@ -64,7 +66,7 @@ object Gost {
 
 class Gost(keyHexString: String) {
 
-  import Gost.BlockPartSize
+  import Gost.{BlockPartSize, SBlockBitSize}
 
   /** Логирование */
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
@@ -94,18 +96,52 @@ class Gost(keyHexString: String) {
     val sMod = (rightPart + partKey) % NumberForMod
     debugSMod(rightPart, partKey, sMod)
 
-    val SBlockBitSize = 4
-    val list = ListBuffer[Int]()
+    // Остаток от деления делим на 8 блоков
+    val delta = BlockPartSize - SBlockBitSize
+    val sBlocskList = ListBuffer[Byte]()
+    var sModShift = sMod
     for (i <- 1 to 8) {
-      val sBlock = (sMod % Math.pow(2, SBlockBitSize)).toInt
-      list += sBlock
+      val sBlock = (sModShift << delta >>> delta).toByte
+      sBlocskList += sBlock
 
-      sMod >>> SBlockBitSize
+      sModShift = sModShift >>> SBlockBitSize
     }
+    debugSBlocks(sBlocskList, sMod)
 
   }
 
   //---------------------DEBUG---------------------//
+
+  /** Отладка получения S-блоков */
+  private def debugSBlocks(sBlocksList: Seq[Byte], sMod: Int) {
+    val reverseSBlocksList = sBlocksList.reverse.to[ListBuffer]
+
+    // Удаляем элементы в начале, если они == 0
+    for (i <- 1 to reverseSBlocksList.size) {
+      if (reverseSBlocksList(0) == 0) reverseSBlocksList.remove(0)
+    }
+
+    // Вывод найденных S-блоков (без начальных нулевых)
+    val sBlocksListOutput = reverseSBlocksList.map(_.toInt.toBinaryString).mkString(" ")
+    logger.debug(s"orig(${sBlocksList.size}): " + sBlocksListOutput)
+
+    // Вывод S-блоков, полученных разбиением строки
+    val testSBlocksStrList = sMod.toBinaryString.reverse.split(s"(?<=\\G.{4})").map(_.reverse).reverse
+    logger.debug(s"test(${testSBlocksStrList.size}): " + testSBlocksStrList.mkString(" "))
+
+    // Преобразование бинарных тестовых блоков в Byte
+    val testSBlocksList = testSBlocksStrList.map(java.lang.Byte.parseByte(_, 2))
+
+    // Проверка правильного нахождения S-блоков
+    for (i <- 0 until reverseSBlocksList.size) {
+      val sBlock = reverseSBlocksList(i)
+      val testSBlock = testSBlocksList(i)
+
+      println(s"$testSBlock == $sBlock")
+      assert(sBlock == testSBlock)
+    }
+
+  }
 
   /** Отладка сложение по модулю 2 в 32 */
   private def debugSMod(rightPart: Int, partKey: Int, sMod: Int) {
