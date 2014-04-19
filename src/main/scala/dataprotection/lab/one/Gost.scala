@@ -96,14 +96,16 @@ class Gost(keyHexString: String) {
     val sMod = (rightPart + partKey) % NumberForMod
     debugSMod(rightPart, partKey, sMod)
 
-    // Остаток от деления делим на 8 блоков
-    val delta = BlockPartSize - SBlockBitSize
+    // Остаток от деления делим на 8 блоков (по 4 бита)
+    val shiftBitsCount = BlockPartSize - SBlockBitSize
     val sBlocskList = ListBuffer[Byte]()
+    val SBlockCount = 8
     var sModShift = sMod
-    for (i <- 1 to 8) {
-      val sBlock = (sModShift << delta >>> delta).toByte
+    for (i <- 1 to SBlockCount) {
+      // Выделение последних 4-х бит
+      val sBlock = (sModShift << shiftBitsCount >>> shiftBitsCount).toByte
       sBlocskList += sBlock
-
+      // Отрезание последних 4-х бит, чтобы подойти к следующему блоку
       sModShift = sModShift >>> SBlockBitSize
     }
     debugSBlocks(sBlocskList, sMod)
