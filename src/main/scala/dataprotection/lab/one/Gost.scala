@@ -24,12 +24,8 @@ object Gost {
   /** Разделитель блоков при выводе ключа */
   private val KeySplitter = " "
 
-
   /** Размер блока шифрования в битах */
   private val BlockPartSize = 32
-
-  /** Размер элементов блока S в битах */
-  private val SBlockBitSize = 4
 
   //---------------------------------------------//
 
@@ -66,7 +62,7 @@ object Gost {
 
 class Gost(keyHexString: String) {
 
-  import Gost.{BlockPartSize, SBlockBitSize}
+  import Gost.BlockPartSize
 
   /** Логирование */
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
@@ -76,6 +72,12 @@ class Gost(keyHexString: String) {
 
   /** Число для нахождения остатка от деления */
   private val NumberForMod = Math.pow(2, BlockPartSize).toInt
+
+  /** Размер элементов блока S в битах */
+  private val SBlockBitSize = 4
+
+  /** Таблица замен */
+  private val ReplaceTbl = ReplaceTable.default
 
   //---------------------------------------------//
 
@@ -110,12 +112,29 @@ class Gost(keyHexString: String) {
     }
     debugSBlocks(sBlocskList, sMod)
 
+    // Замена блоков
+    val sSimple = for (i <- 0 until sBlocskList.size) yield ReplaceTbl(i)(sBlocskList(i))
+    logger.debug("sSimple: " + sSimple.map(_.toInt.toBinaryString))
+    // Преобразование блоков в одно число
+    var sSimpleOne = 0
+    for (i <- 0 until sSimple.size) {
+      val degree = BlockPartSize - SBlockBitSize * (i+1)
+      sSimpleOne += sSimple(i) * Math.pow(2, degree).toInt
+    }
+    //TODO debug
+    println(sSimpleOne.toBinaryString)
+
+    // Циклический сдвиг влево на 11 бит
   }
 
   //---------------------DEBUG---------------------//
 
+
+
   /** Отладка получения S-блоков */
   private def debugSBlocks(sBlocksList: Seq[Byte], sMod: Int) {
+    logger.title("Debug sBlocks")
+
     val reverseSBlocksList = sBlocksList.reverse.to[ListBuffer]
 
     // Удаляем элементы в начале, если они == 0
@@ -139,7 +158,7 @@ class Gost(keyHexString: String) {
       val sBlock = reverseSBlocksList(i)
       val testSBlock = testSBlocksList(i)
 
-      println(s"$testSBlock == $sBlock")
+      logger.debug(s"$testSBlock == $sBlock")
       assert(sBlock == testSBlock)
     }
 
