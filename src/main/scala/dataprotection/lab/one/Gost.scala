@@ -94,15 +94,17 @@ class Gost(keyHexString: String) {
     debugRightPart(block, rightPart)
 
     // Оболочка для частей блока для шифрования
-    var enc: Block = Block(leftPart, rightPart)
+    var enc = Block(leftPart, rightPart)
 
     // Функция запускающая базовый шаг криптопреобразования
     def runBasicStep = (keyPart: Int) => enc = basicStep(enc.leftPart, enc.rightPart, keyPart)
 
-    key.foreach(runBasicStep)
-    key.foreach(runBasicStep)
-    key.foreach(runBasicStep)
-    key.reverse.foreach(runBasicStep)
+    key.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+    key.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+    key.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+    key.reverse.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+
+    enc = Block(enc.rightPart, enc.leftPart)
     debugEncryptBlock(enc)
 
     // Возврат соединенных блоков
@@ -126,10 +128,12 @@ class Gost(keyHexString: String) {
     // Функция запускающая базовый шаг криптопреобразования
     def runBasicStep = (keyPart: Int) => enc = basicStep(enc.leftPart, enc.rightPart, keyPart)
 
-    key.foreach(runBasicStep)
-    key.reverse.foreach(runBasicStep)
-    key.reverse.foreach(runBasicStep)
-    key.reverse.foreach(runBasicStep)
+    key.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+    key.reverse.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+    key.reverse.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+    key.reverse.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+
+    enc = Block(enc.rightPart, enc.leftPart)
     debugEncryptBlock(enc)
 
     // Возврат соединенных блоков
@@ -318,8 +322,9 @@ class Gost(keyHexString: String) {
     logger.debug("" + block)
     val blockBin = block.toBinaryString
     // Правая часть числа
-    val blockRight = blockBin.substring(blockBin.size - BlockPartSize)
-    val blockLeft = blockBin.substring(0, BlockPartSize)
+    val splitIndex = blockBin.size - BlockPartSize
+    val blockRight = blockBin.substring(splitIndex)
+    val blockLeft = blockBin.substring(0, splitIndex)
 
     logger.debug(s"block: $blockLeft $blockRight")
 
