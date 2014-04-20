@@ -103,15 +103,10 @@ class Gost(keyHexString: String) {
     key.foreach(runBasicStep)
     key.foreach(runBasicStep)
     key.reverse.foreach(runBasicStep)
+    debugEncryptBlock(enc)
 
-    val encryptResult = enc.allPart
-
-    //TODO debug
-    println("lPart: " + enc.leftPart.toBinaryString)
-    println("rPart: " + enc.rightPart.toBinaryString)
-    println("encr: " + encryptResult.toBinaryString)
-
-
+    // Возврат соединенных блоков
+    enc.allPart
   }
 
   /** Основной шаг криптопреобразования */
@@ -158,6 +153,26 @@ class Gost(keyHexString: String) {
   }
 
   //---------------------DEBUG---------------------//
+
+  /** Проверка шифрования блока */
+  private def debugEncryptBlock(enc: Block) {
+    logger.title("Debug encrypt block")
+
+    logger.debug("lPart: " + enc.leftPart.toBinaryString + s" (${enc.leftPart}})")
+    logger.debug("rPart: " + enc.rightPart.toBinaryString + s" (${enc.rightPart}})")
+    val resutl = enc.allPart
+    logger.debug("all  : " + resutl.toBinaryString)
+
+    // Откусывание левой части и сравнение ее с оригиналом
+    val testLeftPart = Gost.getLeftPart64BitNumber(resutl)
+    logger.debug(s"${testLeftPart.toBinaryString} == ${enc.leftPart.toBinaryString}")
+    assert(testLeftPart == enc.leftPart)
+
+    // Откусывание правой части и сравнение ее с оригиналом
+    val testRightPart = Gost.getRightPart64BitNumber(resutl)
+    logger.debug(s"${testRightPart.toBinaryString} == ${enc.rightPart.toBinaryString}")
+    assert(testRightPart == enc.rightPart)
+  }
 
   /** Проверка обработки левой части */
   private def debugSXor(leftPart: Int, sRol: Int, sXor: Int) {
