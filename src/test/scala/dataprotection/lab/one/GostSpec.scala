@@ -12,6 +12,8 @@ import scala.runtime.{RichLong, RichInt}
 /**
  * Тестирование класса Gost
  * //TODO переделать
+ *   отдельный тест для хелпера и госта
+ *   попробовать использовать библиотеку для проверки шифрвоания
  */
 class GostSpec extends FlatSpec {
 

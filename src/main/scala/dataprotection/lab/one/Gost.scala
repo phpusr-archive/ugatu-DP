@@ -29,8 +29,9 @@ object Gost extends GostDebug {
 
   /** Шифрование блока */
   private def encryptOrDecryptBlock(block: Long, key: String, encrypt: Boolean) = {
+    //TODO сюда уже должен приходить keyArray
     val keyArray = keyHexToKeyArray(key)
-    //TODO проверка на битность
+    //TODO проверка на битность ключа и блоков
 
     // Левая часть
     val leftPart = getLeftPart64BitNumber(block)
