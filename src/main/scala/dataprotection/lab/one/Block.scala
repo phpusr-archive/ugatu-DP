@@ -16,7 +16,10 @@ case class Block(leftPart: Int, rightPart: Int) {
 
   /** Получение из двух 32-битных частей одну 64-ю */
   def allPart = {
-    (leftPart.toLong << PartSize) | rightPart
+    // Получение 64-битного числа с первой половиной нолей
+    val rightPart64 = rightPart.toLong << PartSize >>> PartSize
+    // Сдвиг левой части в первую половину и сложение со второй
+    (leftPart.toLong << PartSize) | rightPart64
   }
 
 }
