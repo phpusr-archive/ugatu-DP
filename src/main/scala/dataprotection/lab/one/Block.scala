@@ -22,5 +22,8 @@ case class Block(leftPart: Int, rightPart: Int) {
     (leftPart.toLong << PartSize) | rightPart64
   }
 
+  /** Меняет местами левую и правую части */
+  def swap = Block(rightPart, leftPart)
+
 }
 

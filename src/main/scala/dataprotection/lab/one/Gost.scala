@@ -93,18 +93,19 @@ class Gost(keyHexString: String) {
     val rightPart = Gost.getRightPart64BitNumber(block)
     debugRightPart(block, rightPart)
 
-    // Оболочка для частей блока для шифрования
+    // Оболочка частей блока для шифрования
     var enc = Block(leftPart, rightPart)
 
-    // Функция запускающая базовый шаг криптопреобразования
+    /** Функция запускающая базовый шаг криптопреобразования */
     def runBasicStep = (keyPart: Int) => enc = basicStep(enc.leftPart, enc.rightPart, keyPart)
 
-    key.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
-    key.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
-    key.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
-    key.reverse.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+    key.foreach(runBasicStep)
+    key.foreach(runBasicStep)
+    key.foreach(runBasicStep)
+    key.reverse.foreach(runBasicStep)
 
-    enc = Block(enc.rightPart, enc.leftPart)
+    // Меняет местами левую и правую части
+    enc = enc.swap
     debugEncryptBlock(enc)
 
     // Возврат соединенных блоков
@@ -113,6 +114,7 @@ class Gost(keyHexString: String) {
 
   /** Расшифрование блока */
   def decryptBlock(block: Long) = {
+    //TODO проверка на битность
 
     // Левая часть
     val leftPart = Gost.getLeftPart64BitNumber(block)
@@ -122,22 +124,23 @@ class Gost(keyHexString: String) {
     val rightPart = Gost.getRightPart64BitNumber(block)
     debugRightPart(block, rightPart)
 
-    // Оболочка для частей блока для шифрования
-    var enc: Block = Block(leftPart, rightPart)
+    // Оболочка частей блока для расшифрования
+    var dec = Block(leftPart, rightPart)
 
-    // Функция запускающая базовый шаг криптопреобразования
-    def runBasicStep = (keyPart: Int) => enc = basicStep(enc.leftPart, enc.rightPart, keyPart)
+    /** Функция запускающая базовый шаг криптопреобразования */
+    def runBasicStep = (keyPart: Int) => dec = basicStep(dec.leftPart, dec.rightPart, keyPart)
 
-    key.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
-    key.reverse.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
-    key.reverse.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
-    key.reverse.foreach(keyPart => enc = basicStep(enc.leftPart, enc.rightPart, keyPart))
+    key.foreach(runBasicStep)
+    key.reverse.foreach(runBasicStep)
+    key.reverse.foreach(runBasicStep)
+    key.reverse.foreach(runBasicStep)
 
-    enc = Block(enc.rightPart, enc.leftPart)
-    debugEncryptBlock(enc)
+    // Меняет местами левую и правую части
+    dec = dec.swap
+    debugEncryptBlock(dec)
 
     // Возврат соединенных блоков
-    enc.allPart
+    dec.allPart
   }
 
   /** Основной шаг криптопреобразования */
