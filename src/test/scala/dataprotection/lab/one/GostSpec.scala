@@ -11,12 +11,13 @@ import scala.runtime.{RichLong, RichInt}
 
 /**
  * Тестирование класса Gost
+ * //TODO переделать
  */
 class GostSpec extends FlatSpec {
 
   /** Генерация 32-х битного числа */
   it should "generate 32 bit number" in {
-    val number = Gost.generate32BitNumber()
+    val number = GostHelper.generate32BitNumber()
 
     val binaryString = new RichInt(number).toBinaryString
     binaryString.foreach { e =>
@@ -29,7 +30,7 @@ class GostSpec extends FlatSpec {
 
   /** Генерация 64-х битного числа */
   it should "generate 64 bit number" in {
-    val number = Gost.generate64BitNumber()
+    val number = GostHelper.generate64BitNumber()
 
     val binaryString = new RichLong(number).toBinaryString
     binaryString.foreach { e =>
