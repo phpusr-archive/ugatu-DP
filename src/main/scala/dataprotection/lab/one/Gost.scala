@@ -41,7 +41,13 @@ object Gost extends GostDebug {
   //---------------------------------------------//
 
   /** Шифрование блока */
-  def encryptBlock(block: Long, key: String) = {
+  def encryptBlock(block: Long, key: String) = encryptOrDecryptBlock(block, key, encrypt = true)
+
+  /** Расшифрование блока */
+  def decryptBlock(block: Long, key: String) = encryptOrDecryptBlock(block, key, encrypt = false)
+
+  /** Шифрование блока */
+  private def encryptOrDecryptBlock(block: Long, key: String, encrypt: Boolean) = {
     val keyArray = keyHexToKeyArray(key)
     //TODO проверка на битность
 
@@ -59,10 +65,14 @@ object Gost extends GostDebug {
     /** Функция запускающая базовый шаг криптопреобразования */
     def runBasicStep = (keyPart: Int) => enc = basicStep(enc.leftPart, enc.rightPart, keyPart)
 
-    keyArray.foreach(runBasicStep)
-    keyArray.foreach(runBasicStep)
-    keyArray.foreach(runBasicStep)
-    keyArray.reverse.foreach(runBasicStep)
+    // Выбор порядка подачи ключей в зависимости, что нжуно делать: шифровать или расшифровывать
+    if (encrypt) {
+      for (i <- 1 to 3) keyArray.foreach(runBasicStep)
+      keyArray.reverse.foreach(runBasicStep)
+    } else {
+      keyArray.foreach(runBasicStep)
+      for (i <- 1 to 3) keyArray.reverse.foreach(runBasicStep)
+    }
 
     // Меняет местами левую и правую части
     enc = enc.swap
@@ -70,38 +80,6 @@ object Gost extends GostDebug {
 
     // Возврат соединенных блоков
     enc.allPart
-  }
-
-  /** Расшифрование блока */
-  def decryptBlock(block: Long, key: String) = {
-    val keyArray = keyHexToKeyArray(key)
-    //TODO проверка на битность
-
-    // Левая часть
-    val leftPart = getLeftPart64BitNumber(block)
-    debugLeftPart(block, leftPart)
-
-    // Правая часть
-    val rightPart = getRightPart64BitNumber(block)
-    debugRightPart(block, rightPart)
-
-    // Оболочка частей блока для расшифрования
-    var dec = Block(leftPart, rightPart)
-
-    /** Функция запускающая базовый шаг криптопреобразования */
-    def runBasicStep = (keyPart: Int) => dec = basicStep(dec.leftPart, dec.rightPart, keyPart)
-
-    keyArray.foreach(runBasicStep)
-    keyArray.reverse.foreach(runBasicStep)
-    keyArray.reverse.foreach(runBasicStep)
-    keyArray.reverse.foreach(runBasicStep)
-
-    // Меняет местами левую и правую части
-    dec = dec.swap
-    debugEncryptBlock(dec)
-
-    // Возврат соединенных блоков
-    dec.allPart
   }
 
   /** Основной шаг криптопреобразования */
