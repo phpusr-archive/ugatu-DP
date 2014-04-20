@@ -98,7 +98,7 @@ class Gost(keyHexString: String) {
     val sMod = (rightPart + partKey) % NumberForMod
     debugSMod(rightPart, partKey, sMod)
 
-    // Остаток от деления делим на 8 блоков (по 4 бита)
+    // Остаток от деления, делим на 8 блоков (по 4 бита)
     val shiftBitsCount = BlockPartSize - SBlockBitSize
     val sBlocskList = ListBuffer[Byte]()
     val SBlockCount = 8
@@ -114,27 +114,55 @@ class Gost(keyHexString: String) {
 
     // Замена блоков
     val sSimple = for (i <- 0 until sBlocskList.size) yield ReplaceTbl(i)(sBlocskList(i))
-    logger.debug("sSimple: " + sSimple.map(_.toInt.toBinaryString))
     // Преобразование блоков в одно число
     var sSimpleOne = 0
     for (i <- 0 until sSimple.size) {
-      val degree = BlockPartSize - SBlockBitSize * (i+1)
-      sSimpleOne += sSimple(i) * Math.pow(2, degree).toInt
+      val shiftBits = BlockPartSize - SBlockBitSize * (i+1)
+      sSimpleOne += sSimple(i) << shiftBits
     }
-    //TODO debug
-    println(sSimpleOne.toBinaryString)
+    debugJoinSBlocks(sSimple, sSimpleOne)
 
     // Циклический сдвиг влево на 11 бит
   }
 
   //---------------------DEBUG---------------------//
 
+  /** Отладка соединения S-блоков */
+  private def debugJoinSBlocks(sSimple: Seq[Byte], sSimpleOne: Int) {
+    logger.title("Debug join S-blocks")
 
+    // Изменения списка в изменяемый
+    val sSimpleBlocks = sSimple.to[ListBuffer]
+
+    // Удаляем элементы в начале, если они == 0
+    for (i <- 1 to sSimpleBlocks.size) {
+      if (sSimpleBlocks(0) == 0) sSimpleBlocks.remove(0)
+    }
+
+    logger.debug("sSimple: " + sSimpleBlocks.map(_.toInt.toBinaryString).mkString(" "))
+
+    val testBlocksBin = sSimpleOne.toBinaryString.reverse.split(s"(?<=\\G.{4})").map(_.reverse).reverse
+    logger.debug("test   : " + testBlocksBin.mkString(" "))
+
+    // Преобразование бинарных тестовых блоков в Byte
+    val testBlocks = testBlocksBin.map(java.lang.Byte.parseByte(_, 2))
+
+    // Проверка правильности соединения блоков
+    for (i <- 0 until sSimpleBlocks.size) {
+      val sBlock = sSimpleBlocks(i)
+      val testSBlock = testBlocks(i)
+
+      logger.trace(s"$testSBlock == $sBlock")
+      assert(sBlock == testSBlock)
+    }
+
+  }
 
   /** Отладка получения S-блоков */
   private def debugSBlocks(sBlocksList: Seq[Byte], sMod: Int) {
     logger.title("Debug sBlocks")
 
+    // Изменения списка в изменяемый
     val reverseSBlocksList = sBlocksList.reverse.to[ListBuffer]
 
     // Удаляем элементы в начале, если они == 0
@@ -158,7 +186,7 @@ class Gost(keyHexString: String) {
       val sBlock = reverseSBlocksList(i)
       val testSBlock = testSBlocksList(i)
 
-      logger.debug(s"$testSBlock == $sBlock")
+      logger.trace(s"$testSBlock == $sBlock")
       assert(sBlock == testSBlock)
     }
 
