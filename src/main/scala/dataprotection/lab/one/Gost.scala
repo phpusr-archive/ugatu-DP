@@ -25,7 +25,7 @@ object Gost {
   private val KeySplitter = " "
 
   /** Размер блока шифрования в битах */
-  private val BlockPartSize = 32
+  val BlockPartSize = 32
 
   //---------------------------------------------//
 
@@ -67,7 +67,7 @@ class Gost(keyHexString: String) {
   /** Логирование */
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 
-  /** Ключ */
+  /** Ключ */ //TODO проверка на битность
   private val key = Gost.keyHexToKeyArray(keyHexString)
 
   /** Число для нахождения остатка от деления */
@@ -81,8 +81,9 @@ class Gost(keyHexString: String) {
 
   //---------------------------------------------//
 
-  /** Основной шаг криптопреобразования */
-  def basicStep(block: Long) { //TODO private
+  /** Шифрование блока */
+  def encryptBlock(block: Long) {
+    //TODO проверка на битность
 
     // Левая часть
     val leftPart = Gost.getLeftPart64BitNumber(block)
@@ -92,11 +93,33 @@ class Gost(keyHexString: String) {
     val rightPart = Gost.getRightPart64BitNumber(block)
     debugRightPart(block, rightPart)
 
-    val partKey = key(0) //TODO
+    // Оболочка для частей блока для шифрования
+    var enc: Block = Block(leftPart, rightPart)
+
+    // Функция запускающая базовый шаг криптопреобразования
+    def runBasicStep = (keyPart: Int) => enc = basicStep(enc.leftPart, enc.rightPart, keyPart)
+
+    key.foreach(runBasicStep)
+    key.foreach(runBasicStep)
+    key.foreach(runBasicStep)
+    key.reverse.foreach(runBasicStep)
+
+    val encryptResult = enc.allPart
+
+    //TODO debug
+    println("lPart: " + enc.leftPart.toBinaryString)
+    println("rPart: " + enc.rightPart.toBinaryString)
+    println("encr: " + encryptResult.toBinaryString)
+
+
+  }
+
+  /** Основной шаг криптопреобразования */
+  private def basicStep(leftPart: Int, rightPart: Int, keyPart: Int) = {
 
     // Остаток от деления
-    val sMod = (rightPart + partKey) % NumberForMod
-    debugSMod(rightPart, partKey, sMod)
+    val sMod = (rightPart + keyPart) % NumberForMod
+    debugSMod(rightPart, keyPart, sMod)
 
     // Остаток от деления, делим на 8 блоков (по 4 бита)
     val shiftBitsCount = BlockPartSize - SBlockBitSize
@@ -130,6 +153,8 @@ class Gost(keyHexString: String) {
     // Обработка левой части блока
     val sXor = leftPart ^ sRol
     debugSXor(leftPart, sRol, sXor)
+
+    Block(rightPart, sXor)
   }
 
   //---------------------DEBUG---------------------//
@@ -225,7 +250,7 @@ class Gost(keyHexString: String) {
   private def debugSMod(rightPart: Int, partKey: Int, sMod: Int) {
     logger.title("Debug sMod")
 
-    logger.debug("partKey: " + partKey.toBinaryString)
+    logger.debug("keyPart: " + partKey.toBinaryString)
 
     val sum64: Long = rightPart.toLong + partKey.toLong
     logger.debug("sum64: " + sum64.toBinaryString)
