@@ -113,48 +113,63 @@ class Gost(keyHexString: String) {
     debugSBlocks(sBlocskList, sMod)
 
     // Замена блоков
-    val sSimple = for (i <- 0 until sBlocskList.size) yield ReplaceTbl(i)(sBlocskList(i))
+    val sSimpleBlocks = for (i <- 0 until sBlocskList.size) yield ReplaceTbl(i)(sBlocskList(i))
     // Преобразование блоков в одно число
-    var sSimpleOne = 0
-    for (i <- 0 until sSimple.size) {
+    var sSimple = 0
+    for (i <- 0 until sSimpleBlocks.size) {
       val shiftBits = BlockPartSize - SBlockBitSize * (i+1)
-      sSimpleOne += sSimple(i) << shiftBits
+      sSimple += sSimpleBlocks(i) << shiftBits
     }
-    debugJoinSBlocks(sSimple, sSimpleOne)
+    debugJoinSBlocks(sSimpleBlocks, sSimple)
 
     // Циклический сдвиг влево на 11 бит
+    val ShiftBits = 11
+    val sRol = (sSimple << ShiftBits) | (sSimple >>> (BlockPartSize - ShiftBits))
+    debugSSimpleShiftBits(sSimple, sRol, ShiftBits)
   }
 
   //---------------------DEBUG---------------------//
 
+  /** Проверка сдвига sMod на 11 бит */
+  private def debugSSimpleShiftBits(sSimple: Int, sRol: Int, shiftBits: Int) {
+    logger.title("Debug sSimple shift 11 bits")
+
+    val testSRol = Integer.rotateLeft(sSimple, shiftBits)
+    logger.debug(s"${testSRol.toBinaryString} == ${sRol.toBinaryString}")
+
+    assert(testSRol == sRol)
+  }
+
   /** Отладка соединения S-блоков */
-  private def debugJoinSBlocks(sSimple: Seq[Byte], sSimpleOne: Int) {
+  private def debugJoinSBlocks(sSimpleBlocks: Seq[Byte], sSimple: Int) {
     logger.title("Debug join S-blocks")
 
     // Изменения списка в изменяемый
-    val sSimpleBlocks = sSimple.to[ListBuffer]
+    val sSimpleBuffer = sSimpleBlocks.to[ListBuffer]
 
     // Удаляем элементы в начале, если они == 0
-    for (i <- 1 to sSimpleBlocks.size) {
-      if (sSimpleBlocks(0) == 0) sSimpleBlocks.remove(0)
+    for (i <- 1 to sSimpleBuffer.size) {
+      if (sSimpleBuffer(0) == 0) sSimpleBuffer.remove(0)
     }
 
-    logger.debug("sSimple: " + sSimpleBlocks.map(_.toInt.toBinaryString).mkString(" "))
+    logger.debug("sSimple: " + sSimpleBuffer.map(_.toInt.toBinaryString).mkString(" "))
 
-    val testBlocksBin = sSimpleOne.toBinaryString.reverse.split(s"(?<=\\G.{4})").map(_.reverse).reverse
+    val testBlocksBin = sSimple.toBinaryString.reverse.split(s"(?<=\\G.{4})").map(_.reverse).reverse
     logger.debug("test   : " + testBlocksBin.mkString(" "))
 
     // Преобразование бинарных тестовых блоков в Byte
     val testBlocks = testBlocksBin.map(java.lang.Byte.parseByte(_, 2))
 
     // Проверка правильности соединения блоков
-    for (i <- 0 until sSimpleBlocks.size) {
-      val sBlock = sSimpleBlocks(i)
+    for (i <- 0 until sSimpleBuffer.size) {
+      val sBlock = sSimpleBuffer(i)
       val testSBlock = testBlocks(i)
 
       logger.trace(s"$testSBlock == $sBlock")
       assert(sBlock == testSBlock)
     }
+
+    logger.debug("sSimple: " + sSimple.toBinaryString)
 
   }
 
