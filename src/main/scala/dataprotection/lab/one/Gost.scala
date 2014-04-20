@@ -126,9 +126,23 @@ class Gost(keyHexString: String) {
     val ShiftBits = 11
     val sRol = (sSimple << ShiftBits) | (sSimple >>> (BlockPartSize - ShiftBits))
     debugSSimpleShiftBits(sSimple, sRol, ShiftBits)
+
+    // Обработка левой части блока
+    val sXor = leftPart ^ sRol
+    debugSXor(leftPart, sRol, sXor)
   }
 
   //---------------------DEBUG---------------------//
+
+  /** Проверка обработки левой части */
+  private def debugSXor(leftPart: Int, sRol: Int, sXor: Int) {
+    logger.title("Debug processing leftPart")
+
+    logger.debug("sRol: " + sRol.toBinaryString)
+    val testXor = sXor ^ sRol
+
+    assert(testXor == leftPart)
+  }
 
   /** Проверка сдвига sMod на 11 бит */
   private def debugSSimpleShiftBits(sSimple: Int, sRol: Int, shiftBits: Int) {
