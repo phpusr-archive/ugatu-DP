@@ -13,6 +13,7 @@ import dataprotection.lab.one.GostConstants._
 
 /**
  * Отладка ГОСТ-28147-89
+ * //TODO отключение дебага
  */
 trait GostDebug {
 

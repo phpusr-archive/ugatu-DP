@@ -21,25 +21,6 @@ object Gost extends GostDebug {
 
   //---------------------------------------------//
 
-  /** Генерация 256-битного ключ */
-  def generateKey = () => {
-    val KeyBlocksCount = 8
-
-    // Список из 8-ми 32-х битных частей ключа
-    val keySeq = for (i <- 1 to KeyBlocksCount) yield generate32BitNumber()
-
-    val keyHex = keySeq.map(e => Integer.toHexString(e)).mkString(KeySplitter)
-
-    (keySeq, keyHex)
-  }
-
-  /** Преобразование введенного ключа из 16-й строки в 10-й массив */
-  private def keyHexToKeyArray = (keyHex: String) => {
-    keyHex.split(KeySplitter).map(java.lang.Long.parseLong(_, KeyOutputNotation).toInt)
-  }
-
-  //---------------------------------------------//
-
   /** Шифрование блока */
   def encryptBlock(block: Long, key: String) = encryptOrDecryptBlock(block, key, encrypt = true)
 

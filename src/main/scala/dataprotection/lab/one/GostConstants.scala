@@ -17,6 +17,13 @@ object GostConstants {
   /** Разделитель блоков при выводе ключа */
   val KeySplitter = " "
 
+  /** Размер ключа в битах */
+  //TODO задействовать при проверке ключа
+  val KeySize = 256
+
+  /** Кол-во блоков ключа */
+  val KeyBlocksCount = 8
+
   /** Размер блока шифрования в битах */
   val BlockPartSize = 32
 
