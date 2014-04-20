@@ -2,8 +2,8 @@ package dataprotection.lab.one
 
 import scala.collection.mutable.ListBuffer
 import org.dyndns.phpusr.util.log.Logger
-import dataprotection.lab.one.Gost._
 import dataprotection.lab.one.GostHelper._
+import dataprotection.lab.one.GostConstants._
 
 /**
  * @author phpusr
@@ -175,7 +175,8 @@ trait GostDebug {
     logger.debug("" + block)
     val blockBin = block.toBinaryString
     // Правая часть числа
-    val blockRight = blockBin.substring(BlockPartSize)
+    val splitIndex = blockBin.size - BlockPartSize
+    val blockRight = blockBin.substring(splitIndex)
     // Правая часть без незначащих нолей
     val blocRightWithoutZeros = blockRight.substring(blockRight.indexOf("1"))
 

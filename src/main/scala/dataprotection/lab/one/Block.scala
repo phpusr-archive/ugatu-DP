@@ -12,7 +12,7 @@ package dataprotection.lab.one
 case class Block(leftPart: Int, rightPart: Int) {
 
   /** Размер частей блока */
-  private val PartSize = Gost.BlockPartSize
+  private val PartSize = GostConstants.BlockPartSize
 
   /** Получение из двух 32-битных частей одну 64-ю */
   def allPart = {

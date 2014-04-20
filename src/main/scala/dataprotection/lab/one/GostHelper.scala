@@ -14,7 +14,7 @@ import scala.util.Random
 object GostHelper {
 
   /** Кол-во битов для сдвига */
-  val ShiftBits = 32
+  val ShiftBits = GostConstants.BlockPartSize
   
   /** Генерирует 32-битное число */
   def generate32BitNumber = () => Random.nextInt().abs * -1
