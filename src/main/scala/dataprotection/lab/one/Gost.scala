@@ -82,7 +82,7 @@ class Gost(keyHexString: String) {
   //---------------------------------------------//
 
   /** Шифрование блока */
-  def encryptBlock(block: Long) {
+  def encryptBlock(block: Long) = {
     //TODO проверка на битность
 
     // Левая часть
@@ -102,6 +102,33 @@ class Gost(keyHexString: String) {
     key.foreach(runBasicStep)
     key.foreach(runBasicStep)
     key.foreach(runBasicStep)
+    key.reverse.foreach(runBasicStep)
+    debugEncryptBlock(enc)
+
+    // Возврат соединенных блоков
+    enc.allPart
+  }
+
+  /** Расшифрование блока */
+  def decryptBlock(block: Long) = {
+
+    // Левая часть
+    val leftPart = Gost.getLeftPart64BitNumber(block)
+    debugLeftPart(block, leftPart)
+
+    // Правая часть
+    val rightPart = Gost.getRightPart64BitNumber(block)
+    debugRightPart(block, rightPart)
+
+    // Оболочка для частей блока для шифрования
+    var enc: Block = Block(leftPart, rightPart)
+
+    // Функция запускающая базовый шаг криптопреобразования
+    def runBasicStep = (keyPart: Int) => enc = basicStep(enc.leftPart, enc.rightPart, keyPart)
+
+    key.foreach(runBasicStep)
+    key.reverse.foreach(runBasicStep)
+    key.reverse.foreach(runBasicStep)
     key.reverse.foreach(runBasicStep)
     debugEncryptBlock(enc)
 
@@ -291,7 +318,7 @@ class Gost(keyHexString: String) {
     logger.debug("" + block)
     val blockBin = block.toBinaryString
     // Правая часть числа
-    val blockRight = blockBin.substring(BlockPartSize)
+    val blockRight = blockBin.substring(blockBin.size - BlockPartSize)
     val blockLeft = blockBin.substring(0, BlockPartSize)
 
     logger.debug(s"block: $blockLeft $blockRight")
