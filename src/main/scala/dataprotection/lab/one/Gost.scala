@@ -22,16 +22,14 @@ object Gost extends GostDebug {
   //---------------------------------------------//
 
   /** Шифрование блока */
-  def encryptBlock(block: Long, key: String) = encryptOrDecryptBlock(block, key, encrypt = true)
+  def encryptBlock(block: Long, keyArray: Array[Int]) = encryptOrDecryptBlock(block, keyArray, encrypt = true)
 
   /** Расшифрование блока */
-  def decryptBlock(block: Long, key: String) = encryptOrDecryptBlock(block, key, encrypt = false)
+  def decryptBlock(block: Long, keyArray: Array[Int]) = encryptOrDecryptBlock(block, keyArray, encrypt = false)
 
   /** Шифрование блока */
-  private def encryptOrDecryptBlock(block: Long, key: String, encrypt: Boolean) = {
-    //TODO сюда уже должен приходить keyArray
-    val keyArray = keyHexToKeyArray(key)
-    //TODO проверка на битность ключа и блоков
+  private def encryptOrDecryptBlock(block: Long, keyArray: Array[Int], encrypt: Boolean) = {
+    if (keyArray.size != KeyBlocksCount) throw new IllegalArgumentException("Wrong key size")
 
     // Левая часть
     val leftPart = getLeftPart64BitNumber(block)
