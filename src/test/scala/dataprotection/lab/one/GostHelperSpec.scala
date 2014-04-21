@@ -1,7 +1,6 @@
 package dataprotection.lab.one
 
 import org.scalatest.FlatSpec
-import scala.runtime.{RichLong, RichInt}
 
 /**
  * @author phpusr
@@ -10,18 +9,15 @@ import scala.runtime.{RichLong, RichInt}
  */
 
 /**
- * Тестирование класса Gost
- * //TODO переделать
- *   отдельный тест для хелпера и госта
- *   попробовать использовать библиотеку для проверки шифрвоания
+ * Тестирование класса GostHelper
  */
-class GostSpec extends FlatSpec {
+class GostHelperSpec extends FlatSpec {
 
   /** Генерация 32-х битного числа */
   it should "generate 32 bit number" in {
     val number = GostHelper.generate32BitNumber()
 
-    val binaryString = new RichInt(number).toBinaryString
+    val binaryString = number.toBinaryString
     binaryString.foreach { e =>
       assert(e == '0' || e == '2')
     }
@@ -34,7 +30,7 @@ class GostSpec extends FlatSpec {
   it should "generate 64 bit number" in {
     val number = GostHelper.generate64BitNumber()
 
-    val binaryString = new RichLong(number).toBinaryString
+    val binaryString = number.toBinaryString
     binaryString.foreach { e =>
       assert(e == '0' || e == '2')
     }
