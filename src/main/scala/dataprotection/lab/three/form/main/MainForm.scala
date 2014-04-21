@@ -6,6 +6,7 @@ import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
 import dataprotection.lab.three.form.main.panel._
 import dataprotection.lab.three.types.RsaTrait
+import javax.swing.JFrame
 
 /**
  * @author phpusr
@@ -21,8 +22,22 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
   private val gostMenuItem = new RadioMenuItem("GOST-28147-89")
   private val rsaMenuItem = new RadioMenuItem("RSA")
 
+  // Frame, нужен для вызова pack()
+  private var gPeer: JFrame = null
+
+  //TODO
+  val GostTopPanel = new GridBagPanel {
+    visible = false
+
+    val c = new Constraints
+    layout(new Button) = c
+  }
+  //TODO rename
+  private val topPanels = List(GostTopPanel, TopPanel)
+
   /** Форма */
   def top = new MainFrame {
+    gPeer = peer
     title = "RSA"
 
     contents = new BorderPanel {
@@ -32,14 +47,16 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
       menuBar = new MenuBar {
         // Выбор метода шифрования
         contents += new Menu("Encryption method") {
-
           val mutex = new ButtonGroup(gostMenuItem, rsaMenuItem)
           contents ++= mutex.buttons
         }
       }
 
       // Верхняя панель
-      layout(TopPanel) = North
+      layout(new FlowPanel {
+        contents += TopPanel
+        contents += GostTopPanel
+      }) = North
 
       // Центральная панель
       layout(CenterPanel) = Center
@@ -64,11 +81,11 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
   listenTo(exitButton)
 
   reactions += {
-    // Метод шифрования
+    // Методы шифрования
     case ButtonClicked(`gostMenuItem`) =>
-      println("Gost")
+      changePanel(GostTopPanel)
     case ButtonClicked(`rsaMenuItem`) =>
-      println("RSA")
+      changePanel(TopPanel)
 
     // Генерация чисел: p, q, n
     case ButtonClicked(`generatePButton`) =>
@@ -122,6 +139,14 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
 
     // Выход
     case ButtonClicked(`exitButton`) => System.exit(0)
+  }
+  
+  /** Показ определенной панели метода шифрования и скрытие остальных */
+  private def changePanel(panel: Panel) {
+    topPanels.foreach { p =>
+      p.visible = p == panel
+    }
+    gPeer.pack()
   }
 
   // Получение и установка значений на форме

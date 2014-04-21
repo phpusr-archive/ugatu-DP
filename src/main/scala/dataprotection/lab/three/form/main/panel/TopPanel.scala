@@ -67,6 +67,8 @@ trait TopPanel extends DefaultComponents {
   }
 
   protected val TopPanel = new GridBagPanel {
+    visible = false
+
     val c = new Constraints
     val insetsLeft = 50
     val insetsRight = 50
