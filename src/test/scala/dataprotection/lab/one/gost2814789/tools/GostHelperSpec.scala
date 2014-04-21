@@ -1,4 +1,4 @@
-package dataprotection.lab.one
+package dataprotection.lab.one.gost2814789.tools
 
 import org.scalatest.FlatSpec
 

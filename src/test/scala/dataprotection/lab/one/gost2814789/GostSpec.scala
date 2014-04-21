@@ -1,7 +1,8 @@
-package dataprotection.lab.one
+package dataprotection.lab.one.gost2814789
 
 import org.scalatest.FlatSpec
-import dataprotection.lab.one.GostHelper._
+import dataprotection.lab.one.gost2814789.tools.GostHelper
+import GostHelper._
 
 /**
  * @author phpusr

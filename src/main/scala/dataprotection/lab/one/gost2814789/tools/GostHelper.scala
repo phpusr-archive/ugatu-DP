@@ -1,7 +1,7 @@
-package dataprotection.lab.one
+package dataprotection.lab.one.gost2814789.tools
 
 import scala.util.Random
-import dataprotection.lab.one.GostConstants._
+import dataprotection.lab.one.gost2814789.GostConstants
 
 /**
  * @author phpusr

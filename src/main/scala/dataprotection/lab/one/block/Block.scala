@@ -1,4 +1,6 @@
-package dataprotection.lab.one
+package dataprotection.lab.one.block
+
+import dataprotection.lab.one.gost2814789.GostConstants
 
 /**
  * @author phpusr

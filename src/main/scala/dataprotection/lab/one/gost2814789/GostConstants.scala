@@ -1,4 +1,6 @@
-package dataprotection.lab.one
+package dataprotection.lab.one.gost2814789
+
+import dataprotection.lab.one.gost2814789.tools.ReplaceTable
 
 /**
  * @author phpusr

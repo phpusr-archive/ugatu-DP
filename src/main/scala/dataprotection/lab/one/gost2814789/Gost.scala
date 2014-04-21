@@ -1,9 +1,9 @@
-package dataprotection.lab.one
+package dataprotection.lab.one.gost2814789
 
-import org.dyndns.phpusr.util.log.Logger
 import scala.collection.mutable.ListBuffer
-import dataprotection.lab.one.GostHelper._
-import dataprotection.lab.one.GostConstants._
+import org.dyndns.phpusr.util.log.Logger
+import dataprotection.lab.one.block.Block
+import dataprotection.lab.one.gost2814789.tools.GostDebug
 
 /**
  * @author phpusr
