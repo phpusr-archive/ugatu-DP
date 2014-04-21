@@ -19,7 +19,7 @@ class GostHelperSpec extends FlatSpec {
 
     val binaryString = number.toBinaryString
     binaryString.foreach { e =>
-      assert(e == '0' || e == '2')
+      assert(e == '0' || e == '1')
     }
 
     val numberBitsCount = binaryString.size
@@ -32,7 +32,7 @@ class GostHelperSpec extends FlatSpec {
 
     val binaryString = number.toBinaryString
     binaryString.foreach { e =>
-      assert(e == '0' || e == '2')
+      assert(e == '0' || e == '1')
     }
 
     val numberBitsCount = binaryString.size
@@ -55,6 +55,42 @@ class GostHelperSpec extends FlatSpec {
 
       assert(recoveryKeyBlock == originalKeyBlock)
     }
+  }
+
+  /** Преобразование строки в массив 64-битных блоков */
+  it should "converted string to 64-bits blokcs" in {
+    val message = "abcdsdjfhsjdkhf"
+    val messageBinaryArray = message.getBytes.map(_.toInt.toBinaryString)
+    println("\nbytes: " + messageBinaryArray.mkString(" "))
+
+    // Массив блоков по 64 бита
+    val blockArray = GostHelper.stringToBlockArray(message)
+
+    val binaryBlockArray = blockArray.map(_.toBinaryString)
+    val subBlockArray = binaryBlockArray.flatMap { e =>
+      // Разделение строки на блоки по 8 символов (с конца)
+      val blockBytes = e.reverse.split(s"(?<=\\G.{8})").map(_.reverse).reverse
+
+      // Удаляем начальнык нули у подблоков
+      val tmp = blockBytes.map { sub =>
+        var changeSub = sub
+        while (changeSub.size > 1 && changeSub.charAt(0) == '0') changeSub = changeSub.substring(1)
+        changeSub
+      }
+      println("block: " + tmp.mkString(" "))
+
+      tmp
+    }
+
+    // Проверка введеной строки и преобразованных блоков
+    for (i <- 0 until messageBinaryArray.size) {
+      println(s"${messageBinaryArray(i)} == ${subBlockArray(i)}")
+      assert(messageBinaryArray(i) == subBlockArray(i))
+    }
+
+    println("\nbytes: " + messageBinaryArray.mkString(" "))
+    println("reslt: " + subBlockArray.mkString(" "))
+
   }
 
 }

@@ -3,6 +3,7 @@ package dataprotection.lab.one.gost2814789.tools
 import scala.util.Random
 import dataprotection.lab.one.gost2814789.GostConstants._
 import org.dyndns.phpusr.util.log.Logger
+import scala.collection.mutable.ListBuffer
 
 /**
  * @author phpusr
@@ -51,6 +52,46 @@ object GostHelper {
   /** Преобразование введенного ключа из 16-ной строки в 10-ный массив */
   def keyHexToKeyArray = (keyHex: String) => {
     keyHex.split(KeySplitter).map(java.lang.Long.parseLong(_, KeyOutputNotation).toInt)
+  }
+
+  /** Преобразование строки в массив 64-битных блоков */
+  def stringToBlockArray = (message: String) => {
+    val ByteInLongCount = 64 / 8
+
+    val bytes = message.getBytes(CharsetName)
+
+    val blockBuffer = ListBuffer[Long]()
+
+    // Текущее кол-во байтов в блоке
+    var byteInBlockIndex = 0
+    // Текущий обрабатываемый блок
+    var currentBlock = 0L
+    // Текущее кол-во блоков
+    var currentBlockCount = 0
+
+    bytes.foreach { e =>
+      byteInBlockIndex += 1
+
+      // Количество занятых бит в блоке
+      val buzyBits = ByteInLongCount * byteInBlockIndex
+      // Добавляемый элемент сдвинутый от начала на занятое кол-во битов
+      val e64 = e.toLong << (BlockSize - buzyBits)
+
+      // Добавление элемента в блок
+      currentBlock = currentBlock | e64
+
+      // Если блок заполнен
+      if (byteInBlockIndex % ByteInLongCount == 0) {
+        byteInBlockIndex = 0
+        currentBlockCount += 1
+        blockBuffer += currentBlock
+        currentBlock = 0L
+      }
+    }
+    // Если последний блок не был заполнен до конца, добавить его
+    if (byteInBlockIndex != 0) blockBuffer += currentBlock
+
+    blockBuffer.toArray
   }
 
 }

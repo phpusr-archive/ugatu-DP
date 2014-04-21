@@ -27,6 +27,9 @@ object GostConstants {
   val KeyBlocksCount = 8
 
   /** Размер блока шифрования в битах */
+  val BlockSize = 64
+
+  /** Размер блока шифрования в битах */
   val BlockPartSize = 32
 
   /** Число для нахождения остатка от деления */
@@ -37,5 +40,8 @@ object GostConstants {
 
   /** Таблица замен */
   val ReplaceTbl = ReplaceTable.default
+
+  /** Кодировка сообщения для шифрования */
+  val CharsetName = "utf8"
 
 }
