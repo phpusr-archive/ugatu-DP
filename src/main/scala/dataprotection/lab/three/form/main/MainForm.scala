@@ -143,9 +143,17 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
   
   /** Показ определенной панели метода шифрования и скрытие остальных */
   private def changePanel(panel: Panel) {
+    //TODO смена заголовка программы
+
+    // Смена видимой панели
     topPanels.foreach { p =>
       p.visible = p == panel
     }
+
+    // Чек-бокс шифрования числа доступен только для RSA
+    numberCheckBox.visible = panel == TopPanel
+
+    // Выровнить размер окна под компонеты
     gPeer.pack()
   }
 
