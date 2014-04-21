@@ -8,6 +8,8 @@ import dataprotection.lab.three.types.RsaTrait
 import javax.swing.JFrame
 import dataprotection.lab.common.gui.form.main.panel.top.{GostTopPanel, RsaTopPanel}
 import dataprotection.lab.common.gui.form.main.panel.{CenterPanel, BottomPanel}
+import dataprotection.lab.one.gost2814789.tools.GostHelper
+import org.dyndns.phpusr.util.log.Logger
 
 /**
  * @author phpusr
@@ -19,6 +21,10 @@ import dataprotection.lab.common.gui.form.main.panel.{CenterPanel, BottomPanel}
  * Главная форма
  */
 object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait with RsaTopPanel with CenterPanel with BottomPanel {
+
+  /** Логирование */
+  private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
+
   // Элементы меню методов шифрования
   private val gostMenuItem = new RadioMenuItem("GOST-28147-89")
   private val rsaMenuItem = new RadioMenuItem("RSA")
@@ -67,6 +73,8 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   // Обработчики событий формы
   listenTo(gostMenuItem, rsaMenuItem)
 
+  listenTo(gostGenerateKeyButton)
+
   listenTo(generatePButton, generateQButton, generateNButton)
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
   listenTo(generateKeysButton, clearAllButton)
@@ -82,6 +90,16 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
       changePanel(GostTopPanel)
     case ButtonClicked(`rsaMenuItem`) =>
       changePanel(RsaTopPanel)
+
+    //--------------------- begin GOST ---------------------//
+
+    case ButtonClicked(`gostGenerateKeyButton`) =>
+      val (keySeq, keyHex) = GostHelper.generateKey()
+      gostKeyTextField.text = keyHex
+
+    //--------------------- end GOST ---------------------//
+
+    //--------------------- begin RSA ---------------------//
 
     // Генерация чисел: p, q, n
     case ButtonClicked(`generatePButton`) =>
@@ -112,6 +130,8 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
       nTextField.text = n.toString
       publicKeyTextField.text = publicKey.toString
       privateKeyTextField.text = privateKey.toString
+
+    //--------------------- end RSA ---------------------//
 
     // Очистка полей ввода
     case ButtonClicked(`clearAllButton`) =>

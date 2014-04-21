@@ -2,6 +2,7 @@ package dataprotection.lab.one.gost2814789.tools
 
 import scala.util.Random
 import dataprotection.lab.one.gost2814789.GostConstants._
+import org.dyndns.phpusr.util.log.Logger
 
 /**
  * @author phpusr
@@ -13,6 +14,9 @@ import dataprotection.lab.one.gost2814789.GostConstants._
  * Объект с функциями помогающими шифрованию ГОСТ-28147-89
  */
 object GostHelper {
+
+  /** Логирование */
+  private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 
   /** Кол-во битов для сдвига */
   val ShiftBits = BlockPartSize
@@ -36,6 +40,10 @@ object GostHelper {
     val keySeq = for (i <- 1 to KeyBlocksCount) yield generate32BitNumber()
 
     val keyHex = keySeq.map(e => Integer.toHexString(e)).mkString(KeySplitter)
+
+    logger.title("Generate GOST-28147-89 Key")
+    logger.debug("keySeq: " + keySeq.mkString(" "))
+    logger.debug("keyHex: "+ keyHex)
 
     (keySeq, keyHex)
   }
