@@ -6,7 +6,7 @@ import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
 import dataprotection.lab.three.types.RsaTrait
 import javax.swing.JFrame
-import dataprotection.lab.common.gui.form.main.panel.top.RsaTopPanel
+import dataprotection.lab.common.gui.form.main.panel.top.{GostTopPanel, RsaTopPanel}
 import dataprotection.lab.common.gui.form.main.panel.{CenterPanel, BottomPanel}
 
 /**
@@ -18,7 +18,7 @@ import dataprotection.lab.common.gui.form.main.panel.{CenterPanel, BottomPanel}
 /**
  * Главная форма
  */
-object MainForm extends SimpleSwingApplication with RsaTrait with RsaTopPanel with CenterPanel with BottomPanel {
+object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait with RsaTopPanel with CenterPanel with BottomPanel {
   // Элементы меню методов шифрования
   private val gostMenuItem = new RadioMenuItem("GOST-28147-89")
   private val rsaMenuItem = new RadioMenuItem("RSA")
@@ -26,13 +26,6 @@ object MainForm extends SimpleSwingApplication with RsaTrait with RsaTopPanel wi
   // Frame, нужен для вызова pack()
   private var gPeer: JFrame = null
 
-  //TODO
-  val GostTopPanel = new GridBagPanel {
-    visible = false
-
-    val c = new Constraints
-    layout(new Button) = c
-  }
   /** Список панелей методов шифрования */
   private val topPanels = List(GostTopPanel, RsaTopPanel)
 
@@ -66,6 +59,8 @@ object MainForm extends SimpleSwingApplication with RsaTrait with RsaTopPanel wi
       layout(BottomPanel) = South
     }
 
+    // Init form
+    changePanel(GostTopPanel)
     centerOnScreen()
   }
 
