@@ -1,4 +1,4 @@
-package dataprotection.lab.three.run
+package dataprotection.lab.common.run
 
 import javax.swing.UIManager
 import gui.form.main.MainForm
