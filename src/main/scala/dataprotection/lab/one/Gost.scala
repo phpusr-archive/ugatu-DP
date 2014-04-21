@@ -12,7 +12,9 @@ import dataprotection.lab.one.GostConstants._
  */
 
 /**
- * TODO
+ * Алгоритм шифрования
+ * ГОСТ-28147-89 <br/>
+ * написан по статье: <u><a href="http://www.wasm.ru/wault/article/show/gost29147-89">ссылка</a></u>
  */
 object Gost extends GostDebug {
 
