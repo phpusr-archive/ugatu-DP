@@ -11,7 +11,7 @@ import dataprotection.lab.common.gui.form.main.panel.DefaultComponents
  */
 
 /**
- * Верхняя панель
+ * Панель для шифрования методом RSA
  */
 trait RsaTopPanel extends DefaultComponents {
 
