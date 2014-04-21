@@ -1,7 +1,6 @@
 package dataprotection.lab.common.gui.form.main
 
 import scala.swing._
-import scala.swing.event.ButtonClicked
 import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
 import dataprotection.lab.three.types.RsaTrait
@@ -9,7 +8,9 @@ import javax.swing.JFrame
 import dataprotection.lab.common.gui.form.main.panel.top.{GostTopPanel, RsaTopPanel}
 import dataprotection.lab.common.gui.form.main.panel.{CenterPanel, BottomPanel}
 import dataprotection.lab.one.gost2814789.tools.GostHelper
+import scala.swing.event.ButtonClicked
 import org.dyndns.phpusr.util.log.Logger
+import dataprotection.lab.common.gui.form.main.EncryptMethod._
 
 /**
  * @author phpusr
@@ -34,6 +35,9 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
 
   /** Список панелей методов шифрования */
   private val topPanels = List(GostTopPanel, RsaTopPanel)
+
+  /** Текущий метод шифрования */
+  private var currentMethodEncrypt: EncryptMethod = null
 
   /** Форма */
   def top = new MainFrame {
@@ -66,7 +70,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
     }
 
     // Init form
-    changePanel(GostTopPanel)
+    changeEncryptMethod(GOST_28_147_89_METHOD)
     centerOnScreen()
   }
 
@@ -87,9 +91,9 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   reactions += {
     // Методы шифрования
     case ButtonClicked(`gostMenuItem`) =>
-      changePanel(GostTopPanel)
+      changeEncryptMethod(GOST_28_147_89_METHOD)
     case ButtonClicked(`rsaMenuItem`) =>
-      changePanel(RsaTopPanel)
+      changeEncryptMethod(RSA_METHOD)
 
     //--------------------- begin GOST ---------------------//
 
@@ -140,11 +144,12 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
     case ButtonClicked(`clearEncodeMessageButton`) => clearEncodeMessage()
 
     // Шифрование
-    case ButtonClicked(`encodeButton`) => if (numberCheckBox.selected) {
-      encodeMessageTextArea.text = RSA.encodeNumber(decodeMessage, n, publicKey)
-    } else {
-      encodeMessageTextArea.text = RSA.encodeString(decodeMessage, n, publicKey)
-    }
+    case ButtonClicked(`encodeButton`) =>
+      if (numberCheckBox.selected) {
+        encodeMessageTextArea.text = RSA.encodeNumber(decodeMessage, n, publicKey)
+      } else {
+        encodeMessageTextArea.text = RSA.encodeString(decodeMessage, n, publicKey)
+      }
 
     // Расшифрование
     case ButtonClicked(`decodeButton`) => if (numberCheckBox.selected) {
@@ -158,8 +163,17 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   }
   
   /** Показ определенной панели метода шифрования и скрытие остальных */
-  private def changePanel(panel: Panel) {
-    //TODO смена заголовка программы
+  private def changeEncryptMethod(method: EncryptMethod) {
+
+    // Выбор панели
+    val panel = method match {
+      case GOST_28_147_89_METHOD => GostTopPanel
+      case RSA_METHOD => RsaTopPanel
+      case _ => throw new IllegalArgumentException("Wrong encrypt method")
+    }
+
+    // Установка текущего метода шифрования
+    currentMethodEncrypt = method
 
     // Смена видимой панели
     topPanels.foreach { p =>
