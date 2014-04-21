@@ -145,23 +145,51 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
 
     // Шифрование
     case ButtonClicked(`encodeButton`) =>
-      if (numberCheckBox.selected) {
-        encodeMessageTextArea.text = RSA.encodeNumber(decodeMessage, n, publicKey)
-      } else {
-        encodeMessageTextArea.text = RSA.encodeString(decodeMessage, n, publicKey)
+      currentMethodEncrypt match {
+        case GOST_28_147_89_METHOD => rsaEncrypt()
+        case RSA_METHOD => gostEncrypt()
       }
 
+
     // Расшифрование
-    case ButtonClicked(`decodeButton`) => if (numberCheckBox.selected) {
-      decodeMessageTextArea.text = RSA.decodeNumber(encodeMessage, n, privateKey)
-    } else {
-      decodeMessageTextArea.text = RSA.decodeString(encodeMessage, n, privateKey)
-    }
+    case ButtonClicked(`decodeButton`) =>
+      currentMethodEncrypt match {
+        case GOST_28_147_89_METHOD => rsaDecrypt()
+        case RSA_METHOD => gostDecrypt()
+      }
 
     // Выход
     case ButtonClicked(`exitButton`) => System.exit(0)
   }
-  
+
+  /** Шифрование сообщения методом RSA */
+  private def rsaEncrypt() {
+    if (numberCheckBox.selected) {
+      encodeMessageTextArea.text = RSA.encodeNumber(decodeMessage, n, publicKey)
+    } else {
+      encodeMessageTextArea.text = RSA.encodeString(decodeMessage, n, publicKey)
+    }
+  }
+
+  /** Расшифрование сообщения методом RSA */
+  private def rsaDecrypt() {
+    if (numberCheckBox.selected) {
+      decodeMessageTextArea.text = RSA.decodeNumber(encodeMessage, n, privateKey)
+    } else {
+      decodeMessageTextArea.text = RSA.decodeString(encodeMessage, n, privateKey)
+    }
+  }
+
+  /** Шифрование сообщения методом ГОСТ-28147-89 */
+  private def gostEncrypt() {
+    ???
+  }
+
+  /** Расшифрование сообщения методом ГОСТ-28147-89 */
+  private def gostDecrypt() {
+    ???
+  }
+
   /** Показ определенной панели метода шифрования и скрытие остальных */
   private def changeEncryptMethod(method: EncryptMethod) {
 
