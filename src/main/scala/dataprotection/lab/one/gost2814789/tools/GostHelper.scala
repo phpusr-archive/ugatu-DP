@@ -1,7 +1,7 @@
 package dataprotection.lab.one.gost2814789.tools
 
 import scala.util.Random
-import dataprotection.lab.one.gost2814789.GostConstants
+import dataprotection.lab.one.gost2814789.GostConstants._
 
 /**
  * @author phpusr
@@ -15,7 +15,7 @@ import dataprotection.lab.one.gost2814789.GostConstants
 object GostHelper {
 
   /** Кол-во битов для сдвига */
-  val ShiftBits = GostConstants.BlockPartSize
+  val ShiftBits = BlockPartSize
   
   /** Генерирует 32-битное число */
   def generate32BitNumber = () => Random.nextInt().abs * -1

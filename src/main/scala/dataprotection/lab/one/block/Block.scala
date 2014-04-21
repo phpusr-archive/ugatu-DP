@@ -17,7 +17,7 @@ case class Block(leftPart: Int, rightPart: Int) {
   private val PartSize = GostConstants.BlockPartSize
 
   /** Получение из двух 32-битных частей одну 64-ю */
-  def allPart = {
+  def allParts = {
     // Получение 64-битного числа с первой половиной нолей
     val rightPart64 = rightPart.toLong << PartSize >>> PartSize
     // Сдвиг левой части в первую половину и сложение со второй

@@ -3,6 +3,8 @@ package dataprotection.lab.one.gost2814789.tools
 import scala.collection.mutable.ListBuffer
 import org.dyndns.phpusr.util.log.Logger
 import dataprotection.lab.one.block.Block
+import dataprotection.lab.one.gost2814789.tools.GostHelper._
+import dataprotection.lab.one.gost2814789.GostConstants._
 
 /**
  * @author phpusr
@@ -25,7 +27,7 @@ trait GostDebug {
 
     logger.debug("lPart: " + enc.leftPart.toBinaryString + s" (${enc.leftPart}})")
     logger.debug("rPart: " + enc.rightPart.toBinaryString + s" (${enc.rightPart}})")
-    val resutl = enc.allPart
+    val resutl = enc.allParts
     logger.debug("all  : " + resutl.toBinaryString)
 
     // Откусывание левой части и сравнение ее с оригиналом

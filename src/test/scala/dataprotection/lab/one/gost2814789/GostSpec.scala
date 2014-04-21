@@ -11,7 +11,7 @@ import GostHelper._
  */
 
 /**
- * Тестирование класса Gost
+ * Тестирование объекта Gost
  */
 class GostSpec extends FlatSpec {
 
