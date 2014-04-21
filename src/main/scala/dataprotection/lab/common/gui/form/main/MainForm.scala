@@ -11,6 +11,7 @@ import dataprotection.lab.one.gost2814789.tools.GostHelper
 import scala.swing.event.ButtonClicked
 import org.dyndns.phpusr.util.log.Logger
 import dataprotection.lab.common.gui.form.main.EncryptMethod._
+import dataprotection.lab.one.gost2814789.Gost
 
 /**
  * @author phpusr
@@ -146,16 +147,16 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
     // Шифрование
     case ButtonClicked(`encodeButton`) =>
       currentMethodEncrypt match {
-        case GOST_28_147_89_METHOD => rsaEncrypt()
-        case RSA_METHOD => gostEncrypt()
+        case GOST_28_147_89_METHOD => gostEncrypt()
+        case RSA_METHOD => rsaEncrypt()
       }
 
 
     // Расшифрование
     case ButtonClicked(`decodeButton`) =>
       currentMethodEncrypt match {
-        case GOST_28_147_89_METHOD => rsaDecrypt()
-        case RSA_METHOD => gostDecrypt()
+        case GOST_28_147_89_METHOD => gostDecrypt()
+        case RSA_METHOD => rsaDecrypt()
       }
 
     // Выход
@@ -181,13 +182,27 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   }
 
   /** Шифрование сообщения методом ГОСТ-28147-89 */
+  //TODO improve
   private def gostEncrypt() {
-    ???
+    val keyHex = gostKeyTextField.text
+    val key = GostHelper.keyHexToKeyArray(keyHex)
+
+    val blockArray = GostHelper.stringToBlockArray(decodeMessage)
+    val enc = Gost.encryptBlockArray(blockArray, key)
+
+    encodeMessageTextArea.text = enc.mkString(" ") //TODO splitter
   }
 
   /** Расшифрование сообщения методом ГОСТ-28147-89 */
+  //TODO improve
   private def gostDecrypt() {
-    ???
+    val keyHex = gostKeyTextField.text
+    val key = GostHelper.keyHexToKeyArray(keyHex)
+
+    val blockArray = encodeMessage.split(" ").map(_.toLong)
+    val dec = Gost.decryptBlockArray(blockArray, key)
+
+    decodeMessageTextArea.text = GostHelper.blockArrayToString(dec)
   }
 
   /** Показ определенной панели метода шифрования и скрытие остальных */
