@@ -32,6 +32,9 @@ object GostConstants {
   /** Размер блока шифрования в битах */
   val BlockPartSize = 32
 
+  /** Размер байта в битах */
+  val ByteSize = 8
+
   /** Кол-во байтов в 64 битах */
   val ByteInLongCount = 64 / 8
 
@@ -45,6 +48,7 @@ object GostConstants {
   val ReplaceTbl = ReplaceTable.default
 
   /** Кодировка сообщения для шифрования */
-  val CharsetName = "utf8"
+  //TODO переделать на utf8, когда будет hex-вывод
+  val CharsetName = "cp1251"
 
 }

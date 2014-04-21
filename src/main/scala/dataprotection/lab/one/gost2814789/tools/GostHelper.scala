@@ -74,9 +74,12 @@ object GostHelper {
       byteInBlockIndex += 1
 
       // Количество занятых бит в блоке
-      val buzyBits = ByteInLongCount * byteInBlockIndex
-      // Добавляемый элемент сдвинутый от начала на занятое кол-во битов
-      val e64 = e.toLong << (BlockSize - buzyBits)
+      val buzyBits = ByteSize * (byteInBlockIndex-1)
+      // Стираем начальные 56 битов, которые не относятся к элементу
+      // Если элемент отрицательный, то они будут мешать //TODO норм имена для переменных
+      val el = e.toLong << ((ByteInLongCount - 1) * ByteSize)
+      // Добавляемый элемент, сдвинутый от начала на занятое кол-во битов
+      val e64 = el >>> buzyBits
 
       // Добавление элемента в блок
       currentBlock = currentBlock | e64
@@ -98,12 +101,12 @@ object GostHelper {
   /** Преобразование 64-битных блоков назад в строку */
   //TODO учитывать незавершенные блоки
   def blockArrayToString = (blockArray: Array[Long]) => {
-    val ByteSize = 8
 
     val bytes = blockArray.flatMap { block =>
       val byteBuffer = ListBuffer[Byte]()
 
       for (i <- 0 until ByteInLongCount) {
+        //TODO норм имена для переменных
         // Сдвигаем блок символа до конца влево (избавляемся от нулей в начале)
         val el = block << (i * ByteSize)
 
