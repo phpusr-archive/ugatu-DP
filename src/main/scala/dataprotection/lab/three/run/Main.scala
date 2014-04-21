@@ -1,7 +1,7 @@
 package dataprotection.lab.three.run
 
-import dataprotection.lab.three.form.main.MainForm
 import javax.swing.UIManager
+import gui.form.main.MainForm
 
 
 /**

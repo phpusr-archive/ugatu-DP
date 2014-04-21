@@ -1,7 +1,8 @@
-package dataprotection.lab.three.form.main.panel
+package gui.form.main.panel.top
 
 import scala.swing._
 import java.awt.{Dimension, Insets}
+import gui.form.main.panel.DefaultComponents
 
 /**
  * @author phpusr

@@ -1,12 +1,13 @@
-package dataprotection.lab.three.form.main
+package gui.form.main
 
 import scala.swing._
 import scala.swing.event.ButtonClicked
 import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
-import dataprotection.lab.three.form.main.panel._
 import dataprotection.lab.three.types.RsaTrait
 import javax.swing.JFrame
+import gui.form.main.panel.top.RsaTopPanel
+import gui.form.main.panel.{CenterPanel, BottomPanel}
 
 /**
  * @author phpusr
