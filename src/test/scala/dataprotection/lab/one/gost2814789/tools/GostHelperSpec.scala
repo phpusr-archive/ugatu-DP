@@ -91,6 +91,13 @@ class GostHelperSpec extends FlatSpec {
     println("\nbytes: " + messageBinaryArray.mkString(" "))
     println("reslt: " + subBlockArray.mkString(" "))
 
+    //TODO отдельный тест
+    val backMessage = GostHelper.blockArrayToString(blockArray)
+    println(s"backMessage: '$backMessage'")
+    assert(message == backMessage.substring(0, message.size))
   }
+
+  /** Преобразование 64-битных блоков назад в строку */
+
 
 }

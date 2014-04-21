@@ -32,6 +32,9 @@ object GostConstants {
   /** Размер блока шифрования в битах */
   val BlockPartSize = 32
 
+  /** Кол-во байтов в 64 битах */
+  val ByteInLongCount = 64 / 8
+
   /** Число для нахождения остатка от деления */
   val NumberForMod = Math.pow(2, BlockPartSize).toInt
 

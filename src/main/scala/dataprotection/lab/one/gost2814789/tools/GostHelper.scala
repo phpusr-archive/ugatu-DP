@@ -55,8 +55,9 @@ object GostHelper {
   }
 
   /** Преобразование строки в массив 64-битных блоков */
+  //TODO указать чем дополнять незавершенный блок
+  //TODO Попробовать с другой кодировкой
   def stringToBlockArray = (message: String) => {
-    val ByteInLongCount = 64 / 8
 
     val bytes = message.getBytes(CharsetName)
 
@@ -92,6 +93,31 @@ object GostHelper {
     if (byteInBlockIndex != 0) blockBuffer += currentBlock
 
     blockBuffer.toArray
+  }
+
+  /** Преобразование 64-битных блоков назад в строку */
+  //TODO учитывать незавершенные блоки
+  def blockArrayToString = (blockArray: Array[Long]) => {
+    val ByteSize = 8
+
+    val bytes = blockArray.flatMap { block =>
+      val byteBuffer = ListBuffer[Byte]()
+
+      for (i <- 0 until ByteInLongCount) {
+        // Сдвигаем блок символа до конца влево (избавляемся от нулей в начале)
+        val el = block << (i * ByteSize)
+
+        // Сдвигаем блок символа до конца вправо (избавляемся от нулей в конце)
+        val e = (el >>> (ByteInLongCount - 1) * ByteSize).toByte
+
+        // Добавляем блок элемента в список байтов
+        byteBuffer += e
+      }
+
+      byteBuffer
+    }
+
+    new String(bytes, CharsetName)
   }
 
 }
