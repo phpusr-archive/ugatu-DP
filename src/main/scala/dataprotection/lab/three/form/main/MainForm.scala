@@ -17,6 +17,9 @@ import dataprotection.lab.three.types.RsaTrait
  * Главная форма
  */
 object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with CenterPanel with BottomPanel {
+  // Элементы меню методов шифрования
+  private val gostMenuItem = new RadioMenuItem("GOST-28147-89")
+  private val rsaMenuItem = new RadioMenuItem("RSA")
 
   /** Форма */
   def top = new MainFrame {
@@ -24,6 +27,16 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
 
     contents = new BorderPanel {
       import BorderPanel.Position._
+
+      // Меню
+      menuBar = new MenuBar {
+        // Выбор метода шифрования
+        contents += new Menu("Encryption method") {
+
+          val mutex = new ButtonGroup(gostMenuItem, rsaMenuItem)
+          contents ++= mutex.buttons
+        }
+      }
 
       // Верхняя панель
       layout(TopPanel) = North
@@ -39,6 +52,8 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
   }
 
   // Обработчики событий формы
+  listenTo(gostMenuItem, rsaMenuItem)
+
   listenTo(generatePButton, generateQButton, generateNButton)
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
   listenTo(generateKeysButton, clearAllButton)
@@ -49,6 +64,12 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
   listenTo(exitButton)
 
   reactions += {
+    // Метод шифрования
+    case ButtonClicked(`gostMenuItem`) =>
+      println("Gost")
+    case ButtonClicked(`rsaMenuItem`) =>
+      println("RSA")
+
     // Генерация чисел: p, q, n
     case ButtonClicked(`generatePButton`) =>
       clearN(); clearPublicKey(); clearPrivateKey()
