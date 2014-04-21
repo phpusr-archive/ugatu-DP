@@ -1,4 +1,4 @@
-package gui.form.main.panel
+package dataprotection.lab.common.gui.form.main.panel
 
 import scala.swing.Label
 import java.awt.Font
