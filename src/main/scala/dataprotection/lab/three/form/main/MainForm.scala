@@ -17,7 +17,7 @@ import javax.swing.JFrame
 /**
  * Главная форма
  */
-object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with CenterPanel with BottomPanel {
+object MainForm extends SimpleSwingApplication with RsaTrait with RsaTopPanel with CenterPanel with BottomPanel {
   // Элементы меню методов шифрования
   private val gostMenuItem = new RadioMenuItem("GOST-28147-89")
   private val rsaMenuItem = new RadioMenuItem("RSA")
@@ -32,8 +32,8 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
     val c = new Constraints
     layout(new Button) = c
   }
-  //TODO rename
-  private val topPanels = List(GostTopPanel, TopPanel)
+  /** Список панелей методов шифрования */
+  private val topPanels = List(GostTopPanel, RsaTopPanel)
 
   /** Форма */
   def top = new MainFrame {
@@ -54,7 +54,7 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
 
       // Верхняя панель
       layout(new FlowPanel {
-        contents += TopPanel
+        contents += RsaTopPanel
         contents += GostTopPanel
       }) = North
 
@@ -85,7 +85,7 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
     case ButtonClicked(`gostMenuItem`) =>
       changePanel(GostTopPanel)
     case ButtonClicked(`rsaMenuItem`) =>
-      changePanel(TopPanel)
+      changePanel(RsaTopPanel)
 
     // Генерация чисел: p, q, n
     case ButtonClicked(`generatePButton`) =>
@@ -151,7 +151,7 @@ object MainForm extends SimpleSwingApplication with RsaTrait with TopPanel with 
     }
 
     // Чек-бокс шифрования числа доступен только для RSA
-    numberCheckBox.visible = panel == TopPanel
+    numberCheckBox.visible = panel == RsaTopPanel
 
     // Выровнить размер окна под компонеты
     gPeer.pack()

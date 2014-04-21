@@ -12,7 +12,7 @@ import java.awt.{Dimension, Insets}
 /**
  * Верхняя панель
  */
-trait TopPanel extends DefaultComponents {
+trait RsaTopPanel extends DefaultComponents {
 
   // Поля ввода: p, q, n
   protected val generatePButton = defaultGenerateButton()
@@ -66,7 +66,7 @@ trait TopPanel extends DefaultComponents {
     layout(clearButton) = c
   }
 
-  protected val TopPanel = new GridBagPanel {
+  protected val RsaTopPanel = new GridBagPanel {
     visible = false
 
     val c = new Constraints
