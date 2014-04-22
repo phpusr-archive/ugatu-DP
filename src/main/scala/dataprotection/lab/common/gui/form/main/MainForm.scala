@@ -84,8 +84,8 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
   listenTo(generateKeysButton, clearAllButton)
 
-  listenTo(clearEncodeMessageButton, clearDecodeMessageButton)
-  listenTo(encodeButton, decodeButton)
+  listenTo(clearEncryptMessageButton, clearDecryptMessageButton)
+  listenTo(encryptButton, decryptButton)
 
   listenTo(exitButton)
 
@@ -141,11 +141,11 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
     // Очистка полей ввода
     case ButtonClicked(`clearAllButton`) =>
       clearP(); clearQ(); clearN(); clearPublicKey(); clearPrivateKey()
-    case ButtonClicked(`clearDecodeMessageButton`) => clearDecodeMessage()
-    case ButtonClicked(`clearEncodeMessageButton`) => clearEncodeMessage()
+    case ButtonClicked(`clearDecryptMessageButton`) => clearDecryptMessage()
+    case ButtonClicked(`clearEncryptMessageButton`) => clearEncryptMessage()
 
     // Шифрование
-    case ButtonClicked(`encodeButton`) =>
+    case ButtonClicked(`encryptButton`) =>
       currentMethodEncrypt match {
         case GOST_28_147_89_METHOD => gostEncrypt()
         case RSA_METHOD => rsaEncrypt()
@@ -153,7 +153,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
 
 
     // Расшифрование
-    case ButtonClicked(`decodeButton`) =>
+    case ButtonClicked(`decryptButton`) =>
       currentMethodEncrypt match {
         case GOST_28_147_89_METHOD => gostDecrypt()
         case RSA_METHOD => rsaDecrypt()
@@ -166,35 +166,35 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   /** Шифрование сообщения методом RSA */
   private def rsaEncrypt() {
     if (numberCheckBox.selected) {
-      encodeMessageTextArea.text = RSA.encodeNumber(decodeMessage, n, publicKey)
+      encryptMessageTextArea.text = RSA.encryptNumber(decryptMessage, n, publicKey)
     } else {
-      encodeMessageTextArea.text = RSA.encodeString(decodeMessage, n, publicKey)
+      encryptMessageTextArea.text = RSA.encryptString(decryptMessage, n, publicKey)
     }
   }
 
   /** Расшифрование сообщения методом RSA */
   private def rsaDecrypt() {
     if (numberCheckBox.selected) {
-      decodeMessageTextArea.text = RSA.decodeNumber(encodeMessage, n, privateKey)
+      decryptMessageTextArea.text = RSA.decryptNumber(encryptMessage, n, privateKey)
     } else {
-      decodeMessageTextArea.text = RSA.decodeString(encodeMessage, n, privateKey)
+      decryptMessageTextArea.text = RSA.decryptString(encryptMessage, n, privateKey)
     }
   }
 
   /** Шифрование сообщения методом ГОСТ-28147-89 */
   private def gostEncrypt() {
     val key = GostHelper.keyHexToKeyArray(gostKey)
-    val messageBlocks = GostHelper.stringToBlockArray(decodeMessage)
-    val encodeBlocks = Gost.encryptBlockArray(messageBlocks, key)
-    encodeMessageTextArea.text = GostHelper.blockArrayToHexString(encodeBlocks)
+    val messageBlocks = GostHelper.stringToBlockArray(decryptMessage)
+    val encryptBlocks = Gost.encryptBlockArray(messageBlocks, key)
+    encryptMessageTextArea.text = GostHelper.blockArrayToHexString(encryptBlocks)
   }
 
   /** Расшифрование сообщения методом ГОСТ-28147-89 */
   private def gostDecrypt() {
     val key = GostHelper.keyHexToKeyArray(gostKey)
-    val encodeMessageBlocks = GostHelper.hexStringToBlockArray(encodeMessage)
-    val decodeMessageBlocks = Gost.decryptBlockArray(encodeMessageBlocks, key)
-    decodeMessageTextArea.text = GostHelper.blockArrayToString(decodeMessageBlocks)
+    val encryptMessageBlocks = GostHelper.hexStringToBlockArray(encryptMessage)
+    val decryptMessageBlocks = Gost.decryptBlockArray(encryptMessageBlocks, key)
+    decryptMessageTextArea.text = GostHelper.blockArrayToString(decryptMessageBlocks)
   }
 
   /** Показ определенной панели метода шифрования и скрытие остальных */
@@ -239,9 +239,9 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   // ГОСТ 28147-89
   private val gostKey = gostKeyTextField.text
 
-  private def decodeMessage = decodeMessageTextArea.text
-  private def clearDecodeMessage() = decodeMessageTextArea.text = ""
-  private def encodeMessage = encodeMessageTextArea.text
-  private def clearEncodeMessage() = encodeMessageTextArea.text = ""
+  private def decryptMessage = decryptMessageTextArea.text
+  private def clearDecryptMessage() = decryptMessageTextArea.text = ""
+  private def encryptMessage = encryptMessageTextArea.text
+  private def clearEncryptMessage() = encryptMessageTextArea.text = ""
 
 }

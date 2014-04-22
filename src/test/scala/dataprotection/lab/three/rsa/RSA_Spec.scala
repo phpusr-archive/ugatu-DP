@@ -42,8 +42,8 @@ class RSA_Spec extends FlatSpec {
       val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
       val message = Random.nextString(10)
 
-      val encodeMessage = RSA.encodeString(message, n, publicKey)
-      val decodeMessage = RSA.decodeString(encodeMessage, n, privateKey)
+      val encodeMessage = RSA.encryptString(message, n, publicKey)
+      val decodeMessage = RSA.decryptString(encodeMessage, n, privateKey)
 
       assert(message == decodeMessage)
     }
@@ -54,8 +54,8 @@ class RSA_Spec extends FlatSpec {
       val (p, q, n, publicKey, privateKey) = RSA.generateKeys()
       val message = Random.nextInt(10000000).toString
 
-      val encodeMessage = RSA.encodeNumber(message, n, publicKey)
-      val decodeMessage = RSA.decodeNumber(encodeMessage, n, privateKey)
+      val encodeMessage = RSA.encryptNumber(message, n, publicKey)
+      val decodeMessage = RSA.decryptNumber(encodeMessage, n, privateKey)
 
       assert(message == decodeMessage)
     }

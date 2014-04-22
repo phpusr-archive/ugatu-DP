@@ -86,7 +86,7 @@ object RSA extends RsaTrait {
   private def getPhi(p: RsaNumber, q: RsaNumber) = (p-1) * (q-1)
 
   /** Шифрование числа TODO test, rename */
-  def encodeNumber(message: String, n: RsaNumber, publicKey: RsaNumber) = {
+  def encryptNumber(message: String, n: RsaNumber, publicKey: RsaNumber) = {
     logger.title(s"encodeNumber($message)")
     
     // Размер блока числа
@@ -107,7 +107,7 @@ object RSA extends RsaTrait {
   }
 
   /** Расшифрование числа */
-  def decodeNumber(encodeMessage: String, n: RsaNumber, privateKey: RsaNumber) = {
+  def decryptNumber(encodeMessage: String, n: RsaNumber, privateKey: RsaNumber) = {
     logger.title(s"decodeNumber($encodeMessage)")
 
     // Размер блока числа
@@ -137,7 +137,7 @@ object RSA extends RsaTrait {
   }
 
   /** Шифрование строки */
-  def encodeString(message: String, n: RsaNumber, publicKey: RsaNumber) = {
+  def encryptString(message: String, n: RsaNumber, publicKey: RsaNumber) = {
     logger.title(s"encodeString($message)")
 
     val base64String = new BASE64Encoder().encode(message.getBytes(CharsetNameDefault))
@@ -153,7 +153,7 @@ object RSA extends RsaTrait {
   }
 
   /** Рашифрование строки */
-  def decodeString(encodeMessage: String, n: RsaNumber, privateKey: RsaNumber) = {
+  def decryptString(encodeMessage: String, n: RsaNumber, privateKey: RsaNumber) = {
     logger.title(s"decodeString($encodeMessage)")
 
     val split = encodeMessage.split(Splitter)

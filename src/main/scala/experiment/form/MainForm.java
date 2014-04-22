@@ -66,9 +66,9 @@ public class MainForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String encodeMessage = null;
                 if (isNumberMessage()) {
-                    encodeMessage = RSA.encodeNumber(getDecodeMessage(), getN(), getPublicKey());
+                    encodeMessage = RSA.encryptNumber(getDecodeMessage(), getN(), getPublicKey());
                 } else {
-                    encodeMessage = RSA.encodeString(getDecodeMessage(), getN(), getPublicKey());
+                    encodeMessage = RSA.encryptString(getDecodeMessage(), getN(), getPublicKey());
                 }
 
                 encodeMessagetextArea.setText(encodeMessage);
@@ -81,9 +81,9 @@ public class MainForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String decodeMessage = null;
                 if (isNumberMessage()) {
-                    decodeMessage = RSA.decodeNumber(getEncodeMessage(), getN(), getPrivateKey());
+                    decodeMessage = RSA.decryptNumber(getEncodeMessage(), getN(), getPrivateKey());
                 } else {
-                    decodeMessage = RSA.decodeString(getEncodeMessage(), getN(), getPrivateKey());
+                    decodeMessage = RSA.decryptString(getEncodeMessage(), getN(), getPrivateKey());
                 }
 
                 decodeMessagetextArea.setText(decodeMessage);
