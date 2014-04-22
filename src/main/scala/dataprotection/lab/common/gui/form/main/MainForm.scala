@@ -237,7 +237,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   private def clearPrivateKey() = privateKeyTextField.text = ""
 
   // ГОСТ 28147-89
-  private val gostKey = gostKeyTextField.text
+  private def gostKey = gostKeyTextField.text
 
   private def decryptMessage = decryptMessageTextArea.text
   private def clearDecryptMessage() = decryptMessageTextArea.text = ""
