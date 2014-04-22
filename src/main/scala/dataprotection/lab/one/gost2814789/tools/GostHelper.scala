@@ -124,10 +124,10 @@ object GostHelper {
       // Количество занятых бит в блоке
       val buzyBits = ByteSize * (byteInBlockIndex-1)
       // Стираем начальные 56 битов, которые не относятся к элементу
-      // Если элемент отрицательный, то они будут мешать //TODO норм имена для переменных
-      val el = e.toLong << ((ByteInLongCount - 1) * ByteSize)
+      // Если элемент отрицательный, то они будут мешать
+      val eShiftLeft = e.toLong << ((ByteInLongCount - 1) * ByteSize)
       // Добавляемый элемент, сдвинутый от начала на занятое кол-во битов
-      val e64 = el >>> buzyBits
+      val e64 = eShiftLeft >>> buzyBits
 
       // Добавление элемента в блок
       currentBlock = currentBlock | e64
@@ -154,15 +154,14 @@ object GostHelper {
       val byteBuffer = ListBuffer[Byte]()
 
       for (i <- 0 until ByteInLongCount) {
-        //TODO норм имена для переменных
         // Сдвигаем блок символа до конца влево (избавляемся от нулей в начале)
-        val el = block << (i * ByteSize)
+        val blockShiftLeft = block << (i * ByteSize)
 
         // Сдвигаем блок символа до конца вправо (избавляемся от нулей в конце)
-        val e = (el >>> (ByteInLongCount - 1) * ByteSize).toByte
+        val eByte = (blockShiftLeft >>> (ByteInLongCount - 1) * ByteSize).toByte
 
         // Добавляем блок элемента в список байтов
-        byteBuffer += e
+        byteBuffer += eByte
       }
 
       byteBuffer
