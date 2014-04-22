@@ -5,5 +5,5 @@ call env.bat
 cd /d "%CUR_PRJ%"
 
 
-sbt
+call sbt
 pause
