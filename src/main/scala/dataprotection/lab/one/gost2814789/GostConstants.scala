@@ -42,7 +42,6 @@ object GostConstants {
   val ReplaceTbl = ReplaceTable.default
 
   /** Кодировка сообщения для шифрования */
-  //TODO переделать на utf8, когда будет hex-вывод
   val CharsetName = "cp1251"
 
 }

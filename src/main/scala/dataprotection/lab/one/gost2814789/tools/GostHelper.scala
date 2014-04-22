@@ -63,6 +63,7 @@ object GostHelper {
    * Преобразование введенного ключа из 16-ной строки в 10-ный массив <br/>
    *
    * Long потому что число выходит за рамки Int (использует все 32 бита) <br/>
+   * //TODO hex-блоки фиксированного размера, можно не использовать пробелы
    */
   def keyHexToKeyArray = (keyHex: String) => {
     keyHex.split(BlockSplitter).map(java.lang.Long.parseLong(_, KeyOutputNotation).toInt)
@@ -104,7 +105,6 @@ object GostHelper {
 
   /** Преобразование строки в массив 64-битных блоков */
   //TODO указать чем дополнять незавершенный блок
-  //TODO Попробовать с другой кодировкой
   def stringToBlockArray = (string: String) => {
 
     val bytes = string.getBytes(CharsetName)
