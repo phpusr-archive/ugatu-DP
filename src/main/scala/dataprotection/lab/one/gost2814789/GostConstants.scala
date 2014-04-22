@@ -13,12 +13,6 @@ import dataprotection.lab.one.gost2814789.tools.ReplaceTable
  */
 object GostConstants {
 
-  /** Система счисления для вывода ключа */
-  val KeyOutputNotation = 16
-
-  /** Разделитель блоков при выводе ключа */
-  val KeySplitter = " "
-
   /** Размер ключа в битах */
   //TODO задействовать при проверке ключа
   val KeySize = 256

@@ -4,6 +4,7 @@ import scala.util.Random
 import dataprotection.lab.one.gost2814789.GostConstants._
 import org.dyndns.phpusr.util.log.Logger
 import scala.collection.mutable.ListBuffer
+import dataprotection.lab.one.block.Block
 
 /**
  * @author phpusr
@@ -19,9 +20,18 @@ object GostHelper {
   /** Логирование */
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 
+  /** Разделитель блоков при выводе ключа */
+  val BlockSplitter = " "
+
+  /** Разделитель для под-блоков */
+  val SubBlocksSplitter = "-"
+
+  /** Система счисления для вывода ключа */
+  val KeyOutputNotation = 16
+
   /** Кол-во битов для сдвига */
   val ShiftBits = BlockPartSize
-  
+
   /** Генерирует 32-битное число */
   def generate32BitNumber = () => Random.nextInt().abs * -1
 
@@ -40,7 +50,7 @@ object GostHelper {
     // Список из 8-ми 32-х битных частей ключа
     val keySeq = for (i <- 1 to KeyBlocksCount) yield generate32BitNumber()
 
-    val keyHex = keySeq.map(e => Integer.toHexString(e)).mkString(KeySplitter)
+    val keyHex = keySeq.map(e => Integer.toHexString(e)).mkString(BlockSplitter)
 
     logger.title("Generate GOST-28147-89 Key")
     logger.debug("keySeq: " + keySeq.mkString(" "))
@@ -49,17 +59,55 @@ object GostHelper {
     (keySeq, keyHex)
   }
 
-  /** Преобразование введенного ключа из 16-ной строки в 10-ный массив */
+  /**
+   * Преобразование введенного ключа из 16-ной строки в 10-ный массив <br/>
+   *
+   * Long потому что число выходит за рамки Int (использует все 32 бита) <br/>
+   */
   def keyHexToKeyArray = (keyHex: String) => {
-    keyHex.split(KeySplitter).map(java.lang.Long.parseLong(_, KeyOutputNotation).toInt)
+    keyHex.split(BlockSplitter).map(java.lang.Long.parseLong(_, KeyOutputNotation).toInt)
+  }
+
+  /**
+   * Преобразование массива 64-битных блоков в строку 16-х чисел <br/>
+   *
+   * Число разбивается на две 32-битыне части <br/>
+   * Каждая часть преобразуется в 16-ю строку <br/>
+   *
+   * Разбиение сделно, потому что блоки могут занимать все 64 бита <br/>
+   * и не конвертироваться назад в Long <br/>
+   */
+  def blockArrayToHexString = (blockArray: Array[Long]) => {
+    blockArray.map{ e =>
+      val left = getLeftPart64BitNumber(e)
+      val right = getRightPart64BitNumber(e)
+      List(left, right).map(_.toHexString).mkString(SubBlocksSplitter)
+    }.mkString(BlockSplitter)
+  }
+
+  /**
+   * Преобразование строки 16-х чисел в массива 64-битных чисел <br/>
+   *
+   * Строка первый раз разбивается одним делителем <br/>
+   * Потом эти блоки разбиваются второй раз <br/>
+   * Каждый блок преобразуется в 32-битное число <br/>
+   * Результаты склеиваются <br/>
+   */
+  def hexStringToBlockArray = (string: String) => {
+    string.split(BlockSplitter).map { e =>
+      val parts = e.split(SubBlocksSplitter).map { e =>
+        java.lang.Long.parseLong(e, KeyOutputNotation).toInt
+      }
+      Block(parts(0), parts(1)).allParts
+    }
   }
 
   /** Преобразование строки в массив 64-битных блоков */
   //TODO указать чем дополнять незавершенный блок
   //TODO Попробовать с другой кодировкой
-  def stringToBlockArray = (message: String) => {
+  def stringToBlockArray = (string: String) => {
 
-    val bytes = message.getBytes(CharsetName)
+    val bytes = string.getBytes(CharsetName)
 
     val blockBuffer = ListBuffer[Long]()
 
