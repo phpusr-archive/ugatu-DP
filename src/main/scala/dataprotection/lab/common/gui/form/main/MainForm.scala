@@ -182,27 +182,19 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   }
 
   /** Шифрование сообщения методом ГОСТ-28147-89 */
-  //TODO improve
   private def gostEncrypt() {
-    val keyHex = gostKeyTextField.text
-    val key = GostHelper.keyHexToKeyArray(keyHex)
-
-    val blockArray = GostHelper.stringToBlockArray(decodeMessage)
-    val enc = Gost.encryptBlockArray(blockArray, key)
-
-    encodeMessageTextArea.text = enc.mkString(" ") //TODO splitter
+    val key = GostHelper.keyHexToKeyArray(gostKey)
+    val messageBlocks = GostHelper.stringToBlockArray(decodeMessage)
+    val encodeBlocks = Gost.encryptBlockArray(messageBlocks, key)
+    encodeMessageTextArea.text = GostHelper.blockArrayToHexString(encodeBlocks)
   }
 
   /** Расшифрование сообщения методом ГОСТ-28147-89 */
-  //TODO improve
   private def gostDecrypt() {
-    val keyHex = gostKeyTextField.text
-    val key = GostHelper.keyHexToKeyArray(keyHex)
-
-    val blockArray = encodeMessage.split(" ").map(_.toLong)
-    val dec = Gost.decryptBlockArray(blockArray, key)
-
-    decodeMessageTextArea.text = GostHelper.blockArrayToString(dec)
+    val key = GostHelper.keyHexToKeyArray(gostKey)
+    val encodeMessageBlocks = GostHelper.hexStringToBlockArray(encodeMessage)
+    val decodeMessageBlocks = Gost.decryptBlockArray(encodeMessageBlocks, key)
+    decodeMessageTextArea.text = GostHelper.blockArrayToString(decodeMessageBlocks)
   }
 
   /** Показ определенной панели метода шифрования и скрытие остальных */
@@ -231,17 +223,21 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   }
 
   // Получение и установка значений на форме
+
+  // RSA
   private def p = pTextField.text.toRsaNumber
   private def clearP() = pTextField.text = ""
   private def q = qTextField.text.toRsaNumber
   private def clearQ() = qTextField.text = ""
   private def n = nTextField.text.toRsaNumber
   private def clearN() = nTextField.text = ""
-
   private def publicKey = publicKeyTextField.text.toRsaNumber
   private def clearPublicKey() = publicKeyTextField.text = ""
   private def privateKey = privateKeyTextField.text.toRsaNumber
   private def clearPrivateKey() = privateKeyTextField.text = ""
+
+  // ГОСТ 28147-89
+  private val gostKey = gostKeyTextField.text
 
   private def decodeMessage = decodeMessageTextArea.text
   private def clearDecodeMessage() = decodeMessageTextArea.text = ""
