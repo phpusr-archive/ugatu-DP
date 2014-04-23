@@ -183,7 +183,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
 
   /** Шифрование сообщения методом ГОСТ-28147-89 */
   private def gostEncrypt() {
-    val key = GostHelper.keyHexToKeyArray(gostKey)
+    val key = GostHelper.keyHexToKeyArray(gostKeyHex)
     val messageBlocks = GostHelper.stringToBlockArray(decryptMessage)
     val encryptBlocks = Gost.encryptBlockArray(messageBlocks, key)
     encryptMessageTextArea.text = GostHelper.blockArrayToHexString(encryptBlocks)
@@ -191,7 +191,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
 
   /** Расшифрование сообщения методом ГОСТ-28147-89 */
   private def gostDecrypt() {
-    val key = GostHelper.keyHexToKeyArray(gostKey)
+    val key = GostHelper.keyHexToKeyArray(gostKeyHex)
     val encryptMessageBlocks = GostHelper.hexStringToBlockArray(encryptMessage)
     val decryptMessageBlocks = Gost.decryptBlockArray(encryptMessageBlocks, key)
     decryptMessageTextArea.text = GostHelper.blockArrayToString(decryptMessageBlocks)
@@ -237,7 +237,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   private def clearPrivateKey() = privateKeyTextField.text = ""
 
   // ГОСТ 28147-89
-  private def gostKey = gostKeyTextField.text
+  private def gostKeyHex = gostKeyTextField.text
 
   private def decryptMessage = decryptMessageTextArea.text
   private def clearDecryptMessage() = decryptMessageTextArea.text = ""
