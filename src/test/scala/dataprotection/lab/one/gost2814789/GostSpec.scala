@@ -18,37 +18,38 @@ class GostSpec extends FlatSpec {
   /** Должна пройзоти ошибка неправильного размера ключа */
   it should "throw IllegalArgumentException if keyArray have improper size" in {
     intercept [IllegalArgumentException] {
-      Gost.decryptBlock(0, Array())
+      Gost.decryptBlockArray(Array(0L), Array())
     }
 
     intercept [IllegalArgumentException] {
-      Gost.encryptBlock(0, Array())
+      Gost.encryptBlockArray(Array(0L), Array())
     }
   }
 
   /** Не должно произойти ошибки размера ключа */
   it should "executed without exceptions" in {
-    Gost.encryptBlock(-1, Array(1, 2, 3, 4, 5, 6, 7, 8))
+    Gost.encryptBlockArray(Array(0L), Array(1, 2, 3, 4, 5, 6, 7, 8))
   }
 
   /** Должен зашифровать и расшифровать блок, результаты должны совпасть */
   it should "equals before encryption and after decryption" in {
     val times = 10
+    val blockCount = 10
 
     for (i <- 1 to times) {
-      val block = GostHelper.generate64BitNumber()
       val (keySeq, keyHex) = GostHelper.generateKey()
       val keyArray = keyHexToKeyArray(keyHex)
+      val blockArray = (for (blockIndex <- 1 to blockCount) yield GostHelper.generate64BitNumber()).toArray
 
-      val enc = Gost.encryptBlock(block, keyArray)
-      val dec = Gost.decryptBlock(enc, keyArray)
+      val enc = Gost.encryptBlockArray(blockArray, keyArray)
+      val dec = Gost.decryptBlockArray(enc, keyArray)
 
       println("\n>> it should equals before encryption and after decryption")
-      println("blk = " + block.toBinaryString)
-      println("enc = " + enc.toBinaryString)
-      println("dec = " + dec.toBinaryString)
+      println("blk = " + blockArray.mkString(" "))
+      println("enc = " + enc.mkString(" "))
+      println("dec = " + dec.mkString(" "))
 
-      assert(block == dec)
+      assert(blockArray.mkString("") == dec.mkString(""))
     }
   }
 
