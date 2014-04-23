@@ -21,8 +21,13 @@ trait GostDebug {
   /** Логирование */
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 
+  /** Включкние дебага */
+  protected val DebugEnable = false
+
   /** Проверка шифрования блока */
   protected def debugEncryptBlock(enc: Block) {
+    if (!DebugEnable) return
+
     logger.title("Debug encrypt block")
 
     logger.debug("lPart: " + enc.leftPart.toBinaryString + s" (${enc.leftPart}})")
@@ -43,6 +48,8 @@ trait GostDebug {
 
   /** Проверка обработки левой части */
   protected def debugSXor(leftPart: Int, sRol: Int, sXor: Int) {
+    if (!DebugEnable) return
+
     logger.title("Debug processing leftPart")
 
     logger.debug("sRol: " + sRol.toBinaryString)
@@ -53,6 +60,8 @@ trait GostDebug {
 
   /** Проверка сдвига sMod на 11 бит */
   protected def debugSSimpleShiftBits(sSimple: Int, sRol: Int, shiftBits: Int) {
+    if (!DebugEnable) return
+
     logger.title("Debug sSimple shift 11 bits")
 
     val testSRol = Integer.rotateLeft(sSimple, shiftBits)
@@ -63,6 +72,8 @@ trait GostDebug {
 
   /** Отладка соединения S-блоков */
   protected def debugJoinSBlocks(sSimpleBlocks: Seq[Byte], sSimple: Int) {
+    if (!DebugEnable) return
+
     logger.title("Debug join S-blocks")
 
     // Изменения списка в изменяемый
@@ -96,6 +107,8 @@ trait GostDebug {
 
   /** Отладка получения S-блоков */
   protected def debugSBlocks(sBlocksList: Seq[Byte], sMod: Int) {
+    if (!DebugEnable) return
+
     logger.title("Debug sBlocks")
 
     // Изменения списка в изменяемый
@@ -130,6 +143,8 @@ trait GostDebug {
 
   /** Отладка сложение по модулю 2 в 32 */
   protected def debugSMod(rightPart: Int, partKey: Int, sMod: Int) {
+    if (!DebugEnable) return
+
     logger.title("Debug sMod")
 
     logger.debug("keyPart: " + partKey.toBinaryString)
@@ -153,6 +168,8 @@ trait GostDebug {
 
   /** Отладка левой части числа */
   protected def debugLeftPart(block: Long, leftPart: Int) {
+    if (!DebugEnable) return
+
     logger.title("Debug left part")
 
     val blockBin = block.toBinaryString
@@ -172,6 +189,8 @@ trait GostDebug {
 
   /** Отладка правой части числа */
   protected def debugRightPart(block: Long, rightPart: Int) {
+    if (!DebugEnable) return
+
     logger.title("Debug right part")
 
     val blockBin = block.toBinaryString
