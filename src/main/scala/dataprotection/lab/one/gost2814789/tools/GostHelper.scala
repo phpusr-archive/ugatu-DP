@@ -21,7 +21,7 @@ object GostHelper {
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 
   /** Разделитель блоков при выводе ключа */
-  val BlockSplitter = " "
+  val BlockSplitter = ""
 
   /** Система счисления для вывода ключа */
   val KeyOutputNotation = 16
@@ -31,6 +31,12 @@ object GostHelper {
 
   /** Кол-во hex-символов для предоставления 32-битного числа */
   val HexSymbolsCount = 8
+
+  // Формат вывода hex-числа (дополняет спереди нулями до 8 символов)
+  val HexStringFormat = s"%${HexSymbolsCount}s"
+
+  // Регулярное выражение для разбивки текста на блоки по 8 символов
+  val OneBlockRegExp = s"(?<=\\G.{$HexSymbolsCount})"
 
   /** Генерирует 32-битное число */
   def generate32BitNumber = () => Random.nextInt().abs * -1
@@ -50,7 +56,9 @@ object GostHelper {
     // Список из 8-ми 32-х битных частей ключа
     val keySeq = for (i <- 1 to KeyBlocksCount) yield generate32BitNumber()
 
-    val keyHex = keySeq.map(e => Integer.toHexString(e)).mkString(BlockSplitter)
+    val keyHex = keySeq.map {e =>
+      (Integer.toHexString(e) formatted HexStringFormat).replace(' ', '0')
+    }.mkString(BlockSplitter)
 
     logger.title("Generate GOST-28147-89 Key")
     logger.debug("keySeq: " + keySeq.mkString(" "))
@@ -63,10 +71,9 @@ object GostHelper {
    * Преобразование введенного ключа из 16-ной строки в 10-ный массив <br/>
    *
    * Long потому что число выходит за рамки Int (использует все 32 бита) <br/>
-   * //TODO hex-блоки фиксированного размера, можно не использовать пробелы
    */
   def keyHexToKeyArray = (keyHex: String) => {
-    keyHex.split(BlockSplitter).map(java.lang.Long.parseLong(_, KeyOutputNotation).toInt)
+    keyHex.split(OneBlockRegExp).map(java.lang.Long.parseLong(_, KeyOutputNotation).toInt)
   }
 
   /**
@@ -79,13 +86,11 @@ object GostHelper {
    * и не конвертироваться назад в Long <br/>
    */
   def blockArrayToHexString = (blockArray: Array[Long]) => {
-    // Формат вывода hex-числа (дополняет спереди нулями до 8 символов)
-    val Format = s"%${HexSymbolsCount}s"
     blockArray.flatMap{ e =>
       val left = getLeftPart64BitNumber(e)
       val right = getRightPart64BitNumber(e)
       List(left, right).map { e =>
-        (e.toHexString formatted Format).replace(' ', '0')
+        (e.toHexString formatted HexStringFormat).replace(' ', '0')
       }
     }.mkString("")
   }
@@ -101,11 +106,9 @@ object GostHelper {
   def hexStringToBlockArray = (string: String) => {
     // Регулярное выражение для разбивки текста на блоки по 16 символов
     val twoBlocksRegExp = s"(?<=\\G.{${HexSymbolsCount * 2}})"
-    // Регулярное выражение для разбивки текста на блоки по 8 символов
-    val oneBlockRegExp = s"(?<=\\G.{$HexSymbolsCount})"
 
     string.split(twoBlocksRegExp).map { e =>
-      val parts = e.split(oneBlockRegExp).map { e =>
+      val parts = e.split(OneBlockRegExp).map { e =>
         java.lang.Long.parseLong(e, KeyOutputNotation).toInt
       }
       Block(parts(0), parts(1)).allParts
