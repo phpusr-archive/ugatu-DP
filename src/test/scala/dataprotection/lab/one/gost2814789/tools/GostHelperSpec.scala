@@ -43,7 +43,7 @@ class GostHelperSpec extends FlatSpec {
   it should "generate 256 bit key in string" in {
     val (keySeq, keyHex) = GostHelper.generateKey()
 
-    val keySeqForTest = keyHex.split(" ").map(java.lang.Long.parseLong(_, 16).toInt)
+    val keySeqForTest = keyHex.split("(?<=\\G.{8})").map(java.lang.Long.parseLong(_, 16).toInt)
 
     assert(keySeqForTest.size == keySeq.size)
 
