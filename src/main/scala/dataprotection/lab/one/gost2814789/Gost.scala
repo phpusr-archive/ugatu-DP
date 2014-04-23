@@ -36,12 +36,10 @@ object Gost extends GostDebug {
   }
 
   /** Шифрование блока */
-  //TODO make private
-  def encryptBlock(block: Long, keyArray: Array[Int]) = encryptOrDecryptBlock(block, keyArray, encrypt = true)
+  private def encryptBlock(block: Long, keyArray: Array[Int]) = encryptOrDecryptBlock(block, keyArray, encrypt = true)
 
   /** Расшифрование блока */
-  //TODO make private
-  def decryptBlock(block: Long, keyArray: Array[Int]) = encryptOrDecryptBlock(block, keyArray, encrypt = false)
+  private def decryptBlock(block: Long, keyArray: Array[Int]) = encryptOrDecryptBlock(block, keyArray, encrypt = false)
 
   /** Шифрование блока */
   private def encryptOrDecryptBlock(block: Long, keyArray: Array[Int], encrypt: Boolean) = {
