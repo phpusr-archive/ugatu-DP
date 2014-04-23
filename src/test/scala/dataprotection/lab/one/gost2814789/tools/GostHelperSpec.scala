@@ -58,7 +58,7 @@ class GostHelperSpec extends FlatSpec {
   }
 
   /** Преобразование строки в массив 64-битных блоков */
-  it should "converted string to 64-bits blokcs" in {
+  it should "convert string to 64-bits blokcs" in {
     val message = "abcdsdjfhsjdkhf"
     val messageBinaryArray = message.getBytes.map(_.toInt.toBinaryString)
     println("\nbytes: " + messageBinaryArray.mkString(" "))
@@ -90,14 +90,17 @@ class GostHelperSpec extends FlatSpec {
 
     println("\nbytes: " + messageBinaryArray.mkString(" "))
     println("reslt: " + subBlockArray.mkString(" "))
-
-    //TODO отдельный тест
-    val backMessage = GostHelper.blockArrayToString(blockArray)
-    println(s"backMessage: '$backMessage'")
-    assert(message == backMessage.substring(0, message.size))
   }
 
   /** Преобразование 64-битных блоков назад в строку */
+  it should "covert 64-bits blocks to string" in {
+    val message = "abcdsdjfhsjdkhf"
 
+    val blockArray = GostHelper.stringToBlockArray(message)
+    val backMessage = GostHelper.blockArrayToString(blockArray)
+    println(s"backMessage: '$backMessage'")
+
+    assert(message == backMessage.substring(0, message.size))
+  }
 
 }
