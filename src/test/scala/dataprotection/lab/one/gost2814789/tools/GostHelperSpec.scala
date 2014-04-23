@@ -103,4 +103,14 @@ class GostHelperSpec extends FlatSpec {
     assert(message == backMessage.substring(0, message.size))
   }
 
+  /** Преобразование 64-битных блоков в hex-строку и наоборот */
+  it should "convert 64-bits blocks to hex-string and back" in {
+    val blocks = Array[Long](-1, 0, 10 -2)
+
+    val hexString = GostHelper.blockArrayToHexString(blocks)
+    val resultBlocks = GostHelper.hexStringToBlockArray(hexString)
+
+    assert(blocks.mkString(" ") == resultBlocks.mkString(" "))
+  }
+
 }
