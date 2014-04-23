@@ -23,14 +23,14 @@ object GostHelper {
   /** Разделитель блоков при выводе ключа */
   val BlockSplitter = " "
 
-  /** Разделитель для под-блоков */
-  val SubBlocksSplitter = "-"
-
   /** Система счисления для вывода ключа */
   val KeyOutputNotation = 16
 
   /** Кол-во битов для сдвига */
   val ShiftBits = BlockPartSize
+
+  /** Кол-во hex-символов для предоставления 32-битного числа */
+  val HexSymbolsCount = 8
 
   /** Генерирует 32-битное число */
   def generate32BitNumber = () => Random.nextInt().abs * -1
@@ -79,11 +79,15 @@ object GostHelper {
    * и не конвертироваться назад в Long <br/>
    */
   def blockArrayToHexString = (blockArray: Array[Long]) => {
-    blockArray.map{ e =>
+    // Формат вывода hex-числа (дополняет спереди нулями до 8 символов)
+    val Format = s"%${HexSymbolsCount}s"
+    blockArray.flatMap{ e =>
       val left = getLeftPart64BitNumber(e)
       val right = getRightPart64BitNumber(e)
-      List(left, right).map(_.toHexString).mkString(SubBlocksSplitter)
-    }.mkString(BlockSplitter)
+      List(left, right).map { e =>
+        (e.toHexString formatted Format).replace(' ', '0')
+      }
+    }.mkString("")
   }
 
   /**
@@ -95,8 +99,13 @@ object GostHelper {
    * Результаты склеиваются <br/>
    */
   def hexStringToBlockArray = (string: String) => {
-    string.split(BlockSplitter).map { e =>
-      val parts = e.split(SubBlocksSplitter).map { e =>
+    // Регулярное выражение для разбивки текста на блоки по 16 символов
+    val twoBlocksRegExp = s"(?<=\\G.{${HexSymbolsCount * 2}})"
+    // Регулярное выражение для разбивки текста на блоки по 8 символов
+    val oneBlockRegExp = s"(?<=\\G.{$HexSymbolsCount})"
+
+    string.split(twoBlocksRegExp).map { e =>
+      val parts = e.split(oneBlockRegExp).map { e =>
         java.lang.Long.parseLong(e, KeyOutputNotation).toInt
       }
       Block(parts(0), parts(1)).allParts
