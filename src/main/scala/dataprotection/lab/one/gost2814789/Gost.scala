@@ -25,12 +25,12 @@ object Gost extends GostDebug {
 
   //---------------------------------------------//
 
-  /** TODO */
+  /** Шифрование блоков данных */
   def encryptBlockArray(blockArray: Array[Long], keyArray: Array[Int]) = {
     blockArray.map(encryptBlock(_, keyArray))
   }
 
-  /** TODO */
+  /** Расшифрование блоков данных */
   def decryptBlockArray(blockArray: Array[Long], keyArray: Array[Int]) = {
     blockArray.map(decryptBlock(_, keyArray))
   }
