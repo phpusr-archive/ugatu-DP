@@ -43,7 +43,8 @@ class GostSpec extends FlatSpec {
       val enc = Gost.encryptBlock(block, keyArray)
       val dec = Gost.decryptBlock(enc, keyArray)
 
-      println("\nblk = " + block.toBinaryString)
+      println("\n>> it should equals before encryption and after decryption")
+      println("blk = " + block.toBinaryString)
       println("enc = " + enc.toBinaryString)
       println("dec = " + dec.toBinaryString)
 
