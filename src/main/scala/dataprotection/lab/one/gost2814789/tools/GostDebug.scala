@@ -155,8 +155,8 @@ trait GostDebug {
   protected def debugLeftPart(block: Long, leftPart: Int) {
     logger.title("Debug left part")
 
-    logger.debug("" + block)
     val blockBin = block.toBinaryString
+    logger.debug(s"block: $block ($blockBin)")
     // Правая часть числа
     val splitIndex = blockBin.size - BlockPartSize
     val blockRight = blockBin.substring(splitIndex)
@@ -172,17 +172,16 @@ trait GostDebug {
 
   /** Отладка правой части числа */
   protected def debugRightPart(block: Long, rightPart: Int) {
-    return //TODO
-
     logger.title("Debug right part")
 
-    logger.debug("" + block)
     val blockBin = block.toBinaryString
+    logger.debug(s"block: $block ($blockBin)")
     // Правая часть числа
     val splitIndex = blockBin.size - BlockPartSize
     val blockRight = blockBin.substring(splitIndex)
+    val index = blockRight.indexOf("1")
     // Правая часть без незначащих нолей
-    val blocRightWithoutZeros = blockRight.substring(blockRight.indexOf("1")) //TODO выдала ошибку, возможно были все нули
+    val blocRightWithoutZeros = if (index >= 0) blockRight.substring(index) else "0"
 
     logger.debug(s"block: ${blockBin.substring(0, BlockPartSize)} $blocRightWithoutZeros")
 
