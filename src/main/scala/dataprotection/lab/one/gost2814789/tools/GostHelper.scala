@@ -60,7 +60,7 @@ object GostHelper {
       (Integer.toHexString(e) formatted HexStringFormat).replace(' ', '0')
     }.mkString(BlockSplitter)
 
-    logger.title("Generate GOST-28147-89 Key")
+    logger.title("Generate GOST 28147-89 Key")
     logger.debug("keySeq: " + keySeq.mkString(" "))
     logger.debug("keyHex: "+ keyHex)
 

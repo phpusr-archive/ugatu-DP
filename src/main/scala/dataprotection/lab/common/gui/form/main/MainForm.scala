@@ -72,6 +72,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
 
     // Init form
     changeEncryptMethod(GOST_28_147_89_METHOD)
+    gostMenuItem.selected = true
     centerOnScreen()
   }
 
