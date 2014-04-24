@@ -9,11 +9,11 @@ package dataprotection.lab.common.gui.form.main
 /** Метод шифрования */
 object EncryptMethod extends Enumeration {
   
-  type EncryptMethod = Value
+  case class EncryptMethod(name: String)
 
-  /** ГОСТ-28147-89 */
-  val GOST_28_147_89_METHOD = Value
+  /** ГОСТ 28147-89 */
+  val GOST_28147_89_METHOD = EncryptMethod("GOST 28147-89")
   
   /** RSA */
-  val RSA_METHOD = Value
+  val RSA_METHOD = EncryptMethod("RSA")
 }

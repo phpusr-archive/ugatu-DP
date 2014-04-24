@@ -28,8 +28,8 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 
   // Элементы меню методов шифрования
-  private val gostMenuItem = new RadioMenuItem("GOST-28147-89")
-  private val rsaMenuItem = new RadioMenuItem("RSA")
+  private val gostMenuItem = new RadioMenuItem(GOST_28147_89_METHOD.name)
+  private val rsaMenuItem = new RadioMenuItem(RSA_METHOD.name)
 
   // Frame, нужен для вызова pack()
   private var gPeer: JFrame = null
@@ -43,7 +43,6 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   /** Форма */
   def top = new MainFrame {
     gPeer = peer
-    title = "RSA"
 
     contents = new BorderPanel {
       import BorderPanel.Position._
@@ -71,7 +70,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
     }
 
     // Init form
-    changeEncryptMethod(GOST_28_147_89_METHOD)
+    changeEncryptMethod(GOST_28147_89_METHOD)
     gostMenuItem.selected = true
     centerOnScreen()
   }
@@ -93,7 +92,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
   reactions += {
     // Методы шифрования
     case ButtonClicked(`gostMenuItem`) =>
-      changeEncryptMethod(GOST_28_147_89_METHOD)
+      changeEncryptMethod(GOST_28147_89_METHOD)
     case ButtonClicked(`rsaMenuItem`) =>
       changeEncryptMethod(RSA_METHOD)
 
@@ -148,7 +147,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
     // Шифрование
     case ButtonClicked(`encryptButton`) =>
       currentMethodEncrypt match {
-        case GOST_28_147_89_METHOD => gostEncrypt()
+        case GOST_28147_89_METHOD => gostEncrypt()
         case RSA_METHOD => rsaEncrypt()
       }
 
@@ -156,7 +155,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
     // Расшифрование
     case ButtonClicked(`decryptButton`) =>
       currentMethodEncrypt match {
-        case GOST_28_147_89_METHOD => gostDecrypt()
+        case GOST_28147_89_METHOD => gostDecrypt()
         case RSA_METHOD => rsaDecrypt()
       }
 
@@ -203,22 +202,19 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with RsaTrait w
 
     // Выбор панели
     val panel = method match {
-      case GOST_28_147_89_METHOD => GostTopPanel
+      case GOST_28147_89_METHOD => GostTopPanel
       case RSA_METHOD => RsaTopPanel
       case _ => throw new IllegalArgumentException("Wrong encrypt method")
     }
 
     // Установка текущего метода шифрования
     currentMethodEncrypt = method
-
+    // Изменение заголовка
+    gPeer.setTitle(method.name)
     // Смена видимой панели
-    topPanels.foreach { p =>
-      p.visible = p == panel
-    }
-
+    topPanels.foreach { p => p.visible = p == panel }
     // Чек-бокс шифрования числа доступен только для RSA
     numberCheckBox.visible = panel == RsaTopPanel
-
     // Выровнить размер окна под компонеты
     gPeer.pack()
   }
