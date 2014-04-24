@@ -1,6 +1,6 @@
 package dataprotection.lab.common.gui.form.main.panel.top
 
-import scala.swing.{TextField, Button, GridBagPanel}
+import scala.swing.{Alignment, TextField, Button, GridBagPanel}
 import java.awt.{Insets, Dimension}
 import dataprotection.lab.common.gui.form.main.panel.DefaultComponents
 
@@ -17,7 +17,8 @@ trait GostTopPanel extends DefaultComponents {
 
   /** Поле ввода ключа */
   protected val gostKeyTextField = new TextField {
-    preferredSize = new Dimension(300, 30)
+    preferredSize = new Dimension(470, 30)
+    horizontalAlignment = Alignment.Center
   }
 
   /** Кнопка генерации ключа */
