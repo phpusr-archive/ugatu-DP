@@ -15,8 +15,8 @@ import java.awt.{Dimension, Insets}
 trait CenterPanel extends DefaultComponents {
 
   // Кнопки очистки сообщений
-  protected val clearDecryptMessageButton = new Button("X")
-  protected val clearEncryptMessageButton = new Button("X")
+  protected val clearDecryptMessageButton = defaultClearButton()
+  protected val clearEncryptMessageButton = defaultClearButton()
 
   // Поля ввода сообщений
   protected val decryptMessageTextArea = defaultTextArea()
@@ -39,6 +39,9 @@ trait CenterPanel extends DefaultComponents {
     viewportView = c
     verticalScrollBarPolicy = ScrollPane.BarPolicy.AsNeeded
   }
+  private def defaultClearButton = () => new Button("X") {
+    preferredSize = new Dimension(preferredSize.width, 20)
+  }
 
   protected val CenterPanel = new GridBagPanel {
     border = Swing.EtchedBorder
@@ -46,7 +49,7 @@ trait CenterPanel extends DefaultComponents {
     val c = new Constraints
     c.weightx = 0.25
     c.weighty = 0
-    c.insets = new Insets(5, 5, 0, 5)
+    c.insets = new Insets(5, 5, 5, 5)
     c.anchor = GridBagPanel.Anchor.East
     layout(defaultLabel("Decrypt Message")) = c
 
