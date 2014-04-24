@@ -1,6 +1,6 @@
 package dataprotection.lab.common.gui.form.main.panel
 
-import scala.swing.{TextArea, Button, Swing, GridBagPanel}
+import scala.swing._
 import java.awt.{Dimension, Insets}
 
 /**
@@ -32,9 +32,12 @@ trait CenterPanel extends DefaultComponents {
 
 
   // Генерация компонентов по умолчанию
-  private def defaultTextArea = () => new TextArea {
+  private def defaultTextArea = () => new TextArea(15, 30) {
     lineWrap = true
-    preferredSize = new Dimension(350, 200)
+  }
+  private def defaultScrollPane = (c: Component) => new ScrollPane() {
+    viewportView = c
+    verticalScrollBarPolicy = ScrollPane.BarPolicy.AsNeeded
   }
 
   protected val CenterPanel = new GridBagPanel {
@@ -61,8 +64,8 @@ trait CenterPanel extends DefaultComponents {
     c.gridwidth = 2
     c.insets = new Insets(0, 5, 5, 5)
     c.fill = GridBagPanel.Fill.Both
-    layout(decryptMessageTextArea) = c
-    layout(encryptMessageTextArea) = c
+    layout(defaultScrollPane(decryptMessageTextArea)) = c
+    layout(defaultScrollPane(encryptMessageTextArea)) = c
 
     c.gridy = 2
     c.weighty = 0
