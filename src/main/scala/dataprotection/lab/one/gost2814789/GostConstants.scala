@@ -13,10 +13,6 @@ import dataprotection.lab.one.gost2814789.tools.ReplaceTable
  */
 object GostConstants {
 
-  /** Размер ключа в битах */
-  //TODO задействовать при проверке ключа
-  val KeySize = 256
-
   /** Кол-во блоков ключа */
   val KeyBlocksCount = 8
 
