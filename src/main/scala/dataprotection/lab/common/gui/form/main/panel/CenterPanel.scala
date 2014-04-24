@@ -1,7 +1,8 @@
 package dataprotection.lab.common.gui.form.main.panel
 
 import scala.swing._
-import java.awt.{Dimension, Insets}
+import java.awt.{Font, Dimension, Insets}
+import scala.swing.Font
 
 /**
  * @author phpusr
@@ -34,6 +35,7 @@ trait CenterPanel extends DefaultComponents {
   // Генерация компонентов по умолчанию
   private def defaultTextArea = () => new TextArea(15, 30) {
     lineWrap = true
+    font = new Font("Arial", Font.PLAIN, 12)
   }
   private def defaultScrollPane = (c: Component) => new ScrollPane() {
     viewportView = c
