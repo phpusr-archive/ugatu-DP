@@ -116,44 +116,41 @@ object GostHelper {
   }
 
   /** Преобразование строки в массив 64-битных блоков */
-  //TODO указать чем дополнять незавершенный блок
   def stringToBlockArray = (string: String) => {
 
     val bytes = string.getBytes(CharsetName)
 
     val blockBuffer = ListBuffer[Long]()
 
-    // Текущее кол-во байтов в блоке
-    var byteInBlockIndex = 0
-    // Текущий обрабатываемый блок
-    var currentBlock = 0L
-    // Текущее кол-во блоков
-    var currentBlockCount = 0
+    /** Кол-во блоков */
+    val blocksCount = Math.ceil(bytes.size.toFloat / ByteInLongCount).toInt
 
-    bytes.foreach { e =>
-      byteInBlockIndex += 1
+    for (blockIndex <- 0 until blocksCount) {
 
-      // Количество занятых бит в блоке
-      val buzyBits = ByteSize * (byteInBlockIndex-1)
-      // Стираем начальные 56 битов, которые не относятся к элементу
-      // Если элемент отрицательный, то они будут мешать
-      val eShiftLeft = e.toLong << ((ByteInLongCount - 1) * ByteSize)
-      // Добавляемый элемент, сдвинутый от начала на занятое кол-во битов
-      val e64 = eShiftLeft >>> buzyBits
+      // Текущий строящийся блок
+      var currentBlock = 0L
 
-      // Добавление элемента в блок
-      currentBlock = currentBlock | e64
+      for (byteInBlockIndex <- 0 until ByteInLongCount) {
+        val elementIndex = (blockIndex * ByteInLongCount) + byteInBlockIndex
 
-      // Если блок заполнен
-      if (byteInBlockIndex % ByteInLongCount == 0) {
-        byteInBlockIndex = 0
-        currentBlockCount += 1
-        blockBuffer += currentBlock
-        currentBlock = 0L
+        // Если элементы еще есть то берем их, если нет, то берем заполнитель
+        val e = if (elementIndex < bytes.size) bytes(elementIndex) else Aggregate
+
+        // Стираем начальные 56 бит, которые не относятся к элементу
+        // Если элемент отрицательный, то они будут мешать
+        val eShiftLeft = e.toLong << ((ByteInLongCount - 1) * ByteSize)
+
+        // Количество занятых бит в блоке
+        val buzyBits = ByteSize * byteInBlockIndex
+        // Добавляемый элемент, сдвинутый от начала на занятое кол-во бит
+        val e64 = eShiftLeft >>> buzyBits
+
+        // Добавление элемента в блок
+        currentBlock = currentBlock | e64
       }
+
+      blockBuffer += currentBlock
     }
-    // Если последний блок не был заполнен до конца, добавить его
-    if (byteInBlockIndex != 0) blockBuffer += currentBlock
 
     blockBuffer.toArray
   }

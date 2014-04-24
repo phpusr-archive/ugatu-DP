@@ -28,6 +28,9 @@ object GostConstants {
   /** Кол-во байтов в 64 битах */
   val ByteInLongCount = 64 / 8
 
+  /** Заполнитель оставшегося места в блоке */
+  val Aggregate = '_'.toByte
+
   /** Число для нахождения остатка от деления */
   val NumberForMod = Math.pow(2, BlockPartSize).toInt
 
