@@ -156,10 +156,9 @@ object GostHelper {
   }
 
   /** Преобразование 64-битных блоков назад в строку */
-  //TODO учитывать незавершенные блоки
   def blockArrayToString = (blockArray: Array[Long]) => {
 
-    val bytes = blockArray.flatMap { block =>
+    val byteBuffer = blockArray.flatMap { block =>
       val byteBuffer = ListBuffer[Byte]()
 
       for (i <- 0 until ByteInLongCount) {
@@ -174,9 +173,12 @@ object GostHelper {
       }
 
       byteBuffer
-    }
+    }.toBuffer
 
-    new String(bytes, CharsetName)
+    // Удаление заполнителей в незавершенном блоке
+    while (byteBuffer.size > 1 && byteBuffer(byteBuffer.size-1) == Aggregate) byteBuffer.remove(byteBuffer.size - 1)
+
+    new String(byteBuffer.toArray, CharsetName)
   }
 
 }
