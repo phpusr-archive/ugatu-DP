@@ -36,6 +36,14 @@ class BitNumberSpec extends FlatSpec {
     assert(bitNumberTwo.toString == s"$expectResultTwo(32)")
   }
 
+  /** Должен создать 8-битный нулевой BitNumber на основе длины */
+  it should "create 8 bit number from size" in {
+    val bitNumber = BitNumber(8, init = true)
+    println(bitNumber)
+
+    assert(bitNumber.toBinStr == "00000000")
+  }
+
   /** Должен получить и установить значение по индексу */
   it should "get & set bit by index" in {
     val bitNumber = BitNumber(4)

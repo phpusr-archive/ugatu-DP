@@ -38,6 +38,12 @@ object BitNumber {
     }
   }
 
+  /** Создание BitNumber = 0, на основе его длины */
+  def apply(size: Int, init: Boolean) = {
+    val bitList = for (i <- 0 until size) yield Zero
+    new BitNumber(bitList)
+  }
+
   /** Создание BitNumber из Int */
   private def createBitNumberFromInt(value: Int) = {
     val valueBin = (value.toBinaryString formatted s"%${IntSize}s").replace(' ', ZeroChar)
