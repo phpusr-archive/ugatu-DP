@@ -71,16 +71,22 @@ object BitNumber {
 class BitNumber(bitList: Seq[Boolean]) {
   import dataprotection.lab.two.bitnumber.BitNumber._
 
+  /** Представление числа */
+  private val number = bitList.toArray
+
   /** Возвращает размер числа в битах */
-  def size = bitList.size
+  def size = number.size
 
   /** Конвертирует число в двоичную стркоу */
-  def toBinStr = bitList.map(bitNumToChar).mkString
+  def toBinStr = number.map(bitNumToChar).mkString
 
-  override def toString = {
-    s"$toBinStr($size)"
-  }
+  /** Возвращает бит по указанному индексу */
+  def apply(index: Int) = bitNumToChar(number(index))
+
+  /** Устанавливает бит по указанному индексу */
+  def set(index: Int, value: BitNum) = number(index) = value
 
 
+  override def toString = s"$toBinStr($size)"
 
 }

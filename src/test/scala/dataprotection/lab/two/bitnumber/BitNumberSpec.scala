@@ -13,7 +13,7 @@ import org.scalatest.FlatSpec
  */
 class BitNumberSpec extends FlatSpec {
 
-  /** Тестирование создания BitNumber из Int */
+  /** Должен создать 32-битный BitNumber из Int */
   it should "create 32 bit number from Int" in {
     val bitNumberOne = BitNumber(4)
     println("4: " + bitNumberOne)
@@ -34,6 +34,18 @@ class BitNumberSpec extends FlatSpec {
     assert(bitNumberTwo.toBinStr == expectResultTwo)
     assert(bitNumberTwo.size == 32)
     assert(bitNumberTwo.toString == s"$expectResultTwo(32)")
+  }
+
+  /** Должен получить и установить значение по индексу */
+  it should "get & set bit by index" in {
+    val bitNumber = BitNumber(4)
+
+    assert(bitNumber(0) == '0')
+    assert(bitNumber(1) == '0')
+    assert(bitNumber(32-1-2) == '1')
+
+    bitNumber.set(3, true)
+    assert(bitNumber(3) == '1')
   }
 
 }
