@@ -13,6 +13,9 @@ object EncryptMethod extends Enumeration {
 
   /** ГОСТ 28147-89 */
   val GOST_28147_89_METHOD = EncryptMethod("GOST 28147-89")
+
+  /** RC4 */
+  val RC4_METHOD = EncryptMethod("RC4")
   
   /** RSA */
   val RSA_METHOD = EncryptMethod("RSA")
