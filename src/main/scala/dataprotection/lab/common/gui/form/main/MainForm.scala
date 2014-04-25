@@ -12,6 +12,7 @@ import scala.swing.event.ButtonClicked
 import org.dyndns.phpusr.util.log.Logger
 import dataprotection.lab.common.gui.form.main.EncryptMethod._
 import dataprotection.lab.one.gost2814789.Gost
+import dataprotection.lab.two.rc4.RC4
 
 /**
  * @author phpusr
@@ -81,6 +82,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   listenTo(gostMenuItem, rc4MenuItem, rsaMenuItem)
 
   listenTo(gostGenerateKeyButton)
+  listenTo(rc4GenerateKeyButton)
 
   listenTo(generatePButton, generateQButton, generateNButton)
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
@@ -104,6 +106,15 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
       gostKeyTextField.text = keyHex
 
     //--------------------- end GOST ---------------------//
+
+    //--------------------- begin RC4 ---------------------//
+
+    case ButtonClicked(`rc4GenerateKeyButton`) =>
+      val key = RC4.generateKey(10).mkString(RC4.Splitter)
+      rc4KeyTextField.text = key
+
+    //--------------------- begin RC4 ---------------------//
+
 
     //--------------------- begin RSA ---------------------//
 
@@ -149,6 +160,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     case ButtonClicked(`encryptButton`) =>
       currentMethodEncrypt match {
         case GOST_28147_89_METHOD => gostEncrypt()
+        case RC4_METHOD => rc4Encrypt()
         case RSA_METHOD => rsaEncrypt()
       }
 
@@ -157,6 +169,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     case ButtonClicked(`decryptButton`) =>
       currentMethodEncrypt match {
         case GOST_28147_89_METHOD => gostDecrypt()
+        case RC4_METHOD => rc4Decrypt()
         case RSA_METHOD => rsaDecrypt()
       }
 
@@ -179,6 +192,23 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     val decryptMessageBlocks = Gost.decryptBlockArray(encryptMessageBlocks, key)
     decryptMessageTextArea.text = GostHelper.blockArrayToString(decryptMessageBlocks)
   }
+
+  /** Шифрование сообщения методом ГОСТ-28147-89 */
+  private def rc4Encrypt() {
+    val key = rc4Key.split(RC4.Splitter).map(_.toByte)
+    val data = decryptMessage.getBytes(RC4.CharsetName)
+    val encryptData = RC4.encrypt(data, key)
+    encryptMessageTextArea.text = encryptData.mkString(RC4.Splitter)
+  }
+
+  /** Расшифрование сообщения методом ГОСТ-28147-89 */
+  private def rc4Decrypt() {
+    val key = rc4Key.split(RC4.Splitter).map(_.toByte)
+    val encryptData = encryptMessage.split(RC4.Splitter).map(_.toByte)
+    val decryptData = RC4.decrypt(encryptData, key)
+    decryptMessageTextArea.text = new String(decryptData, RC4.CharsetName)
+  }
+
 
   /** Шифрование сообщения методом RSA */
   private def rsaEncrypt() {
@@ -236,6 +266,9 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
 
   // ГОСТ 28147-89
   private def gostKeyHex = gostKeyTextField.text
+
+  // RC4
+  private def rc4Key = rc4KeyTextField.text
 
   private def decryptMessage = decryptMessageTextArea.text
   private def clearDecryptMessage() = decryptMessageTextArea.text = ""
