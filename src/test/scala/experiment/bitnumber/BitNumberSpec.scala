@@ -1,5 +1,6 @@
-package dataprotection.lab.two.bitnumber
+package experiment.bitnumber
 
+import dataprotection.lab.two.bitnumber.BitNumber
 import org.scalatest.FlatSpec
 
 /**
