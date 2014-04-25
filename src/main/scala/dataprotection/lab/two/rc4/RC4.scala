@@ -2,6 +2,7 @@ package dataprotection.lab.two.rc4
 
 import org.dyndns.phpusr.util.log.Logger
 import dataprotection.lab.two.counter.Counter
+import scala.util.Random
 
 /**
  * @author phpusr
@@ -18,17 +19,32 @@ import dataprotection.lab.two.counter.Counter
  */
 object RC4 {
 
-  /** Размер S-блока */
-  private val SBlockSize = 256
   /** Тип для S-блока */
   private type SBlocType = Int
+
   /** Тип для элементов шифрования */
   private type RC4Type = Byte
 
-  val logger = new Logger(true, true, false)
+  /** Размер S-блока */
+  private val SBlockSize = 256
+
+  /** Разделитель блоков */
+  val Splitter = " "
+
+  /** Кодировка для преобразования строки */
+  val CharsetName = "cp1251"
+
+  private val logger = new Logger(true, true, false)
+
+  //------------------------------------------
+
+  /** Генератор ключа */
+  def generateKey = (size: Int) => {
+    (for (i <- 1 to size) yield Random.nextInt().toByte).toArray
+  }
 
   /** Инициализация S-блока (Key-Scheduling Algorithm) */
-  def ksa(key: Array[RC4Type]) = {
+  private def ksa(key: Array[RC4Type]) = {
     val keyArray = key.map(rc4eToSBlock)
     val sBlock = (0 until SBlockSize).toArray
 
@@ -48,7 +64,7 @@ object RC4 {
   /** Шифрование */
   def encrypt(data: Array[RC4Type], key: Array[RC4Type]) = encryptAndDecrypt(data, key)
   /** Расшифрование */
-  def decrypt(data: Array[RC4Type], key: Array[RC4Type]) = encryptAndDecrypt(data, key)
+  def decrypt(encryptData: Array[RC4Type], key: Array[RC4Type]) = encryptAndDecrypt(encryptData, key)
 
   /** Шифрование / Расшифрование */
   private def encryptAndDecrypt(data: Array[RC4Type], key: Array[RC4Type]) = {
