@@ -93,12 +93,9 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
 
   reactions += {
     // Методы шифрования
-    case ButtonClicked(`gostMenuItem`) =>
-      changeEncryptMethod(GOST_28147_89_METHOD)
-    case ButtonClicked(`rc4MenuItem`) =>
-      changeEncryptMethod(RC4_METHOD)
-    case ButtonClicked(`rsaMenuItem`) =>
-      changeEncryptMethod(RSA_METHOD)
+    case ButtonClicked(`gostMenuItem`) => changeEncryptMethod(GOST_28147_89_METHOD)
+    case ButtonClicked(`rc4MenuItem`) => changeEncryptMethod(RC4_METHOD)
+    case ButtonClicked(`rsaMenuItem`) => changeEncryptMethod(RSA_METHOD)
 
     //--------------------- begin GOST ---------------------//
 
@@ -167,6 +164,22 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     case ButtonClicked(`exitButton`) => System.exit(0)
   }
 
+  /** Шифрование сообщения методом ГОСТ-28147-89 */
+  private def gostEncrypt() {
+    val key = GostHelper.keyHexToKeyArray(gostKeyHex)
+    val messageBlocks = GostHelper.stringToBlockArray(decryptMessage)
+    val encryptBlocks = Gost.encryptBlockArray(messageBlocks, key)
+    encryptMessageTextArea.text = GostHelper.blockArrayToHexString(encryptBlocks)
+  }
+
+  /** Расшифрование сообщения методом ГОСТ-28147-89 */
+  private def gostDecrypt() {
+    val key = GostHelper.keyHexToKeyArray(gostKeyHex)
+    val encryptMessageBlocks = GostHelper.hexStringToBlockArray(encryptMessage)
+    val decryptMessageBlocks = Gost.decryptBlockArray(encryptMessageBlocks, key)
+    decryptMessageTextArea.text = GostHelper.blockArrayToString(decryptMessageBlocks)
+  }
+
   /** Шифрование сообщения методом RSA */
   private def rsaEncrypt() {
     if (numberCheckBox.selected) {
@@ -185,22 +198,6 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     }
   }
 
-  /** Шифрование сообщения методом ГОСТ-28147-89 */
-  private def gostEncrypt() {
-    val key = GostHelper.keyHexToKeyArray(gostKeyHex)
-    val messageBlocks = GostHelper.stringToBlockArray(decryptMessage)
-    val encryptBlocks = Gost.encryptBlockArray(messageBlocks, key)
-    encryptMessageTextArea.text = GostHelper.blockArrayToHexString(encryptBlocks)
-  }
-
-  /** Расшифрование сообщения методом ГОСТ-28147-89 */
-  private def gostDecrypt() {
-    val key = GostHelper.keyHexToKeyArray(gostKeyHex)
-    val encryptMessageBlocks = GostHelper.hexStringToBlockArray(encryptMessage)
-    val decryptMessageBlocks = Gost.decryptBlockArray(encryptMessageBlocks, key)
-    decryptMessageTextArea.text = GostHelper.blockArrayToString(decryptMessageBlocks)
-  }
-
   /** Показ определенной панели метода шифрования и скрытие остальных */
   private def changeEncryptMethod(method: EncryptMethod) {
 
@@ -209,7 +206,6 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
       case GOST_28147_89_METHOD => GostTopPanel
       case RC4_METHOD => Rc4TopPanel
       case RSA_METHOD => RsaTopPanel
-      case _ => throw new IllegalArgumentException("Wrong encrypt method")
     }
 
     // Установка текущего метода шифрования
