@@ -21,7 +21,7 @@ object GostHelper {
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
 
   /** Разделитель блоков при выводе ключа */
-  val BlockSplitter = ""
+  val BlockSplitter = " "
 
   /** Система счисления для вывода ключа */
   val KeyOutputNotation = 16
@@ -58,7 +58,7 @@ object GostHelper {
 
     val keyHex = keySeq.map {e =>
       (Integer.toHexString(e) formatted HexStringFormat).replace(' ', '0')
-    }.mkString(BlockSplitter)
+    }.mkString
 
     logger.title("Generate GOST 28147-89 Key")
     logger.debug("keySeq: " + keySeq.mkString(" "))
@@ -86,13 +86,13 @@ object GostHelper {
    * и не конвертироваться назад в Long <br/>
    */
   def blockArrayToHexString = (blockArray: Array[Long]) => {
-    blockArray.flatMap{ e =>
+    blockArray.map{ e =>
       val left = getLeftPart64BitNumber(e)
       val right = getRightPart64BitNumber(e)
       List(left, right).map { e =>
         (e.toHexString formatted HexStringFormat).replace(' ', '0')
-      }
-    }.mkString("")
+      }.mkString
+    }.mkString(BlockSplitter)
   }
 
   /**
@@ -104,10 +104,7 @@ object GostHelper {
    * Результаты склеиваются <br/>
    */
   def hexStringToBlockArray = (string: String) => {
-    // Регулярное выражение для разбивки текста на блоки по 16 символов
-    val twoBlocksRegExp = s"(?<=\\G.{${HexSymbolsCount * 2}})"
-
-    string.split(twoBlocksRegExp).map { e =>
+    string.split(BlockSplitter).map { e =>
       val parts = e.split(OneBlockRegExp).map { e =>
         java.lang.Long.parseLong(e, KeyOutputNotation).toInt
       }
