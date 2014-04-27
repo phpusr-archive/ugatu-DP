@@ -1,16 +1,13 @@
 import scala.Some
 
-name := "RSA"
+name := "DP"
 
-val runClass = "dataprotection.lab.three.run.Main"
+val runClass = "dataprotection.lab.common.run.Main"
 
-scalaVersion := "2.10.3"
-
-// Encryption library (http://www.bouncycastle.org/latest_releases.html)
-unmanagedJars in Compile += file("lib/bcprov-jdk15on-150.jar")
+unmanagedJars in Compile += file(s"${Path.userHome}/.ivy2/cache/org.scala-lang/scala-swing/jars/scala-swing-2.10.3.jar")
 
 libraryDependencies ++= Seq(
-  "org.scala-lang" % "scala-swing" % scalaVersion.value,
+  //"org.scala-lang" % "scala-swing" % scalaVersion.value,
   "org.scalatest" % "scalatest_2.10" % "2.1.3" % "test",
   "org.pegdown" % "pegdown" % "1.4.2" % "test"
 )
