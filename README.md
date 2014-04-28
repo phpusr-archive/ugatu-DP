@@ -3,7 +3,6 @@
 
 # TODO list
 
-* Добавить инф-ю об RSA
 * Найти способ проверить RC4
 * Реализовать ГОСТ c помощью BitNumber
 * Сделать заметку в Evernote по сдвиговым операциям и вставить сюда ссылку
@@ -29,6 +28,20 @@
 * [Реализация шифра ГОСТ 28147-89 на PHP (Качественная работа с комментариями)](http://intsystem.org/19/gost-28147-89-php/)
 * [Реализация шифра ГОСТ 28147-89 на JavaScript (За основу был взят предыдущий проект)](https://github.com/Craager/crypto.lab)
 * [Шифр ГОСТ 28147—89 (на php)](http://borlis.ru/blog/2009/06/15/%D1%88%D0%B8%D1%84%D1%80-%D0%B3%D0%BE%D1%81%D1%82-28147%E2%80%9489/)
+
+
+# RSA
+
+## Информация
+
+* [Статья в Википедии](http://ru.wikipedia.org/wiki/RSA)
+* [Расширенный алгоритм Евклида (Рекурсивный)](http://www.e-olimp.com/articles/18)
+* [Расширенный алгоритм Евклида](http://algolist.manual.ru/maths/teornum/nod.php#4)
+* [C# реализация расширенного алгоритма Эвклида](http://landrina.ru/development/c-realizaciya-rasshirennogo-algoritma-evklida)
+
+## Реализации
+
+* [C# реализация алгоритма шифрования RSA](http://landrina.ru/development/c-sharp-realizaciya-rsa/)
 
 
 # RC4
