@@ -33,4 +33,18 @@ class RC4Spec extends FlatSpec {
     assert(decryptData == data)
   }
 
+  /** Зашифрованные результаты должны совпать с эталонными (взяты из библиотеки bouncycastle) */
+  it should "encrypt result coincide with reference" in {
+    val message = "Hello, World!"
+    val key = Array(114, 61, 12, -98, 13, 78, 110, -8, 111, 36).map(_.toByte)
+
+    val enc = RC4.encrypt(message.getBytes("cp1251"), key)
+    val encStr = enc.mkString(" ")
+
+    val reference = "-119 103 -92 -114 -30 -83 7 -55 78 8 -102 67 47"
+    println(s"($encStr) == ($reference)")
+
+    assert(encStr == reference)
+  }
+
 }
