@@ -30,7 +30,7 @@ packageBin in Compile <<= (packageBin in Compile) dependsOn (test in Test)
 
 
 
-// Run task (run-app, runApp)
+// Run task after tests (run-app, runApp)
 lazy val runApp = TaskKey[Unit]("run-app", "A custom run task.")
 
 fullRunTask(runApp, Test, runClass)
