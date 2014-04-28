@@ -102,7 +102,7 @@ object Gost extends GostDebug {
     // Преобразование блоков в одно число
     var sSimple = 0
     for (i <- 0 until sSimpleBlocks.size) {
-      val shiftBits = BlockPartSize - SBlockBitSize * (i+1)
+      val shiftBits = SBlockBitSize * i
       sSimple |= sSimpleBlocks(i) << shiftBits
     }
     debugJoinSBlocks(sSimpleBlocks, sSimple)
