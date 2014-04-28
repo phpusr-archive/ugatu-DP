@@ -3,10 +3,8 @@
 
 # TODO list
 
-* Сделать все TODO
 * Добавить инф-ю об RSA
 * Найти способ проверить RC4
-* Проверить как шифрует org.bouncycastle.jcajce.provider.symmetric.GOST28147
 * Реализовать ГОСТ c помощью BitNumber
 * Сделать заметку в Evernote по сдвиговым операциям и вставить сюда ссылку
 
