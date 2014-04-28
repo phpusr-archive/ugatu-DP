@@ -45,32 +45,34 @@ class GostSpec extends FlatSpec {
       val dec = Gost.decryptBlockArray(enc, keyArray)
 
       println("\n>> it should equals before encryption and after decryption")
-      println("blk = " + blockArray.mkString(" "))
-      println("enc = " + enc.mkString(" "))
-      println("dec = " + dec.mkString(" "))
+      if (false) {
+        println("blk = " + blockArray.mkString(" "))
+        println("enc = " + enc.mkString(" "))
+        println("dec = " + dec.mkString(" "))
+      }
 
       assert(blockArray.mkString("") == dec.mkString(""))
     }
   }
 
   /**
-   * http://localhost/ClassGost/test.php
    * Выполнение данного примера должно вернуть
-   * 32bc0b1b 42abbcce
-   * Что соответствует результату из Приложения А.
+   * 42abbcce 32bc0b1b
+   * Что соответствует результату из ГОСТ 34.11-94 (Приложения А)
    */
-  //TODO проверка по ГОСТу Р 34.11-94 (Приложение А)
-  it should "match GOST" in {
-    val keys = Array(0x733D2C20, 0x65686573, 0x74746769, 0x79676120, 0x626E7373, 0x20657369, 0x326C6568, 0x33206D54).reverse
+  it should "test case" in {
+    val key = Array(0x733D2C20, 0x65686573, 0x74746769, 0x79676120, 0x626E7373, 0x20657369, 0x326C6568, 0x33206D54).reverse
 
     val blockArray = Array(0L)
 
-    val enc = Gost.encryptBlockArray(blockArray, keys)
+    val enc = Gost.encryptBlockArray(blockArray, key)
     val hexStr = GostHelper.blockArrayToHexString(enc)
-    println("\nhex: " + hexStr.splitAt(8))
+    println(s"\nhex: ${hexStr.splitAt(8)} == (42abbcce,32bc0b1b)")
+    assert(hexStr == "42abbcce32bc0b1b")
 
-    val dec = Gost.decryptBlockArray(enc, keys)
-    println("dec: "+ dec.mkString(" "))
+    val dec = Gost.decryptBlockArray(enc, key)
+    println(s"dec: ${dec.mkString(" ")} == 0")
+    assert(dec.mkString == "0")
   }
 
 
