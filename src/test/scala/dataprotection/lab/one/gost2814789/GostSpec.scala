@@ -61,18 +61,24 @@ class GostSpec extends FlatSpec {
    * Что соответствует результату из ГОСТ 34.11-94 (Приложения А)
    */
   it should "test case" in {
-    val key = Array(0x733D2C20, 0x65686573, 0x74746769, 0x79676120, 0x626E7373, 0x20657369, 0x326C6568, 0x33206D54).reverse
-
     val blockArray = Array(0L)
 
-    val enc = Gost.encryptBlockArray(blockArray, key)
-    val hexStr = GostHelper.blockArrayToHexString(enc)
+    // Example 1
+    var key = Array(0x733D2C20, 0x65686573, 0x74746769, 0x79676120, 0x626E7373, 0x20657369, 0x326C6568, 0x33206D54).reverse
+    var enc = Gost.encryptBlockArray(blockArray, key)
+    var hexStr = GostHelper.blockArrayToHexString(enc)
     println(s"\nhex: ${hexStr.splitAt(8)} == (42abbcce,32bc0b1b)")
     assert(hexStr == "42abbcce32bc0b1b")
 
     val dec = Gost.decryptBlockArray(enc, key)
     println(s"dec: ${dec.mkString(" ")} == 0")
     assert(dec.mkString == "0")
+
+    // Example 2
+    key = Array(0x110c733d, 0x0d166568, 0x130e7474, 0x6417967, 0x1d00626e, 0x161a2065, 0x090d326c, 0x4d393320).reverse
+    enc = Gost.encryptBlockArray(blockArray, key)
+    hexStr = GostHelper.blockArrayToHexString(enc)
+    assert(hexStr == "5203ebc85d9bcffd")
   }
 
 
