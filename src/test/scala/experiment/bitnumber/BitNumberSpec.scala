@@ -14,8 +14,8 @@ import org.scalatest.FlatSpec
  */
 class BitNumberSpec extends FlatSpec {
 
-  /** Должен создать 32-битный BitNumber из Int */
-  it should "create 32 bit number from Int" in {
+  /** Должен создать 32-битный BitNumber из Array[Int] */
+  it should "create 32 bit number from Array[Int]" in {
     val bitNumberOne = BitNumber(Array(4))
     println("4: " + bitNumberOne)
 
@@ -37,10 +37,33 @@ class BitNumberSpec extends FlatSpec {
     assert(bitNumberTwo.toString == s"$expectResultTwo(32)")
   }
 
+  /** Должен создать 8-битный BitNumber из Array[Byte] */
+  it should "create 8 bit number from Array[Byte]" in {
+    var bitNumber = BitNumber(Array(10.toByte))
+    println("10: " + bitNumber)
+
+    var expectResult = "00001010"
+
+    assert(bitNumber.toBinStr == expectResult)
+    assert(bitNumber.size == 8)
+    assert(bitNumber.toString == s"$expectResult(8)")
+
+    //----------------------------------
+
+    bitNumber = BitNumber(Array(-10.toByte, 2.toByte))
+    println("10: " + bitNumber)
+
+    expectResult = "1111011000000010"
+
+    assert(bitNumber.toBinStr == expectResult)
+    assert(bitNumber.size == 16)
+    assert(bitNumber.toString == s"$expectResult(16)")
+  }
+
   /** Должен создать 8-битный нулевой BitNumber на основе длины */
   it should "create 8 bit number from size" in {
     val bitNumber = BitNumber(8)
-    println(bitNumber)
+    println("0: " + bitNumber)
 
     assert(bitNumber.toBinStr == "00000000")
   }

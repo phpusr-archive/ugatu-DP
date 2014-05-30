@@ -19,6 +19,8 @@ object BitNumber {
 
   /** Размер в битах для Int */
   private val IntSize = 32
+  /** Размер в битах для Byte */
+  private val ByteSize = 8
 
   // Константы для конвертирования
   private val Zero = false
@@ -31,12 +33,23 @@ object BitNumber {
 
   //--------------------------------------------------------------//
 
-  /** Создание BitNumber на основе какого-то значения */
+  /** Создание BitNumber на основе массива Int */
   def apply(value: Array[Int]): BitNumber = {
     val number = apply(0)
     value.foreach { e =>
-      createBitNumberFromInt(e)
-      number.join _
+      val bit = createBitNumberFromInt(e)
+      number.join(bit)
+    }
+
+    number
+  }
+
+  /** Создание BitNumber на основе массива Byte */
+  def apply(value: Array[Byte]): BitNumber = {
+    val number = apply(0)
+    value.foreach { e =>
+      val bit = createBitNumberFromByte(e)
+      number.join(bit)
     }
 
     number
@@ -52,6 +65,12 @@ object BitNumber {
   private def createBitNumberFromInt(value: Int) = {
     val valueBin = (value.toBinaryString formatted s"%${IntSize}s").replace(' ', ZeroChar)
     val bitList = valueBin.map(charToBitNum)
+    new BitNumber(bitList)
+  }
+
+  /** Создание BitNumber из Byte */
+  private def createBitNumberFromByte(value: Byte) = {
+    val bitList = createBitNumberFromInt(value).bits.slice(IntSize - ByteSize, IntSize)
     new BitNumber(bitList)
   }
 
