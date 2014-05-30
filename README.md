@@ -3,7 +3,7 @@
 
 # TODO list
 
-* Реализовать ГОСТ c помощью BitNumber
+* Реализовать РГР c помощью BitNumber (IDEA) (org.bouncycastle.crypto.engines.IDEAEngine)
 * Сделать заметку в Evernote по сдвиговым операциям и вставить сюда ссылку
 
 
@@ -49,3 +49,10 @@
 
 * [RC4 - статья в Википедии](http://ru.wikipedia.org/wiki/RC4)
 * [Программные реализации RC4](http://ru.wikibooks.org/w/index.php?oldid=66041)
+
+
+# IDEA
+
+## Информация
+
+* [Статья в Википедии](http://ru.wikipedia.org/wiki/IDEA)
