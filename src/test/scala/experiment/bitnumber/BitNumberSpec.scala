@@ -16,7 +16,7 @@ class BitNumberSpec extends FlatSpec {
 
   /** Должен создать 32-битный BitNumber из Int */
   it should "create 32 bit number from Int" in {
-    val bitNumberOne = BitNumber(4)
+    val bitNumberOne = BitNumber(Array(4))
     println("4: " + bitNumberOne)
 
     val expectResultOne = "00000000000000000000000000000100"
@@ -27,7 +27,7 @@ class BitNumberSpec extends FlatSpec {
 
     //----------------------------------
 
-    val bitNumberTwo = BitNumber(-11)
+    val bitNumberTwo = BitNumber(Array(-11))
     println("-11: " + bitNumberTwo)
 
     val expectResultTwo = "11111111111111111111111111110101"
@@ -47,7 +47,7 @@ class BitNumberSpec extends FlatSpec {
 
   /** Должен получить и установить значение по индексу */
   it should "get & set bit by index" in {
-    val bitNumber = BitNumber(4)
+    val bitNumber = BitNumber(Array(4))
 
     assert(bitNumber(0) == '0')
     assert(bitNumber(1) == '0')

@@ -1,6 +1,7 @@
 package dataprotection.lab.two.bitnumber
 
 import org.dyndns.phpusr.util.log.Logger
+import scala.collection.mutable.ListBuffer
 
 /**
  * @author phpusr
@@ -12,7 +13,7 @@ import org.dyndns.phpusr.util.log.Logger
  * Объект для создания BitNumber
  */
 object BitNumber {
-  
+
   /** Тип для одного бита числа */
   private type BitNum = Boolean
 
@@ -31,15 +32,18 @@ object BitNumber {
   //--------------------------------------------------------------//
 
   /** Создание BitNumber на основе какого-то значения */
-  def apply(value :AnyVal) = {
-    value match {
-      case _:Int => createBitNumberFromInt(value.asInstanceOf[Int])
-      case _ => throw new IllegalArgumentException("Not support type")
+  def apply(value: Array[Int]): BitNumber = {
+    val number = apply(0, true)
+    value.foreach { e =>
+      createBitNumberFromInt(e)
+      number.join _
     }
+
+    number
   }
 
   /** Создание BitNumber = 0, на основе его длины */
-  def apply(size: Int, init: Boolean) = {
+  def apply(size: Int, init: Boolean): BitNumber = {
     val bitList = for (i <- 0 until size) yield Zero
     new BitNumber(bitList)
   }
@@ -78,19 +82,29 @@ class BitNumber(bitList: Seq[Boolean]) {
   import dataprotection.lab.two.bitnumber.BitNumber._
 
   /** Представление числа */
-  private val number = bitList.toArray
+  private val _number = {
+    val list = ListBuffer[Boolean]()
+    list ++= bitList
+    list
+  }
+
+  /** Массив битов числа */
+  val bits = _number.toList
 
   /** Возвращает размер числа в битах */
-  def size = number.size
+  def size = _number.size
 
   /** Конвертирует число в двоичную стркоу */
-  def toBinStr = number.map(bitNumToChar).mkString
+  def toBinStr = _number.map(bitNumToChar).mkString
 
   /** Возвращает бит по указанному индексу */
-  def apply(index: Int) = bitNumToChar(number(index))
+  def apply(index: Int) = bitNumToChar(_number(index))
 
   /** Устанавливает бит по указанному индексу */
-  def set(index: Int, value: BitNum) = number(index) = value
+  def set(index: Int, value: BitNum) = _number(index) = value
+
+  /** Соединение с другим */
+  def join(otherNumber: BitNumber) =  _number ++= otherNumber.bits
 
 
   override def toString = s"$toBinStr($size)"
