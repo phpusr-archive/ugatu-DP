@@ -76,7 +76,7 @@ class BitNumberSpec extends FlatSpec {
     assert(bitNumber(1) == '0')
     assert(bitNumber(32-1-2) == '1')
 
-    bitNumber.set(3, true)
+    bitNumber.set(3, BitNum.One)
     assert(bitNumber(3) == '1')
   }
 
