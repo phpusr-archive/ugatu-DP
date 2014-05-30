@@ -33,7 +33,7 @@ object BitNumber {
 
   /** Создание BitNumber на основе какого-то значения */
   def apply(value: Array[Int]): BitNumber = {
-    val number = apply(0, true)
+    val number = apply(0)
     value.foreach { e =>
       createBitNumberFromInt(e)
       number.join _
@@ -43,7 +43,7 @@ object BitNumber {
   }
 
   /** Создание BitNumber = 0, на основе его длины */
-  def apply(size: Int, init: Boolean): BitNumber = {
+  def apply(size: Int): BitNumber = {
     val bitList = for (i <- 0 until size) yield Zero
     new BitNumber(bitList)
   }
