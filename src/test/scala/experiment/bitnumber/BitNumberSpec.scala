@@ -50,14 +50,14 @@ class BitNumberSpec extends FlatSpec {
 
     //----------------------------------
 
-    bitNumber = BitNumber(Array(-10.toByte, 2.toByte))
-    println("10: " + bitNumber)
+    bitNumber = BitNumber(Array(-10.toByte))
+    println("-10: " + bitNumber)
 
-    expectResult = "1111011000000010"
+    expectResult = "11110110"
 
     assert(bitNumber.toBinStr == expectResult)
-    assert(bitNumber.size == 16)
-    assert(bitNumber.toString == s"$expectResult(16)")
+    assert(bitNumber.size == 8)
+    assert(bitNumber.toString == s"$expectResult(8)")
   }
 
   /** Должен создать 8-битный нулевой BitNumber на основе длины */
@@ -78,6 +78,19 @@ class BitNumberSpec extends FlatSpec {
 
     bitNumber.set(3, true)
     assert(bitNumber(3) == '1')
+  }
+
+  /** Должен соединить 2 BitNumber */
+  it should "join 2 BitNumber" in {
+    val array = Array(-10.toByte, 2.toByte)
+    val bitNumber = BitNumber(array)
+    println(s"${array.mkString("|")}: $bitNumber")
+
+    val expectResult = "1111011000000010"
+
+    assert(bitNumber.toBinStr == expectResult)
+    assert(bitNumber.size == 16)
+    assert(bitNumber.toString == s"$expectResult(16)")
   }
 
 }
