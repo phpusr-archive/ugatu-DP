@@ -195,7 +195,7 @@ class BitNumberSpec extends FlatSpec {
     var a = BitNumber(Array(10.toByte))
     var b = BitNumber(Array(8.toByte))
 
-    var res = a * b
+    var res = a & b
     var expect = "00001000"
 
     assert(res.toBinStr == expect)
@@ -206,7 +206,7 @@ class BitNumberSpec extends FlatSpec {
     a = BitNumber(Array(4.toByte))
     b = BitNumber(Array(5.toByte))
 
-    res = a * b
+    res = a & b
     expect = "00000100"
 
     assert(res.toBinStr == expect)
@@ -218,7 +218,7 @@ class BitNumberSpec extends FlatSpec {
     b = BitNumber(Array(8))
 
     intercept [IllegalArgumentException] {
-      a * b
+      a & b
     }
   }
 
@@ -273,7 +273,7 @@ class BitNumberSpec extends FlatSpec {
     b = BitNumber(Array(8))
 
     intercept [IllegalArgumentException] {
-      a * b
+      a xor b
     }
   }
 
@@ -338,7 +338,7 @@ class BitNumberSpec extends FlatSpec {
     var a = BitNumber(Array(10.toByte))
     var b = BitNumber(Array(8.toByte))
 
-    var res = a ** b
+    var res = a * b
     var expect = "000000001010000"
 
     assert(res.toBinStr == expect)
@@ -351,7 +351,7 @@ class BitNumberSpec extends FlatSpec {
     a = BitNumber(Array(20.toByte))
     b = BitNumber(Array(21.toByte))
 
-    res = a ** b
+    res = a * b
     expect = "000000110100100"
 
     assert(res.toBinStr == expect)

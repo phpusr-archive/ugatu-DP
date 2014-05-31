@@ -139,7 +139,7 @@ class BitNumber(bitList: Seq[BitNum]) {
   }
 
   /** Побитовое умножение */
-  def *(otherNumber: BitNumber) = {
+  def &(otherNumber: BitNumber) = {
     if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")
 
     val res = _number.zip(otherNumber.bits).map { case (x, y) => x * y }
@@ -147,7 +147,7 @@ class BitNumber(bitList: Seq[BitNum]) {
   }
 
   /** Умножение на бит */
-  def *(bit: BitNum) = new BitNumber(_number.map(_ * bit))
+  def *(bit: BitNum): BitNumber = new BitNumber(_number.map(_ * bit))
 
   /** XOR */
   def xor(otherNumber: BitNumber) = {
@@ -207,7 +207,7 @@ class BitNumber(bitList: Seq[BitNum]) {
   }
 
   /** Умножение */
-  def **(otherNumber: BitNumber) = {
+  def *(otherNumber: BitNumber): BitNumber = {
     var sum = BitNumber(0)
     if (false) println(otherNumber.toString)
     otherNumber.bits.reverse.zipWithIndex.foreach { case (bit, index) =>

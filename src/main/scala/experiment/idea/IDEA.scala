@@ -73,17 +73,17 @@ object IDEA {
       val k = subKeys(i)
 
 
-      val a = m(d(0) ** k(0))
+      val a = m(d(0) * k(0))
       val b = m(d(1) + k(1))
       val c = m(d(2) + k(2))
-      val g = m(d(3) ** k(3))
+      val g = m(d(3) * k(3))
       val e = a xor c
       val f = b xor g
 
-      val d1 = a xor m((f + e ** k(4)) ** k(5))
-      val d2 = c xor m((f + e ** k(4)) ** k(5))
-      val d3 = b xor m(e ** k(4) + (f + e ** k(4)) ** k(5))
-      val d4 = g xor m(e ** k(4) + (f + e ** k(4)) ** k(5))
+      val d1 = a xor m((f + e * k(4)) * k(5))
+      val d2 = c xor m((f + e * k(4)) * k(5))
+      val d3 = b xor m(e * k(4) + (f + e * k(4)) * k(5))
+      val d4 = g xor m(e * k(4) + (f + e * k(4)) * k(5))
 
       d = List(d1, d2, d3, d4)
 
@@ -91,10 +91,10 @@ object IDEA {
     }
 
     val k = subKeys(8)
-    val d1 = d(0) ** k(0)
-    val d2 = d(2) ** k(1)
-    val d3 = d(1) ** k(2)
-    val d4 = d(3) ** k(3)
+    val d1 = d(0) * k(0)
+    val d2 = d(2) * k(1)
+    val d3 = d(1) * k(2)
+    val d4 = d(3) * k(3)
 
     List(d1, d2, d3, d4).map(m)
   }
