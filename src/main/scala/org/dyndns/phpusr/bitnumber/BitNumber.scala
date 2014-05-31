@@ -123,6 +123,18 @@ class BitNumber(bitList: Seq[BitNum]) {
     new BitNumber(list)
   }
 
+  /** Циклический сдвиг влево */
+  def <<(shiftSize: Int) = {
+    val list = ListBuffer[BitNum]()
+    list ++= _number
+    for (i <- 0 until shiftSize) {
+      val bit = list.remove(0)
+      list += bit
+    }
+
+    new BitNumber(list)
+  }
+
   /** Побитовое умножение */
   def *(otherNumber: BitNumber) = {
     if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")
