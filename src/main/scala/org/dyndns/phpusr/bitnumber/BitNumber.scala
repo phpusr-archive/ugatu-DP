@@ -94,6 +94,9 @@ class BitNumber(bitList: Seq[BitNum]) {
   /** Конвертирует число в двоичную стркоу */
   def toBinStr = _number.map(_.toChar).mkString
 
+  /** Конвертирует число в hex-строку */
+  def toHexStr = _number.sliding(4, 4).map(e => Integer.parseInt(e.mkString, 2)).map(_.toHexString).mkString
+
   /** Возвращает бит по указанному индексу */
   def apply(index: Int) = _number(index).toChar
 

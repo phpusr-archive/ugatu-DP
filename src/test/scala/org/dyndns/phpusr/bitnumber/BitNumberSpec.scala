@@ -79,6 +79,18 @@ class BitNumberSpec extends FlatSpec {
     assert(bitNumber(3) == '1')
   }
 
+  /** Проверка конвертации в hex-строку */
+  it should "create hex-string" in {
+    var a = BitNumber(Array(4))
+    assert(a.toHexStr == "00000004")
+
+    a = BitNumber(Array(250))
+    assert(a.toHexStr == "000000fa")
+
+    a = BitNumber(Array(255.toByte))
+    assert(a.toHexStr == "ff")
+  }
+
   /** Должен соединить 2 BitNumber */
   it should "join 2 BitNumber" in {
     val array = Array(-10.toByte, 2.toByte)
