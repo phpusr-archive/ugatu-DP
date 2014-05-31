@@ -104,6 +104,12 @@ class BitNumber(bitList: Seq[BitNum]) {
   /** Соединение с другим */
   def join(otherNumber: BitNumber) =  _number ++= otherNumber.bits
 
+  /** Возвращает последние биты */
+  def last(n: Int) = {
+    val list = _number.slice(size-n, size)
+    new BitNumber(list)
+  }
+
   /** Сдвиг влево */
   def <(shiftSize: Int) = {
     val list = ListBuffer[BitNum]()

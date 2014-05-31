@@ -93,6 +93,27 @@ class BitNumberSpec extends FlatSpec {
     assert(bitNumber.toString == s"$expectResult(16)")
   }
 
+  /** Последние биты */
+  it should "last" in {
+    var a = BitNumber(Array(10.toByte))
+
+    var res = a.last(3)
+    var expect = "010"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 3)
+
+    //--------------------------------
+
+    a = BitNumber(Array(500))
+
+    res = a.last(8)
+    expect = "11110100"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 8)
+  }
+
   /** Сдвиг влево */
   it should "left shift" in {
     var a = BitNumber(Array(10.toByte))
@@ -104,6 +125,7 @@ class BitNumberSpec extends FlatSpec {
     assert(res.size == 11)
 
     //--------------------------------
+
     a = BitNumber(Array(5.toByte))
 
     res = a < 2
