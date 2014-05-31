@@ -157,4 +157,16 @@ class BitNumberSpec extends FlatSpec {
     }
   }
 
+  /** + */
+  it should "+" in {
+    var a = BitNumber(Array(10.toByte))
+    var b = BitNumber(Array(8.toByte))
+
+    var res = a + b
+    var expect = "00010010"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 8)
+  }
+
 }

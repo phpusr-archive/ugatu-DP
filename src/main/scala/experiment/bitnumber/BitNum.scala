@@ -19,6 +19,8 @@ case class BitNum(value: Boolean) {
 
   /** Операция XOR */
   def xor(otherBit: BitNum) = BitNum(value ^ otherBit.value)
+
+  override def toString = toChar.toString
 }
 
 object BitNum {

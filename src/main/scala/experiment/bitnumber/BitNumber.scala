@@ -80,6 +80,11 @@ class BitNumber(bitList: Seq[BitNum]) {
     list
   }
 
+  /** Логгер */
+  private val logger = new Logger(true, true, true)
+
+  //--------------------------------------------------------------//
+
   /** Массив битов числа */
   def bits = _number.toList
 
@@ -112,6 +117,46 @@ class BitNumber(bitList: Seq[BitNum]) {
 
     val res = _number.zip(otherNumber.bits).map { case (x, y) => x xor y }
     new BitNumber(res)
+  }
+
+  /** Сложение (TODO без увеличения разрядов) */
+  def +(otherNumber: BitNumber) = {
+    if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")
+
+    val notSupportCaseException = new Exception("Not support case exception")
+
+    val list = ListBuffer[BitNum]()
+    var memory = BitNum.Zero
+    for (i <- 1 to size) {
+      val x = _number(size-i)
+      val y = otherNumber.bits(size-i)
+
+      logger.trace(s"$x + $y ($memory) = ")
+
+      val bit = if (memory == BitNum.Zero) { // Если есть перенос бита
+        if (x == BitNum.Zero && y == BitNum.One || x == BitNum.One && y == BitNum.Zero) {
+          BitNum.One
+        } else if (x == BitNum.Zero && y == BitNum.Zero) BitNum.Zero
+        else if (x == BitNum.One && y == BitNum.One) {
+          memory = BitNum.One
+          BitNum.Zero
+        } else throw notSupportCaseException
+      } else if (memory == BitNum.One) { // Если нет переноса бита
+        if (x == BitNum.Zero && y == BitNum.One || x == BitNum.One && y == BitNum.Zero) {
+          BitNum.One
+        } else if (x == BitNum.Zero && y == BitNum.Zero) {
+          memory = BitNum.Zero
+          BitNum.One
+        } else if (x == BitNum.One && y == BitNum.One) BitNum.One
+        else throw notSupportCaseException
+      } else throw notSupportCaseException
+
+      logger.trace(""+bit)
+
+      list += bit
+    }
+
+    new BitNumber(list.reverse)
   }
 
 
