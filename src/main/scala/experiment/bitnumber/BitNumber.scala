@@ -112,6 +112,9 @@ class BitNumber(bitList: Seq[BitNum]) {
     new BitNumber(res)
   }
 
+  /** Умножение на бит */
+  def *(bit: BitNum) = new BitNumber(_number.map(_ * bit))
+
   /** XOR */
   def xor(otherNumber: BitNumber) = {
     if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")

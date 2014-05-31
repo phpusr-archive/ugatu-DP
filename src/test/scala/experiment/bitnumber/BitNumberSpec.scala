@@ -125,6 +125,29 @@ class BitNumberSpec extends FlatSpec {
     }
   }
 
+  /** Умножение на бит */
+  it should "multiply on bit" in {
+    var a = BitNumber(Array(10.toByte))
+    var b = BitNum.One
+
+    var res = a * b
+    var expect = "00001010"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 8)
+
+    //--------------------------------
+    a = BitNumber(Array(4.toByte))
+    b = BitNum.Zero
+
+    res = a * b
+    expect = "00000000"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 8)
+
+  }
+
   /** XOR */
   it should "xor" in {
     var a = BitNumber(Array(10.toByte))
