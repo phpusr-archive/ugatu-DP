@@ -134,17 +134,18 @@ class BitNumber(bitList: Seq[BitNum]) {
 
   /** Сложение */
   def +(otherNumber: BitNumber) = {
-    if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")
+    val maxSize = Math.max(size, otherNumber.size)
 
     val notSupportCaseException = new Exception("Not support case exception")
 
     val list = ListBuffer[BitNum]()
     var memory = Zero
-    for (i <- 1 to size) {
-      val x = _number(size-i)
-      val y = otherNumber.bits(size-i)
+    for (i <- 1 to maxSize) {
+      // Если у какого-то из числе меньше разрядов, то они заменяются нулями
+      val x = if (i <= size) _number(size-i) else BitNum.Zero
+      val y = if (i <= otherNumber.size) otherNumber.bits(otherNumber.size-i) else BitNum.Zero
 
-      print(s"$x + $y ($memory) = ")
+      if (false) print(s"$x + $y ($memory) = ")
 
       val bit = if (memory == Zero) { // Если есть перенос бита
         if (x == Zero && y == One || x == One && y == Zero) One
@@ -162,7 +163,7 @@ class BitNumber(bitList: Seq[BitNum]) {
         else throw notSupportCaseException
       } else throw notSupportCaseException
 
-      println(""+bit)
+      if (false) println(""+bit)
 
       list += bit
     }
@@ -178,6 +179,19 @@ class BitNumber(bitList: Seq[BitNum]) {
     val res = this + otherNumber
     _number.clear()
     _number ++= res.bits
+  }
+
+  /** Умножение */
+  def **(otherNumber: BitNumber) = {
+    var sum = BitNumber(0)
+    if (false) println(otherNumber.toString)
+    otherNumber.bits.reverse.zipWithIndex.foreach { case (bit, index) =>
+      val res = (this * bit) < index
+      if (false) println(s"$index: $res")
+      sum += res
+    }
+
+    sum
   }
 
   /** Клонирование */

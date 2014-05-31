@@ -125,7 +125,7 @@ class BitNumberSpec extends FlatSpec {
   }
 
   /** Побитовое умножение */
-  it should "multiply" in {
+  it should "bit multiply" in {
     var a = BitNumber(Array(10.toByte))
     var b = BitNumber(Array(8.toByte))
 
@@ -179,7 +179,7 @@ class BitNumberSpec extends FlatSpec {
 
   }
 
-  /** XOR */
+  /** XOR (Сложение по модулю 2) */
   it should "xor" in {
     var a = BitNumber(Array(10.toByte))
     var b = BitNumber(Array(8.toByte))
@@ -211,7 +211,7 @@ class BitNumberSpec extends FlatSpec {
     }
   }
 
-  /** + */
+  /** Сложение */
   it should "+" in {
     var a = BitNumber(Array(10.toByte))
     var b = BitNumber(Array(8.toByte))
@@ -263,6 +263,26 @@ class BitNumberSpec extends FlatSpec {
     assert(a.size == 9)
     assert(b.toBinStr == "10110111")
 
+  }
+
+  /** Умножение */
+  it should "multiply" in {
+    println("Multiply")
+
+    var a = BitNumber(Array(10.toByte))
+    var b = BitNumber(Array(8.toByte))
+
+    var res = a ** b
+    var expect = "000000001010000"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 15)
+
+    println("----")
+
+    //--------------------------------
+
+    //TODO еще пример
   }
 
 }
