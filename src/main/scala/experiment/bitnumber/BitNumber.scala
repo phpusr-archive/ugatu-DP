@@ -173,6 +173,13 @@ class BitNumber(bitList: Seq[BitNum]) {
     new BitNumber(list.reverse)
   }
 
+  /** Добавление */
+  def +=(otherNumber: BitNumber) = {
+    val res = this + otherNumber
+    _number.clear()
+    _number ++= res.bits
+  }
+
   /** Клонирование */
   override def clone = new BitNumber(_number.toList)
 

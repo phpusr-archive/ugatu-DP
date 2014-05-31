@@ -237,4 +237,32 @@ class BitNumberSpec extends FlatSpec {
 
   }
 
+  /** Добавление */
+  it should "b add to a" in {
+    var a = BitNumber(Array(10.toByte))
+    var b = BitNumber(Array(8.toByte))
+
+    a += b
+    var expect = "00010010"
+
+    assert(a.toBinStr == expect)
+    assert(a.size == 8)
+    assert(b.toBinStr == "00001000")
+
+    println("----")
+
+    //--------------------------------
+
+    a = BitNumber(Array(152.toByte))
+    b = BitNumber(Array(183.toByte))
+
+    a += b
+    expect = "101001111"
+
+    assert(a.toBinStr == expect)
+    assert(a.size == 9)
+    assert(b.toBinStr == "10110111")
+
+  }
+
 }
