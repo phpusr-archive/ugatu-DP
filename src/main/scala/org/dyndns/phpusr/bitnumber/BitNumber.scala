@@ -1,9 +1,8 @@
-package dataprotection.lab.two.bitnumber
+package org.dyndns.phpusr.bitnumber
 
 import org.dyndns.phpusr.util.log.Logger
 import scala.collection.mutable.ListBuffer
-import experiment.bitnumber.BitNum
-import experiment.bitnumber.BitNum._
+import org.dyndns.phpusr.bitnumber.BitNum._
 
 /**
  * @author phpusr

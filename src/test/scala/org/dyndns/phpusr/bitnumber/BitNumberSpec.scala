@@ -1,6 +1,5 @@
-package experiment.bitnumber
+package org.dyndns.phpusr.bitnumber
 
-import dataprotection.lab.two.bitnumber.BitNumber
 import org.scalatest.FlatSpec
 
 /**

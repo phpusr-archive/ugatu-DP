@@ -1,4 +1,4 @@
-package experiment.bitnumber
+package org.dyndns.phpusr.bitnumber
 
 /**
  * @author phpusr
@@ -10,8 +10,8 @@ package experiment.bitnumber
  * Тип для одного бита числа
  */
 case class BitNum(value: Boolean) {
-  import experiment.bitnumber.BitNum._
-  
+  import org.dyndns.phpusr.bitnumber.BitNum._
+
   def toChar = if (value) OneChar else ZeroChar
 
   /** Операция умножения */
