@@ -21,31 +21,43 @@ object IDEA {
   val KeyPartSize = 16
   /** Кол-во подключей */
   val SubKeysCount = 52
+  /** Кол-во блоков подключей */
+  val SubKeysBlocksCount = 6
+
   /** Размер блока */
   val BlockSize = 64
+  /** Кол-во подблоков */
+  val SubBlocksCount = 4
 
   /** Подключи */
-  private val subKeys = ListBuffer[BitNumber]()
+  private var subKeys: Seq[Seq[BitNumber]] = null
 
   /** Шифрование данных */
   def encrypt(data: BitNumber, key: BitNumber) = {
     assert(data.size == BlockSize)
     assert(key.size == KeySize)
 
+    // Генерация подключей
     generateSubKeys(key)
     assert(subKeys.size == SubKeysCount)
+
+    // TODO
+
   }
 
   /** Генерация подключей */
   def generateSubKeys(key: BitNumber) {
+    val tmpSubKeys = ListBuffer[BitNumber]()
     var shiftKey = key
-    for (i <- 1 to 6) {
-      subKeys ++= shiftKey.split(KeyPartSize)
+    for (i <- 1 to SubKeysBlocksCount) {
+      tmpSubKeys ++= shiftKey.split(KeyPartSize)
       shiftKey = shiftKey << 25
     }
     val sk = shiftKey.split(KeyPartSize)
-    subKeys ++= sk.take(4)
-    //TODO возможно стоит разбить по 6 элементов
+    tmpSubKeys ++= sk.take(4)
+
+    // Разбитие на блоки по 6 подключей
+    subKeys = tmpSubKeys.sliding(SubKeysBlocksCount, SubKeysBlocksCount).toList
   }
 
   /** Отладка */
@@ -56,8 +68,8 @@ object IDEA {
 
     generateSubKeys(key)
 
-    val str = subKeys.map(_.toHexStr).sliding(6, 6).map { e =>
-      e.mkString(", ")
+    val str = subKeys.map{ e =>
+      e.map(_.toHexStr)
     }.mkString("\n")
     println(str)
   }
