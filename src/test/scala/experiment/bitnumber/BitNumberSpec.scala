@@ -282,7 +282,17 @@ class BitNumberSpec extends FlatSpec {
 
     //--------------------------------
 
-    //TODO еще пример
+    a = BitNumber(Array(20.toByte))
+    b = BitNumber(Array(21.toByte))
+
+    res = a ** b
+    expect = "000000110100100"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 15)
+
+    println("----")
+
   }
 
 }
