@@ -81,7 +81,7 @@ class BitNumber(bitList: Seq[BitNum]) {
   }
 
   /** Массив битов числа */
-  val bits = _number.toList
+  def bits = _number.toList
 
   /** Возвращает размер числа в битах */
   def size = _number.size
@@ -98,8 +98,13 @@ class BitNumber(bitList: Seq[BitNum]) {
   /** Соединение с другим */
   def join(otherNumber: BitNumber) =  _number ++= otherNumber.bits
 
-  /** Умножение */
-  def * = ???
+  /** Побитовое умножение */
+  def *(otherNumber: BitNumber) = {
+    if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")
+
+    val res = _number.zip(otherNumber.bits).map { case (x, y) => x * y }
+    new BitNumber(res)
+  }
 
 
   override def toString = s"$toBinStr($size)"

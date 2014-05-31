@@ -93,4 +93,36 @@ class BitNumberSpec extends FlatSpec {
     assert(bitNumber.toString == s"$expectResult(16)")
   }
 
+  /** Побитовое умножение */
+  it should "multiply" in {
+    var a = BitNumber(Array(10.toByte))
+    var b = BitNumber(Array(8.toByte))
+
+    var res = a * b
+    var expect = "00001000"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 8)
+
+    //--------------------------------
+
+    a = BitNumber(Array(10.toByte))
+    b = BitNumber(Array(8.toByte))
+
+    res = a * b
+    expect = "00001000"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 8)
+
+    //--------------------------------
+
+    a = BitNumber(Array(10.toByte))
+    b = BitNumber(Array(8))
+
+    intercept [IllegalArgumentException] {
+      a * b
+    }
+  }
+
 }

@@ -13,6 +13,9 @@ case class BitNum(value: Boolean) {
   import experiment.bitnumber.BitNum._
   
   def toChar = if (value) OneChar else ZeroChar
+
+  /** Операция умножения */
+  def *(otherBit: BitNum) = BitNum(value && otherBit.value)
 }
 
 object BitNum {
