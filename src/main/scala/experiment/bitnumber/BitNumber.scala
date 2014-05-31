@@ -131,7 +131,7 @@ class BitNumber(bitList: Seq[BitNum]) {
       val x = _number(size-i)
       val y = otherNumber.bits(size-i)
 
-      logger.trace(s"$x + $y ($memory) = ")
+      print(s"$x + $y ($memory) = ")
 
       val bit = if (memory == BitNum.Zero) { // Если есть перенос бита
         if (x == BitNum.Zero && y == BitNum.One || x == BitNum.One && y == BitNum.Zero) {
@@ -143,7 +143,7 @@ class BitNumber(bitList: Seq[BitNum]) {
         } else throw notSupportCaseException
       } else if (memory == BitNum.One) { // Если нет переноса бита
         if (x == BitNum.Zero && y == BitNum.One || x == BitNum.One && y == BitNum.Zero) {
-          BitNum.One
+          BitNum.Zero
         } else if (x == BitNum.Zero && y == BitNum.Zero) {
           memory = BitNum.Zero
           BitNum.One
@@ -151,7 +151,7 @@ class BitNumber(bitList: Seq[BitNum]) {
         else throw notSupportCaseException
       } else throw notSupportCaseException
 
-      logger.trace(""+bit)
+      println(""+bit)
 
       list += bit
     }
