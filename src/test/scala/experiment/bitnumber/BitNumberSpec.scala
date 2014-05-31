@@ -93,6 +93,37 @@ class BitNumberSpec extends FlatSpec {
     assert(bitNumber.toString == s"$expectResult(16)")
   }
 
+  /** Сдвиг влево */
+  it should "left shift" in {
+    var a = BitNumber(Array(10.toByte))
+
+    var res = a < 3
+    var expect = "00001010000"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 11)
+
+    //--------------------------------
+    a = BitNumber(Array(5.toByte))
+
+    res = a < 2
+    expect = "0000010100"
+
+    assert(res.toBinStr == expect)
+    assert(res.size == 10)
+  }
+
+  /** Клонирование */
+  it should "clone" in {
+    val a = BitNumber(Array(10.toByte))
+    val clone = a.clone
+
+    assert(a != clone)
+    assert(a.toBinStr == clone.toBinStr)
+    clone.set(5, BitNum.One)
+    assert(a.toBinStr != clone.toBinStr)
+  }
+
   /** Побитовое умножение */
   it should "multiply" in {
     var a = BitNumber(Array(10.toByte))

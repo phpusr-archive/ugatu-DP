@@ -104,6 +104,15 @@ class BitNumber(bitList: Seq[BitNum]) {
   /** Соединение с другим */
   def join(otherNumber: BitNumber) =  _number ++= otherNumber.bits
 
+  /** Сдвиг влево */
+  def <(shiftSize: Int) = {
+    val list = ListBuffer[BitNum]()
+    list ++= _number
+    for (i <- 0 until shiftSize) list += BitNum.Zero
+
+    new BitNumber(list)
+  }
+
   /** Побитовое умножение */
   def *(otherNumber: BitNumber) = {
     if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")
@@ -164,6 +173,8 @@ class BitNumber(bitList: Seq[BitNum]) {
     new BitNumber(list.reverse)
   }
 
+  /** Клонирование */
+  override def clone = new BitNumber(_number.toList)
 
   override def toString = s"$toBinStr($size)"
 
