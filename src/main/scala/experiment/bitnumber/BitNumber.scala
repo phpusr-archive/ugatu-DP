@@ -3,6 +3,7 @@ package dataprotection.lab.two.bitnumber
 import org.dyndns.phpusr.util.log.Logger
 import scala.collection.mutable.ListBuffer
 import experiment.bitnumber.BitNum
+import experiment.bitnumber.BitNum._
 
 /**
  * @author phpusr
@@ -49,13 +50,13 @@ object BitNumber {
 
   /** Создание BitNumber = 0, на основе его длины */
   def apply(size: Int): BitNumber = {
-    val bitList = for (i <- 0 until size) yield BitNum.Zero
+    val bitList = for (i <- 0 until size) yield Zero
     new BitNumber(bitList)
   }
 
   /** Создание BitNumber из Int */
   private def createBitNumberFromInt(value: Int) = {
-    val valueBin = (value.toBinaryString formatted s"%${IntSize}s").replace(' ', BitNum.ZeroChar)
+    val valueBin = (value.toBinaryString formatted s"%${IntSize}s").replace(' ', ZeroChar)
     val bitList = valueBin.map(BitNum(_))
     new BitNumber(bitList)
   }
@@ -119,35 +120,33 @@ class BitNumber(bitList: Seq[BitNum]) {
     new BitNumber(res)
   }
 
-  /** Сложение (TODO без увеличения разрядов) */
+  /** Сложение */
   def +(otherNumber: BitNumber) = {
     if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")
 
     val notSupportCaseException = new Exception("Not support case exception")
 
     val list = ListBuffer[BitNum]()
-    var memory = BitNum.Zero
+    var memory = Zero
     for (i <- 1 to size) {
       val x = _number(size-i)
       val y = otherNumber.bits(size-i)
 
       print(s"$x + $y ($memory) = ")
 
-      val bit = if (memory == BitNum.Zero) { // Если есть перенос бита
-        if (x == BitNum.Zero && y == BitNum.One || x == BitNum.One && y == BitNum.Zero) {
-          BitNum.One
-        } else if (x == BitNum.Zero && y == BitNum.Zero) BitNum.Zero
-        else if (x == BitNum.One && y == BitNum.One) {
-          memory = BitNum.One
-          BitNum.Zero
+      val bit = if (memory == Zero) { // Если есть перенос бита
+        if (x == Zero && y == One || x == One && y == Zero) One
+        else if (x == Zero && y == Zero) Zero
+        else if (x == One && y == One) {
+          memory = One
+          Zero
         } else throw notSupportCaseException
-      } else if (memory == BitNum.One) { // Если нет переноса бита
-        if (x == BitNum.Zero && y == BitNum.One || x == BitNum.One && y == BitNum.Zero) {
-          BitNum.Zero
-        } else if (x == BitNum.Zero && y == BitNum.Zero) {
-          memory = BitNum.Zero
-          BitNum.One
-        } else if (x == BitNum.One && y == BitNum.One) BitNum.One
+      } else if (memory == One) { // Если нет переноса бита
+        if (x == Zero && y == One || x == One && y == Zero) Zero
+        else if (x == Zero && y == Zero) {
+          memory = Zero
+          One
+        } else if (x == One && y == One) One
         else throw notSupportCaseException
       } else throw notSupportCaseException
 
@@ -155,6 +154,9 @@ class BitNumber(bitList: Seq[BitNum]) {
 
       list += bit
     }
+
+    // Добавление еще одно разряда в начале если нужно
+    if (memory == One) list += memory
 
     new BitNumber(list.reverse)
   }

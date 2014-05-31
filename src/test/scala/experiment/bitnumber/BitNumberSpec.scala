@@ -176,10 +176,10 @@ class BitNumberSpec extends FlatSpec {
     b = BitNumber(Array(183.toByte))
 
     res = a + b
-    expect = "01001111"
+    expect = "101001111"
 
     assert(res.toBinStr == expect)
-    assert(res.size == 8)
+    assert(res.size == 9)
 
   }
 
