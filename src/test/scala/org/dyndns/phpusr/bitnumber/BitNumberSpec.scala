@@ -113,6 +113,18 @@ class BitNumberSpec extends FlatSpec {
     assert(res.size == 8)
   }
 
+  /** Разбиение на части */
+  it should "split" in {
+    val a = BitNumber(Array(1000000))
+
+    val res = a.split(16).map(_.toBinStr).mkString(",")
+    val expect = "0000000000001111,0100001001000000"
+
+    assert(res == expect)
+    assert(res.size == 33)
+
+  }
+
   /** Сдвиг влево */
   it should "left shift" in {
     var a = BitNumber(Array(10.toByte))

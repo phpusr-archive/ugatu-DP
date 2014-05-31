@@ -109,6 +109,11 @@ class BitNumber(bitList: Seq[BitNum]) {
     new BitNumber(list)
   }
 
+  /** Разбиение на части */
+  def split(partSize: Int) = {
+    _number.sliding(partSize, partSize).map(new BitNumber(_)).toList
+  }
+
   /** Сдвиг влево */
   def <(shiftSize: Int) = {
     val list = ListBuffer[BitNum]()
