@@ -106,6 +106,14 @@ class BitNumber(bitList: Seq[BitNum]) {
     new BitNumber(res)
   }
 
+  /** XOR */
+  def xor(otherNumber: BitNumber) = {
+    if (size != otherNumber.size) throw new IllegalArgumentException("Size do not match")
+
+    val res = _number.zip(otherNumber.bits).map { case (x, y) => x xor y }
+    new BitNumber(res)
+  }
+
 
   override def toString = s"$toBinStr($size)"
 

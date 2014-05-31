@@ -16,6 +16,9 @@ case class BitNum(value: Boolean) {
 
   /** Операция умножения */
   def *(otherBit: BitNum) = BitNum(value && otherBit.value)
+
+  /** Операция XOR */
+  def xor(otherBit: BitNum) = BitNum(value ^ otherBit.value)
 }
 
 object BitNum {
