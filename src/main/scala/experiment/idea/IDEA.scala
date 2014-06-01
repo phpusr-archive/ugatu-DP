@@ -80,23 +80,23 @@ object IDEA {
       val e = a xor c
       val f = b xor g
 
-      val d1 = a xor m((f + e * k(4)) * k(5))
-      val d2 = c xor m((f + e * k(4)) * k(5))
-      val d3 = b xor m(e * k(4) + (f + e * k(4)) * k(5))
-      val d4 = g xor m(e * k(4) + (f + e * k(4)) * k(5))
+      val d0 = a xor m((f + e * k(4)) * k(5))
+      val d1 = c xor m((f + e * k(4)) * k(5))
+      val d2 = b xor m(e * k(4) + (f + e * k(4)) * k(5))
+      val d3 = g xor m(e * k(4) + (f + e * k(4)) * k(5))
 
-      d = List(d1, d2, d3, d4)
+      d = List(d0, d1, d2, d3)
 
       println(s"${i+1}" + d.map(_.toHexStr).mkString(", "))
     }
 
     val k = subKeys(8)
-    val d1 = d(0) * k(0)
-    val d2 = d(2) * k(1)
-    val d3 = d(1) * k(2)
-    val d4 = d(3) * k(3)
+    val d0 = d(0) * k(0)
+    val d1 = d(2) * k(1)
+    val d2 = d(1) * k(2)
+    val d3 = d(3) * k(3)
 
-    List(d1, d2, d3, d4).map(m)
+    List(d0, d1, d2, d3).map(m)
   }
 
   /** Отладка */
