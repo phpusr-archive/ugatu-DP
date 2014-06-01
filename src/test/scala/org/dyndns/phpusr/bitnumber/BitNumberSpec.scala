@@ -91,6 +91,12 @@ class BitNumberSpec extends FlatSpec {
     assert(a.toHexStr == "ff")
   }
 
+  /** Проверка конвертации в int */
+  it should "create int" in {
+    val a = BitNumber(Array(100))
+    assert(a.toInt == 100)
+  }
+
   /** Должен соединить 2 BitNumber */
   it should "join 2 BitNumber" in {
     val array = Array(-10.toByte, 2.toByte)
