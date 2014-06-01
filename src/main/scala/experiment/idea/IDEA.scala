@@ -82,7 +82,7 @@ object IDEA {
       val s6 = s2 xor s4
 
       val s7 = mul(s5, k(4))
-      val s8 = s6 + s7
+      val s8 = m(s6 + s7)
       val s9 = mul(s8, k(5))
       val s10 = m(s7 + s9)
 
@@ -97,10 +97,10 @@ object IDEA {
     }
 
     val k = subKeys(8)
-    val d0 = d(0) * k(0)
+    val d0 = mul(d(0), k(0))
     val d1 = d(2) + k(1)
     val d2 = d(1) + k(2)
-    val d3 = d(3) * k(3)
+    val d3 = mul(d(3), k(3))
 
     List(d0, d1, d2, d3).map(m)
   }
@@ -122,8 +122,8 @@ object IDEA {
       x = y - x + (if (y < x)  1 else 0)
     }
 
-    val res = x & Mask
-    BitNumber(Array(res)).last(SubBlocksSize)
+    val res = BitNumber(Array(x & Mask))
+    res.last(SubBlocksSize)
   }
 
   /** Отладка */
@@ -141,7 +141,7 @@ object IDEA {
 
     val dataArray = Array(0, 0, 0, 1, 0, 2, 0, 3).map(_.toByte)
     val data = BitNumber(dataArray)
-    val a = action(data) //TODO fix
+    val a = action(data)
 
     println(a.map(_.toHexStr).mkString(", "))
   }
