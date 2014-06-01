@@ -74,16 +74,16 @@ object IDEA {
     for (i <- 0 until 8) {
       val k = subKeys(i)
 
-      val s1 = m(d(0) * k(0))
+      val s1 = mul(d(0), k(0))
       val s2 = m(d(1) + k(1))
       val s3 = m(d(2) + k(2))
-      val s4 = m(d(3) * k(3))
+      val s4 = mul(d(3), k(3))
       val s5 = s1 xor s3
       val s6 = s2 xor s4
 
-      val s7 = s5 * k(4)
+      val s7 = mul(s5, k(4))
       val s8 = s6 + s7
-      val s9 = m(s8 * k(5))
+      val s9 = mul(s8, k(5))
       val s10 = m(s7 + s9)
 
       val d0 = s1 xor s9
@@ -103,6 +103,27 @@ object IDEA {
     val d3 = d(3) * k(3)
 
     List(d0, d1, d2, d3).map(m)
+  }
+
+  /** Умножение по модулю 2 в 16 + 1 */
+  def mul(a: BitNumber, b: BitNumber) = {
+    val Base = 0x10001
+    val Mask = 0xffff
+
+    var x = a.toInt
+    var y = b.toInt
+
+    if (x == 0) x = Base - y
+    else if (y == 0) x = Base - x
+    else {
+      val p = x * y
+      y = p & Mask
+      x = p >>> 16
+      x = y - x + (if (y < x)  1 else 0)
+    }
+
+    val res = x & Mask
+    BitNumber(Array(res)).last(SubBlocksSize)
   }
 
   /** Отладка */
