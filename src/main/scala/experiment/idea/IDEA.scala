@@ -65,13 +65,13 @@ object IDEA {
   /** TODO */
   def action(data: BitNumber) = {
     var d = data.split(SubBlocksSize)
+    println(s"0. " + d.map(_.toHexStr).mkString(", "))
     assert(d.size == SubBlocksCount)
 
     val m = (bitNumber: BitNumber) => bitNumber.last(SubBlocksSize)
 
     for (i <- 0 until 8) {
       val k = subKeys(i)
-
 
       val a = m(d(0) * k(0))
       val b = m(d(1) + k(1))
@@ -80,20 +80,23 @@ object IDEA {
       val e = a xor c
       val f = b xor g
 
-      val d0 = a xor m((f + e * k(4)) * k(5))
-      val d1 = c xor m((f + e * k(4)) * k(5))
-      val d2 = b xor m(e * k(4) + (f + e * k(4)) * k(5))
-      val d3 = g xor m(e * k(4) + (f + e * k(4)) * k(5))
+      val h = (f + e * k(4)) * k(5)
+      val j = e * k(4)
+
+      val d0 = a xor m(h)
+      val d1 = c xor m(h)
+      val d2 = b xor m(j + h)
+      val d3 = g xor m(j + h)
 
       d = List(d0, d1, d2, d3)
 
-      println(s"${i+1}" + d.map(_.toHexStr).mkString(", "))
+      println(s"${i+1}. " + d.map(_.toHexStr).mkString(", "))
     }
 
     val k = subKeys(8)
     val d0 = d(0) * k(0)
-    val d1 = d(2) * k(1)
-    val d2 = d(1) * k(2)
+    val d1 = d(2) + k(1)
+    val d2 = d(1) + k(2)
     val d3 = d(3) * k(3)
 
     List(d0, d1, d2, d3).map(m)
