@@ -73,20 +73,22 @@ object IDEA {
     for (i <- 0 until 8) {
       val k = subKeys(i)
 
-      val a = m(d(0) * k(0))
-      val b = m(d(1) + k(1))
-      val c = m(d(2) + k(2))
-      val g = m(d(3) * k(3))
-      val e = a xor c
-      val f = b xor g
+      val s1 = m(d(0) * k(0))
+      val s2 = m(d(1) + k(1))
+      val s3 = m(d(2) + k(2))
+      val s4 = m(d(3) * k(3))
+      val s5 = s1 xor s3
+      val s6 = s2 xor s4
 
-      val h = (f + e * k(4)) * k(5)
-      val j = e * k(4)
+      val s7 = s5 * k(4)
+      val s8 = s6 + s7
+      val s9 = m(s8 * k(5))
+      val s10 = m(s7 + s9)
 
-      val d0 = a xor m(h)
-      val d1 = c xor m(h)
-      val d2 = b xor m(j + h)
-      val d3 = g xor m(j + h)
+      val d0 = s1 xor s9
+      val d1 = s3 xor s9
+      val d2 = s2 xor s10
+      val d3 = s4 xor s10
 
       d = List(d0, d1, d2, d3)
 
