@@ -68,6 +68,7 @@ object IDEA {
     println(s"0. " + d.map(_.toHexStr).mkString(", "))
     assert(d.size == SubBlocksCount)
 
+    // TODO умножение по модулю 2^16 + 1, вместо нуля используется 2^16
     val m = (bitNumber: BitNumber) => bitNumber.last(SubBlocksSize)
 
     for (i <- 0 until 8) {
