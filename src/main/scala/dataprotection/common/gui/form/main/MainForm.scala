@@ -196,7 +196,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     decryptMessageTextArea.text = GostHelper.blockArrayToString(decryptMessageBlocks)
   }
 
-  /** Шифрование сообщения методом ГОСТ-28147-89 */
+  /** Шифрование сообщения методом RC4 */
   private def rc4Encrypt() {
     val key = rc4Key.split(RC4.Splitter).map(_.toByte)
     val data = decryptMessage.getBytes(RC4.CharsetName)
@@ -204,7 +204,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     encryptMessageTextArea.text = encryptData.mkString(RC4.Splitter)
   }
 
-  /** Расшифрование сообщения методом ГОСТ-28147-89 */
+  /** Расшифрование сообщения методом RC4 */
   private def rc4Decrypt() {
     val key = rc4Key.split(RC4.Splitter).map(_.toByte)
     val encryptData = encryptMessage.split(RC4.Splitter).map(_.toByte)
