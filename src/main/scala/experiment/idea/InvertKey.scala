@@ -19,54 +19,51 @@ object InvertKey {
    * It also involves the multiplicative inverse and the additive inverse functions.
    */
   def invertKey(inKeySeq: Seq[Seq[BitNumber]]) = {
+    /** Промежуточные значения */
     var t1, t2, t3, t4 = 0
-    var p = SubKeysCount
-    val key = new Array[Int](SubKeysCount)
-    var inOff = 0
-
+    /** Входной ключ в виде Int */
     val inKey = inKeySeq.flatMap(_.toSeq).map(_.toInt)
+    /** Инвертированный ключ */
+    val key = new Array[Int](SubKeysCount)
 
-    val inOffInc = () => {val value = inKey(inOff); inOff += 1; value}
-    val setKey = (value: Int) => {p -= 1; key(p) = value}
+    /** Индекс входного ключа */
+    var inKeyIndex = 0
+    /** Индекс выходного ключа */
+    var outKeyIndex = SubKeysCount
 
-    t1 = mulInv(inOffInc())
-    t2 = addInv(inOffInc())
-    t3 = addInv(inOffInc())
-    t4 = mulInv(inOffInc())
-    setKey(t4)
-    setKey(t3)
-    setKey(t2)
-    setKey(t1)
+    /** Возвращает подключ входного ключа и увеличивает индекс (inKeyIndex) */
+    val getSubKey = () => {val value = inKey(inKeyIndex); inKeyIndex += 1; value}
+    /** Уменьшает индекс (outKeyIndex) и устанавливает подключ выходного ключа */
+    val setSubKey = (value: Int) => {outKeyIndex -= 1; key(outKeyIndex) = value}
 
-    for (i <- 1 to 7) {
-      t1 = inOffInc()
-      t2 = inOffInc()
-      setKey(t2)
-      setKey(t1)
-
-      t1 = mulInv(inOffInc())
-      t2 = addInv(inOffInc())
-      t3 = addInv(inOffInc())
-      t4 = mulInv(inOffInc())
-      setKey(t4)
-      setKey(t2) /* NB: Order */
-      setKey(t3)
-      setKey(t1)
+    /** Набор операций 1 */
+    val set1 = () => {
+      t1 = getSubKey(); t2 = getSubKey()
+      setSubKey(t2); setSubKey(t1)
     }
 
-    t1 = inOffInc()
-    t2 = inOffInc()
-    setKey(t2)
-    setKey(t1)
+    /** Набор операций 2 */
+    val set2 = () => {
+      t1 = mulInv(getSubKey()); t2 = addInv(getSubKey())
+      t3 = addInv(getSubKey()); t4 = mulInv(getSubKey())
+      setSubKey(t4); setSubKey(t3)
+      setSubKey(t2); setSubKey(t1)
+    }
 
-    t1 = mulInv(inOffInc())
-    t2 = addInv(inOffInc())
-    t3 = addInv(inOffInc())
-    t4 = mulInv(inOffInc())
-    setKey(t4)
-    setKey(t3)
-    setKey(t2)
-    setKey(t1)
+    set2()
+
+    for (i <- 1 to 7) {
+      set1()
+
+      t1 = mulInv(getSubKey()); t2 = addInv(getSubKey())
+      t3 = addInv(getSubKey()); t4 = mulInv(getSubKey())
+      /* NB: Order */
+      setSubKey(t4); setSubKey(t2)
+      setSubKey(t3); setSubKey(t1)
+    }
+
+    set1()
+    set2()
 
     key.map(e => BitNumber(Array(e)).last(KeyPartSize)).sliding(SubKeysBlocksCount, SubKeysBlocksCount).toList.map(_.toList)
   }
