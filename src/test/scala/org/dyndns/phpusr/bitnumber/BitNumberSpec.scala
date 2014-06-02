@@ -190,10 +190,19 @@ class BitNumberSpec extends FlatSpec {
     val a = BitNumber(Array(10.toByte))
     val clone = a.clone
 
-    assert(a != clone)
     assert(a.toBinStr == clone.toBinStr)
     clone.set(5, BitNum.One)
     assert(a.toBinStr != clone.toBinStr)
+  }
+
+  /** Равенство и неравенство */
+  it should "== and !=" in {
+    val a = BitNumber(Array(10))
+    val b = BitNumber(Array(10))
+    val c = BitNumber(Array(11))
+
+    assert(a == b)
+    assert(a != c)
   }
 
   /** Побитовое умножение */

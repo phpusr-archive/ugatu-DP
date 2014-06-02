@@ -222,6 +222,12 @@ class BitNumber(bitList: Seq[BitNum]) {
     sum
   }
 
+  /** Равенство */
+  def ==(otherNumber: BitNumber) = toString == otherNumber.toString
+
+  /** Неравенство */
+  def !=(otherNumber: BitNumber) = !(this == otherNumber)
+
   /** Клонирование */
   override def clone = new BitNumber(_number.toList)
 
