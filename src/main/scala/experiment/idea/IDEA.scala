@@ -31,6 +31,10 @@ object IDEA {
   /** Размер подблоков */
   val SubBlocksSize = 16
 
+  //TODO перенести
+  val Base = 0x10001
+  val Mask = 0xffff
+
   /** Подключи */
   private var subKeys: Seq[Seq[BitNumber]] = null
 
@@ -102,13 +106,17 @@ object IDEA {
     val d2 = d(1) + k(2)
     val d3 = mul(d(3), k(3))
 
-    List(d0, d1, d2, d3).map(m)
+    //TODO improve
+    val res = List(d0, d1, d2, d3).map(m)
+    val r = BitNumber(0)
+    res.foreach(r.join)
+
+    r
   }
 
+  //TODO перенести
   /** Умножение по модулю 2 в 16 + 1 */
   def mul(a: BitNumber, b: BitNumber) = {
-    val Base = 0x10001
-    val Mask = 0xffff
 
     var x = a.toInt
     var y = b.toInt
@@ -134,16 +142,28 @@ object IDEA {
 
     generateSubKeys(key)
 
-    val str = subKeys.map{ e =>
-      e.map(_.toHexStr)
+    /*val str = subKeys.map{ e =>
+      e.map(_.toHexStr).mkString(", ")
     }.mkString("\n")
-    println(str + "\n")
+    println(str + "\n")*/
 
     val dataArray = Array(0, 0, 0, 1, 0, 2, 0, 3).map(_.toByte)
     val data = BitNumber(dataArray)
     val a = action(data)
 
-    println(a.map(_.toHexStr).mkString(", "))
+    println("a: " + a.toHexStr)
+
+    val inv = InvertKey.invertKey(subKeys)
+    subKeys = inv
+    val str2 = inv.map{ e =>
+      e.map(_.toHexStr).mkString(", ")
+    }.mkString("\n")
+    println(str2 + "\n")
+    println("")
+
+    val b = action(a)
+    println("b: " + b.toHexStr)
+
   }
 
 }
