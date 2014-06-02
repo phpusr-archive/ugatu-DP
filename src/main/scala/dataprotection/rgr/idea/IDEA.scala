@@ -11,6 +11,9 @@ import scala.collection.mutable.ListBuffer
 
 object IDEA {
 
+  /** Отладка */
+  val DebugEnable = false
+
   /** Размер ключа */
   val KeySize = 128
   /** Размер частей ключа */
@@ -33,7 +36,6 @@ object IDEA {
  * Алгоритм шифрования данных IDEA
  * http://ru.wikipedia.org/wiki/IDEA
  */
-//TODO println
 class IDEA(key: BitNumber, encrypt: Boolean) extends IDEATools {
 
   import dataprotection.rgr.idea.IDEA._
@@ -76,7 +78,7 @@ class IDEA(key: BitNumber, encrypt: Boolean) extends IDEATools {
     assert(data.size == BlockSize)
 
     var d = data.split(SubBlocksSize)
-    println(s"0. " + d.map(_.toHexStr).mkString(", "))
+    if (DebugEnable) println(s"0. " + d.map(_.toHexStr).mkString(", "))
     assert(d.size == SubBlocksCount)
 
     /** Выделение последних 16 бит */
@@ -104,7 +106,7 @@ class IDEA(key: BitNumber, encrypt: Boolean) extends IDEATools {
 
       d = List(d0, d1, d2, d3)
 
-      println(s"${i+1}. " + d.map(_.toHexStr).mkString(", "))
+      if (DebugEnable) println(s"${i+1}. " + d.map(_.toHexStr).mkString(", "))
     }
 
     val k = subKeys(8)
