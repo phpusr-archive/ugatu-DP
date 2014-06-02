@@ -102,4 +102,14 @@ class IDEA$Spec extends FlatSpec {
     assert(key.size == 128)
   }
 
+  /** Проверка toBytes */
+  it should "get bytes" in {
+    println("Get bytes")
+
+    val bytes = "text".getBytes
+    val outBytes = BitNumber(bytes).getBytes
+
+    assert(bytes.mkString(", ") == outBytes.mkString(", "))
+  }
+
 }

@@ -222,6 +222,10 @@ class BitNumber(bitList: Seq[BitNum]) {
     sum
   }
 
+  /** Массив байтов */
+  def getBytes = split(8).map(_.toInt.toByte).toArray
+
+
   /** Равенство */
   def ==(otherNumber: BitNumber) = toString == otherNumber.toString
 
