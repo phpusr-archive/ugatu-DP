@@ -2,6 +2,7 @@ package dataprotection.rgr.idea
 
 import org.dyndns.phpusr.bitnumber.BitNumber
 import scala.collection.mutable.ListBuffer
+import scala.util.Random
 
 /**
  * @author phpusr
@@ -29,6 +30,17 @@ object IDEA {
   val SubBlocksCount = 4
   /** Размер подблоков */
   val SubBlocksSize = 16
+
+  /** Генерация ключа */
+  def generateKey() = {
+    val key = BitNumber(0)
+    for (i <- 1 to 4) {
+      val part = BitNumber(Array(Random.nextInt()))
+      key.join(part)
+    }
+
+    key
+  }
 
 }
 

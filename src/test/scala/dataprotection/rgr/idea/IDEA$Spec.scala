@@ -92,4 +92,14 @@ class IDEA$Spec extends FlatSpec {
     assert(decryptBits == data)
   }
 
+  /** Проверка генерации ключа */
+  it should "generate key" in {
+    println("\nGenerate key:")
+
+    val key = IDEA.generateKey()
+    println(s"key bin: $key")
+    println(s"key hex: ${key.toHexStr}")
+    assert(key.size == 128)
+  }
+
 }
