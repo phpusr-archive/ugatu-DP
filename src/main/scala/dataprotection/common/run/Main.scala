@@ -1,7 +1,7 @@
-package dataprotection.lab.common.run
+package dataprotection.common.run
 
 import javax.swing.{JFrame, UIManager}
-import dataprotection.lab.common.gui.form.main.MainForm
+import dataprotection.common.gui.form.main.MainForm
 
 
 /**

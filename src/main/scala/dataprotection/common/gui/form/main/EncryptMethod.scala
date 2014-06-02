@@ -1,4 +1,4 @@
-package dataprotection.lab.common.gui.form.main
+package dataprotection.common.gui.form.main
 
 /**
  * @author phpusr

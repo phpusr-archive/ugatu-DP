@@ -2,7 +2,7 @@ import scala.Some
 
 name := "DP"
 
-val runClass = "dataprotection.lab.common.run.Main"
+val runClass = "dataprotection.common.run.Main"
 
 unmanagedJars in Compile += file(s"${Path.userHome}/.ivy2/cache/org.scala-lang/scala-swing/jars/scala-swing-2.10.3.jar")
 

@@ -1,4 +1,4 @@
-package dataprotection.lab.common.gui.form.main.panel
+package dataprotection.common.gui.form.main.panel
 
 import scala.swing._
 import java.awt.{Font, Dimension, Insets}

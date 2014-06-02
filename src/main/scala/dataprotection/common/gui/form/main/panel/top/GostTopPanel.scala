@@ -1,8 +1,8 @@
-package dataprotection.lab.common.gui.form.main.panel.top
+package dataprotection.common.gui.form.main.panel.top
 
 import scala.swing.{Alignment, TextField, Button, GridBagPanel}
 import java.awt.{Insets, Dimension}
-import dataprotection.lab.common.gui.form.main.panel.DefaultComponents
+import dataprotection.common.gui.form.main.panel.DefaultComponents
 
 /**
  * @author phpusr
@@ -11,31 +11,31 @@ import dataprotection.lab.common.gui.form.main.panel.DefaultComponents
  */
 
 /**
- * Панель для шифрования методом RC4
+ * Панель для шифрования методом ГОСТ-28147-89
  */
-trait Rc4TopPanel extends DefaultComponents {
+trait GostTopPanel extends DefaultComponents {
 
   /** Поле ввода ключа */
-  protected val rc4KeyTextField = new TextField {
-    preferredSize = new Dimension(300, 30)
+  protected val gostKeyTextField = new TextField {
+    preferredSize = new Dimension(470, 30)
     horizontalAlignment = Alignment.Center
   }
 
   /** Кнопка генерации ключа */
-  protected val rc4GenerateKeyButton = new Button("Generate Key")
+  protected val gostGenerateKeyButton = new Button("Generate Key")
 
 
   //////////////////////////////////////////////////////////////
 
 
-  protected val Rc4TopPanel = new GridBagPanel {
+  protected val GostTopPanel = new GridBagPanel {
     visible = false
 
     val c = new Constraints
     c.insets = new Insets(10, 5, 10, 5)
 
     layout(defaultLabel("Key:")) = c
-    layout(rc4KeyTextField) = c
-    layout(rc4GenerateKeyButton) = c
+    layout(gostKeyTextField) = c
+    layout(gostGenerateKeyButton) = c
   }
 }

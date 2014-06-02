@@ -1,8 +1,8 @@
-package dataprotection.lab.common.gui.form.main.panel.top
+package dataprotection.common.gui.form.main.panel.top
 
 import scala.swing._
 import java.awt.{Dimension, Insets}
-import dataprotection.lab.common.gui.form.main.panel.DefaultComponents
+import dataprotection.common.gui.form.main.panel.DefaultComponents
 
 /**
  * @author phpusr

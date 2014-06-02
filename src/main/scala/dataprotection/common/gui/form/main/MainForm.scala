@@ -1,16 +1,16 @@
-package dataprotection.lab.common.gui.form.main
+package dataprotection.common.gui.form.main
 
 import scala.swing._
 import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
 import dataprotection.lab.three.types.RsaTrait
 import javax.swing.JFrame
-import dataprotection.lab.common.gui.form.main.panel.top.{Rc4TopPanel, GostTopPanel, RsaTopPanel}
-import dataprotection.lab.common.gui.form.main.panel.{CenterPanel, BottomPanel}
+import dataprotection.common.gui.form.main.panel.top.{Rc4TopPanel, GostTopPanel, RsaTopPanel}
+import dataprotection.common.gui.form.main.panel.{CenterPanel, BottomPanel}
 import dataprotection.lab.one.gost2814789.tools.GostHelper
 import scala.swing.event.ButtonClicked
 import org.dyndns.phpusr.util.log.Logger
-import dataprotection.lab.common.gui.form.main.EncryptMethod._
+import dataprotection.common.gui.form.main.EncryptMethod._
 import dataprotection.lab.one.gost2814789.Gost
 import dataprotection.lab.two.rc4.RC4
 
