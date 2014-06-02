@@ -50,7 +50,7 @@ class IDEA$Spec extends FlatSpec {
   it should "equals with lib" in {
     println("\nEquals with lib")
 
-    println("\nEncrypt")
+    println("\nEncrypt process:")
 
     // Шифрование библиотекой
     val keyArray = Array(0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8).map(_.toByte)
@@ -74,7 +74,7 @@ class IDEA$Spec extends FlatSpec {
 
     assert(encryptBitsLib == encryptBits)
 
-    println("\nDecrypt")
+    println("\nDecrypt process:")
 
     // Расшифрование библиотекой
     engine.init(false, keyParam)
