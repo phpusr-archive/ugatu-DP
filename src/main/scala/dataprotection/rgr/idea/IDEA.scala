@@ -1,4 +1,4 @@
-package experiment.idea
+package dataprotection.rgr.idea
 
 import org.dyndns.phpusr.bitnumber.BitNumber
 import scala.collection.mutable.ListBuffer
@@ -58,8 +58,8 @@ object IDEA {
  */
 //TODO println
 class IDEA(key: BitNumber, encrypt: Boolean) extends IDEATools {
-  
-  import experiment.idea.IDEA._
+
+  import dataprotection.rgr.idea.IDEA._
 
   assert(key.size == KeySize)
 

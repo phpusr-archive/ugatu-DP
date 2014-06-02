@@ -1,6 +1,6 @@
-package experiment.idea
+package dataprotection.rgr.idea
 
-import experiment.idea.IDEA._
+import dataprotection.rgr.idea.IDEA._
 import org.dyndns.phpusr.bitnumber.BitNumber
 
 /**
