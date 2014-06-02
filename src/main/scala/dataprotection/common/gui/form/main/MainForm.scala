@@ -14,6 +14,7 @@ import dataprotection.common.gui.form.main.EncryptMethod._
 import dataprotection.lab.one.gost2814789.Gost
 import dataprotection.lab.two.rc4.RC4
 import dataprotection.rgr.idea.IDEA
+import org.dyndns.phpusr.bitnumber.BitNumber
 
 /**
  * @author phpusr
@@ -244,12 +245,27 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
 
   /** Шифрование сообщения методом IDEA */
   private def ideaEncrypt() {
+    val encryptIdea = new IDEA(ideaKey, true)
 
+    val data = BitNumber(decryptMessage.getBytes) //TODO charset
+    val Aggregate = '^'.toByte
+    val aggregateCount = (IDEA.BlockSize - data.size % IDEA.BlockSize) / 8
+    val agr = (for (i <- 1 to aggregateCount) yield Aggregate).toArray
+    data.join(BitNumber(agr))
+
+    encryptMessageTextArea.text = encryptIdea.processBlocks(data).toHexStr
   }
 
   /** Расшифрование сообщения методом IDEA */
   private def ideaDecrypt() {
+    val decryptIdea = new IDEA(ideaKey, false)
 
+    val a = encryptMessage.sliding(8, 8).map(java.lang.Long.parseLong(_, 16).toInt).toArray //TODO improve
+    val data = BitNumber(a)
+
+    val bytes = decryptIdea.processBlocks(data).getBytes
+    decryptMessageTextArea.text = new String(bytes) //TODO charset
+    //TODO убрать заполнитель
   }
 
   /** Показ определенной панели метода шифрования и скрытие остальных */
@@ -294,6 +310,12 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
 
   // RC4
   private def rc4Key = rc4KeyTextField.text
+
+  // IDEA
+  private def ideaKey = {
+    val keyArray = ideaKeyTextField.text.sliding(8, 8).map(java.lang.Long.parseLong(_, 16).toInt).toArray
+    BitNumber(keyArray)
+  }
 
   private def decryptMessage = decryptMessageTextArea.text
   private def clearDecryptMessage() = decryptMessageTextArea.text = ""
