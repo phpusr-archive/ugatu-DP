@@ -27,29 +27,6 @@ object IDEA {
   /** Размер подблоков */
   val SubBlocksSize = 16
 
-  /** Отладка */
-  def main(args: Array[String]) {
-    val keyArray = Array(0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8).map(_.toByte)
-    val key = BitNumber(keyArray)
-    println(s"key: ${key.toHexStr}")
-
-    val dataArray = Array(0, 0, 0, 1, 0, 2, 0, 3).map(_.toByte)
-    val data = BitNumber(dataArray)
-
-    val idea = new IDEA(key, true)
-    println(idea.subKeysStr + "\n")
-    val enc = idea.processBlocks(data)
-    println("enc: " + enc.toHexStr)
-
-    val ideaDycrypt = new IDEA(key, false)
-    println(ideaDycrypt.subKeysStr + "\n")
-
-    val dec = ideaDycrypt.processBlocks(enc)
-    println("dec: " + dec.toHexStr)
-
-    assert(data.toString == dec.toString)
-  }
-
 }
 
 /**
