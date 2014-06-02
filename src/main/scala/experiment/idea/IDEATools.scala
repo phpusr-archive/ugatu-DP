@@ -12,7 +12,32 @@ import org.dyndns.phpusr.bitnumber.BitNumber
 /**
  * Инверсия ключа
  */
-object InvertKey {
+trait IDEATools {
+
+  /** 2 в 16 + 1 */
+  private val Base = 0x10001
+
+  /** Маска для выделения последних 16 бит из Int */
+  private val Mask = 0xffff
+
+  /** Умножение по модулю 2 в 16 + 1 */
+  def mul(a: BitNumber, b: BitNumber) = {
+
+    var x = a.toInt
+    var y = b.toInt
+
+    if (x == 0) x = Base - y
+    else if (y == 0) x = Base - x
+    else {
+      val p = x * y
+      y = p & Mask
+      x = p >>> SubBlocksSize
+      x = y - x + (if (y < x)  1 else 0)
+    }
+
+    val res = BitNumber(Array(x & Mask))
+    res.last(SubBlocksSize)
+  }
 
   /**
    * The function to invert the encryption subkey to the decryption subkey.
@@ -74,7 +99,7 @@ object InvertKey {
    * <p>
    * i.e. x * mulInv(x) == 1 (modulo BASE)
    */
-  def mulInv(xIn: Int): Int = {
+  private def mulInv(xIn: Int): Int = {
     var t0 = 0
     var t1 = 0
     var q = 0
@@ -106,6 +131,6 @@ object InvertKey {
    * <p>
    * i.e. x + addInv(x) == 0
    */
-  def addInv(x: Int) =  (0 - x) & Mask
+  private def addInv(x: Int) =  (0 - x) & Mask
 
 }

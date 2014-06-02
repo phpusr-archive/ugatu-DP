@@ -13,7 +13,7 @@ import scala.collection.mutable.ListBuffer
  * Алгоритм шифрования данных IDEA
  * http://ru.wikipedia.org/wiki/IDEA
  */
-object IDEA {
+object IDEA extends IDEATools {
 
   /** Размер ключа */
   val KeySize = 128
@@ -30,10 +30,6 @@ object IDEA {
   val SubBlocksCount = 4
   /** Размер подблоков */
   val SubBlocksSize = 16
-
-  //TODO перенести
-  val Base = 0x10001
-  val Mask = 0xffff
 
   /** Подключи */
   private var subKeys: Seq[Seq[BitNumber]] = null
@@ -114,26 +110,6 @@ object IDEA {
     r
   }
 
-  //TODO перенести
-  /** Умножение по модулю 2 в 16 + 1 */
-  def mul(a: BitNumber, b: BitNumber) = {
-
-    var x = a.toInt
-    var y = b.toInt
-
-    if (x == 0) x = Base - y
-    else if (y == 0) x = Base - x
-    else {
-      val p = x * y
-      y = p & Mask
-      x = p >>> 16
-      x = y - x + (if (y < x)  1 else 0)
-    }
-
-    val res = BitNumber(Array(x & Mask))
-    res.last(SubBlocksSize)
-  }
-
   /** Отладка */
   def main(args: Array[String]) {
     val keyArray = Array(0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8).map(_.toByte)
@@ -153,7 +129,7 @@ object IDEA {
 
     println("a: " + a.toHexStr)
 
-    val inv = InvertKey.invertKey(subKeys)
+    val inv = invertKey(subKeys)
     subKeys = inv
     val str2 = inv.map{ e =>
       e.map(_.toHexStr).mkString(", ")
