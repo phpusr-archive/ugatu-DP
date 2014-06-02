@@ -115,12 +115,12 @@ class IDEA(key: BitNumber, encrypt: Boolean) extends IDEATools {
     val d2 = d(1) + k(2)
     val d3 = mul(d(3), k(3))
 
-    //TODO improve
-    val res = List(d0, d1, d2, d3).map(m)
-    val r = BitNumber(0)
-    res.foreach(r.join)
+    // Склеивание подблоков
+    val dList = List(d0, d1, d2, d3).map(m)
+    val outBits = BitNumber(0)
+    dList.foreach(outBits.join)
 
-    r
+    outBits
   }
 
 }
