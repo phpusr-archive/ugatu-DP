@@ -13,6 +13,7 @@ import org.dyndns.phpusr.util.log.Logger
 import dataprotection.common.gui.form.main.EncryptMethod._
 import dataprotection.lab.one.gost2814789.Gost
 import dataprotection.lab.two.rc4.RC4
+import dataprotection.rgr.idea.IDEA
 
 /**
  * @author phpusr
@@ -83,8 +84,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   // Обработчики событий формы
   listenTo(gostMenuItem, rc4MenuItem, rsaMenuItem, ideaMenuItem)
 
-  listenTo(gostGenerateKeyButton)
-  listenTo(rc4GenerateKeyButton)
+  listenTo(gostGenerateKeyButton, rc4GenerateKeyButton, ideaGenerateKeyButton)
 
   listenTo(generatePButton, generateQButton, generateNButton)
   listenTo(generatePublicKeyButton, generatePrivateKeyButton)
@@ -109,6 +109,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
       gostKeyTextField.text = keyHex
 
     //--------------------- end GOST ---------------------//
+
 
     //--------------------- begin RC4 ---------------------//
 
@@ -153,6 +154,15 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
 
     //--------------------- end RSA ---------------------//
 
+
+    //--------------------- begin IDEA ---------------------//
+
+    case ButtonClicked(`ideaGenerateKeyButton`) =>
+      ideaKeyTextField.text = IDEA.generateKey().toHexStr
+
+    //--------------------- begin IDEA ---------------------//
+
+
     // Очистка полей ввода
     case ButtonClicked(`clearAllButton`) =>
       clearP(); clearQ(); clearN(); clearPublicKey(); clearPrivateKey()
@@ -165,6 +175,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
         case GOST_28147_89_METHOD => gostEncrypt()
         case RC4_METHOD => rc4Encrypt()
         case RSA_METHOD => rsaEncrypt()
+        case IDEA_METHOD => ideaEncrypt()
       }
 
 
@@ -174,6 +185,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
         case GOST_28147_89_METHOD => gostDecrypt()
         case RC4_METHOD => rc4Decrypt()
         case RSA_METHOD => rsaDecrypt()
+        case IDEA_METHOD => ideaDecrypt()
       }
 
     // Выход
@@ -212,7 +224,6 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     decryptMessageTextArea.text = new String(decryptData, RC4.CharsetName)
   }
 
-
   /** Шифрование сообщения методом RSA */
   private def rsaEncrypt() {
     if (numberCheckBox.selected) {
@@ -229,6 +240,16 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     } else {
       decryptMessageTextArea.text = RSA.decryptString(encryptMessage, n, privateKey)
     }
+  }
+
+  /** Шифрование сообщения методом IDEA */
+  private def ideaEncrypt() {
+
+  }
+
+  /** Расшифрование сообщения методом IDEA */
+  private def ideaDecrypt() {
+
   }
 
   /** Показ определенной панели метода шифрования и скрытие остальных */
