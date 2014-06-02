@@ -19,4 +19,7 @@ object EncryptMethod extends Enumeration {
   
   /** RSA */
   val RSA_METHOD = EncryptMethod("RSA")
+
+  /** IDEA */
+  val IDEA_METHOD = EncryptMethod("IDEA")
 }

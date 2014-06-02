@@ -5,7 +5,7 @@ import dataprotection.lab.three.rsa.RSA
 import dataprotection.lab.three.prime.Prime
 import dataprotection.lab.three.types.RsaTrait
 import javax.swing.JFrame
-import dataprotection.common.gui.form.main.panel.top.{Rc4TopPanel, GostTopPanel, RsaTopPanel}
+import dataprotection.common.gui.form.main.panel.top.{IdeaTopPanel, Rc4TopPanel, GostTopPanel, RsaTopPanel}
 import dataprotection.common.gui.form.main.panel.{CenterPanel, BottomPanel}
 import dataprotection.lab.one.gost2814789.tools.GostHelper
 import scala.swing.event.ButtonClicked
@@ -23,7 +23,7 @@ import dataprotection.lab.two.rc4.RC4
 /**
  * Главная форма
  */
-object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPanel with RsaTrait with RsaTopPanel with CenterPanel with BottomPanel {
+object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPanel with RsaTrait with RsaTopPanel with IdeaTopPanel with CenterPanel with BottomPanel {
 
   /** Логирование */
   private val logger = Logger(infoEnable = true, debugEnable = true, traceEnable = true)
@@ -32,12 +32,13 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   private val gostMenuItem = new RadioMenuItem(GOST_28147_89_METHOD.name)
   private val rc4MenuItem = new RadioMenuItem(RC4_METHOD.name)
   private val rsaMenuItem = new RadioMenuItem(RSA_METHOD.name)
+  private val ideaMenuItem = new RadioMenuItem(IDEA_METHOD.name)
 
   // Frame, нужен для вызова pack()
   private var gPeer: JFrame = null
 
   /** Список панелей методов шифрования */
-  private val topPanels = List(GostTopPanel, Rc4TopPanel, RsaTopPanel)
+  private val topPanels = List(GostTopPanel, Rc4TopPanel, RsaTopPanel, IdeaTopPanel)
 
   /** Текущий метод шифрования */
   private var currentMethodEncrypt: EncryptMethod = null
@@ -53,7 +54,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
       menuBar = new MenuBar {
         // Выбор метода шифрования
         contents += new Menu("Encryption method") {
-          val mutex = new ButtonGroup(gostMenuItem, rc4MenuItem, rsaMenuItem)
+          val mutex = new ButtonGroup(gostMenuItem, rc4MenuItem, rsaMenuItem, ideaMenuItem)
           contents ++= mutex.buttons
         }
       }
@@ -63,6 +64,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
         contents += GostTopPanel
         contents += Rc4TopPanel
         contents += RsaTopPanel
+        contents += IdeaTopPanel
       }) = North
 
       // Центральная панель
@@ -73,13 +75,13 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     }
 
     // Init form
-    changeEncryptMethod(RC4_METHOD)
-    rc4MenuItem.selected = true
+    changeEncryptMethod(IDEA_METHOD)
+    ideaMenuItem.selected = true
     centerOnScreen()
   }
 
   // Обработчики событий формы
-  listenTo(gostMenuItem, rc4MenuItem, rsaMenuItem)
+  listenTo(gostMenuItem, rc4MenuItem, rsaMenuItem, ideaMenuItem)
 
   listenTo(gostGenerateKeyButton)
   listenTo(rc4GenerateKeyButton)
@@ -98,6 +100,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     case ButtonClicked(`gostMenuItem`) => changeEncryptMethod(GOST_28147_89_METHOD)
     case ButtonClicked(`rc4MenuItem`) => changeEncryptMethod(RC4_METHOD)
     case ButtonClicked(`rsaMenuItem`) => changeEncryptMethod(RSA_METHOD)
+    case ButtonClicked(`ideaMenuItem`) => changeEncryptMethod(IDEA_METHOD)
 
     //--------------------- begin GOST ---------------------//
 
@@ -236,6 +239,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
       case GOST_28147_89_METHOD => GostTopPanel
       case RC4_METHOD => Rc4TopPanel
       case RSA_METHOD => RsaTopPanel
+      case IDEA_METHOD => IdeaTopPanel
     }
 
     // Установка текущего метода шифрования
