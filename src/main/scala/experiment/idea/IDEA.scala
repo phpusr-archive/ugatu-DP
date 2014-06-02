@@ -9,11 +9,7 @@ import scala.collection.mutable.ListBuffer
  *         Time: 17:06
  */
 
-/**
- * Алгоритм шифрования данных IDEA
- * http://ru.wikipedia.org/wiki/IDEA
- */
-object IDEA extends IDEATools {
+object IDEA {
 
   /** Размер ключа */
   val KeySize = 128
@@ -31,24 +27,60 @@ object IDEA extends IDEATools {
   /** Размер подблоков */
   val SubBlocksSize = 16
 
+  /** Отладка */
+  def main(args: Array[String]) {
+    val keyArray = Array(0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8).map(_.toByte)
+    val key = BitNumber(keyArray)
+    println(s"key: ${key.toHexStr}")
+
+    val dataArray = Array(0, 0, 0, 1, 0, 2, 0, 3).map(_.toByte)
+    val data = BitNumber(dataArray)
+
+    val idea = new IDEA(key, true)
+    println(idea.subKeysStr + "\n")
+    val enc = idea.processBlocks(data)
+    println("enc: " + enc.toHexStr)
+
+    val ideaDycrypt = new IDEA(key, false)
+    println(ideaDycrypt.subKeysStr + "\n")
+
+    val dec = ideaDycrypt.processBlocks(enc)
+    println("dec: " + dec.toHexStr)
+
+    assert(data.toString == dec.toString)
+  }
+
+}
+
+/**
+ * Алгоритм шифрования данных IDEA
+ * http://ru.wikipedia.org/wiki/IDEA
+ */
+//TODO println
+class IDEA(key: BitNumber, encrypt: Boolean) extends IDEATools {
+  
+  import experiment.idea.IDEA._
+
+  assert(key.size == KeySize)
+
   /** Подключи */
-  private var subKeys: Seq[Seq[BitNumber]] = null
+  private val subKeys = if (encrypt) generateSubKeys else invertKey(generateSubKeys)
+  assert(subKeys.map(_.size).sum == SubKeysCount)
+
+  /** Подключи в виде строки (для отлдаки) */
+  val subKeysStr = subKeys.map{ e =>
+    e.map(_.toHexStr).mkString(", ")
+  }.mkString("\n")
 
   /** Шифрование данных */
-  def encrypt(data: BitNumber, key: BitNumber) = {
-    assert(data.size == BlockSize)
-    assert(key.size == KeySize)
-
-    // Генерация подключей
-    generateSubKeys(key)
-    assert(subKeys.size == SubKeysCount)
-
-    // TODO
-
+  def processBlocks(data: BitNumber) = {
+    val out = BitNumber(0)
+    data.split(BlockSize).map(processBlock).foreach(out.join)
+    out
   }
 
   /** Генерация подключей */
-  def generateSubKeys(key: BitNumber) {
+  private def generateSubKeys = {
     val tmpSubKeys = ListBuffer[BitNumber]()
     var shiftKey = key
     for (i <- 1 to SubKeysBlocksCount) {
@@ -59,16 +91,18 @@ object IDEA extends IDEATools {
     tmpSubKeys ++= sk.take(4)
 
     // Разбитие на блоки по 6 подключей
-    subKeys = tmpSubKeys.sliding(SubKeysBlocksCount, SubKeysBlocksCount).toList
+    tmpSubKeys.sliding(SubKeysBlocksCount, SubKeysBlocksCount).toList
   }
 
-  /** TODO */
-  def action(data: BitNumber) = {
+  /** Шифрование/расшифрование блока */
+  private def processBlock(data: BitNumber) = {
+    assert(data.size == BlockSize)
+
     var d = data.split(SubBlocksSize)
     println(s"0. " + d.map(_.toHexStr).mkString(", "))
     assert(d.size == SubBlocksCount)
 
-    // TODO умножение по модулю 2^16 + 1, вместо нуля используется 2^16
+    /** Выделение последних 16 бит */
     val m = (bitNumber: BitNumber) => bitNumber.last(SubBlocksSize)
 
     for (i <- 0 until 8) {
@@ -108,38 +142,6 @@ object IDEA extends IDEATools {
     res.foreach(r.join)
 
     r
-  }
-
-  /** Отладка */
-  def main(args: Array[String]) {
-    val keyArray = Array(0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8).map(_.toByte)
-    val key = BitNumber(keyArray)
-    println(s"key: ${key.toHexStr}")
-
-    generateSubKeys(key)
-
-    /*val str = subKeys.map{ e =>
-      e.map(_.toHexStr).mkString(", ")
-    }.mkString("\n")
-    println(str + "\n")*/
-
-    val dataArray = Array(0, 0, 0, 1, 0, 2, 0, 3).map(_.toByte)
-    val data = BitNumber(dataArray)
-    val a = action(data)
-
-    println("a: " + a.toHexStr)
-
-    val inv = invertKey(subKeys)
-    subKeys = inv
-    val str2 = inv.map{ e =>
-      e.map(_.toHexStr).mkString(", ")
-    }.mkString("\n")
-    println(str2 + "\n")
-    println("")
-
-    val b = action(a)
-    println("b: " + b.toHexStr)
-
   }
 
 }
