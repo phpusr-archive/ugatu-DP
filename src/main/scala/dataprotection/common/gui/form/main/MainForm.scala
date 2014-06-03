@@ -260,8 +260,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   private def ideaDecrypt() {
     val decryptIdea = new IDEA(ideaKey, false)
 
-    val a = encryptMessage.sliding(8, 8).map(java.lang.Long.parseLong(_, 16).toInt).toArray //TODO improve
-    val data = BitNumber(a)
+    val data = BitNumber(hexStrToIntArray(encryptMessage))
 
     val bytes = decryptIdea.processBlocks(data).getBytes
     decryptMessageTextArea.text = new String(bytes) //TODO charset
@@ -312,9 +311,11 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   private def rc4Key = rc4KeyTextField.text
 
   // IDEA
+  private def hexStrToIntArray(str: String) = {
+    str.sliding(8, 8).map(java.lang.Long.parseLong(_, 16).toInt).toArray
+  }
   private def ideaKey = {
-    val keyArray = ideaKeyTextField.text.sliding(8, 8).map(java.lang.Long.parseLong(_, 16).toInt).toArray
-    BitNumber(keyArray)
+    BitNumber(hexStrToIntArray(ideaKeyTextField.text))
   }
 
   private def decryptMessage = decryptMessageTextArea.text
