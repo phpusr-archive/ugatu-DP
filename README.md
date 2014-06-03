@@ -3,7 +3,6 @@
 
 # TODO list
 
-* Реализовать РГР c помощью BitNumber (IDEA) (org.bouncycastle.crypto.engines.IDEAEngine)
 * Сделать заметку в Evernote по сдвиговым операциям и вставить сюда ссылку
 
 
