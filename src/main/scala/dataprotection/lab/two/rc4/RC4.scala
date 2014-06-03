@@ -31,9 +31,6 @@ object RC4 {
   /** Разделитель блоков */
   val Splitter = " "
 
-  /** Кодировка для преобразования строки */
-  val CharsetName = "cp1251"
-
   private val logger = new Logger(true, true, false)
 
   //------------------------------------------

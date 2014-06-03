@@ -45,6 +45,9 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   /** Текущий метод шифрования */
   private var currentMethodEncrypt: EncryptMethod = null
 
+  /** Кодировка для преобразования строки */
+  private val CharsetName = "cp1251"
+
   /** Форма */
   def top = new MainFrame {
     gPeer = peer
@@ -212,7 +215,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   /** Шифрование сообщения методом RC4 */
   private def rc4Encrypt() {
     val key = rc4Key.split(RC4.Splitter).map(_.toByte)
-    val data = decryptMessage.getBytes(RC4.CharsetName)
+    val data = decryptMessage.getBytes(CharsetName)
     val encryptData = RC4.encrypt(data, key)
     encryptMessageTextArea.text = encryptData.mkString(RC4.Splitter)
   }
@@ -222,7 +225,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     val key = rc4Key.split(RC4.Splitter).map(_.toByte)
     val encryptData = encryptMessage.split(RC4.Splitter).map(_.toByte)
     val decryptData = RC4.decrypt(encryptData, key)
-    decryptMessageTextArea.text = new String(decryptData, RC4.CharsetName)
+    decryptMessageTextArea.text = new String(decryptData, CharsetName)
   }
 
   /** Шифрование сообщения методом RSA */
