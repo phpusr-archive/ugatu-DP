@@ -10,7 +10,7 @@ import org.dyndns.phpusr.bitnumber.BitNumber
  */
 
 /**
- * Инверсия ключа
+ * Утилита для шифра IDEA
  */
 trait IDEATools {
 
