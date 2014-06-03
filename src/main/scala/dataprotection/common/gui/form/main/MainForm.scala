@@ -39,7 +39,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   // Frame, нужен для вызова pack()
   private var gPeer: JFrame = null
 
-  /** Список панелей методов шифрования */
+  /** Список панелей методов шифрования (Для смены видимой панели) */
   private val topPanels = List(GostTopPanel, Rc4TopPanel, RsaTopPanel, IdeaTopPanel)
 
   /** Текущий метод шифрования */
