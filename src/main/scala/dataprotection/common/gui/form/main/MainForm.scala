@@ -47,6 +47,8 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
 
   /** Кодировка для преобразования строки */
   private val CharsetName = "cp1251"
+  /** Заполнитель для неполного блока */
+  private val Aggregate = '^'.toByte
 
   /** Форма */
   def top = new MainFrame {
@@ -251,10 +253,10 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     val encryptIdea = new IDEA(ideaKey, true)
 
     val data = BitNumber(decryptMessage.getBytes(CharsetName))
-    val Aggregate = '^'.toByte
+    // Дополнение неполного блока
     val aggregateCount = (IDEA.BlockSize - data.size % IDEA.BlockSize) / 8
-    val agr = (for (i <- 1 to aggregateCount) yield Aggregate).toArray
-    data.join(BitNumber(agr))
+    val aggregateArray = (for (i <- 1 to aggregateCount) yield Aggregate).toArray
+    data.join(BitNumber(aggregateArray))
 
     encryptMessageTextArea.text = encryptIdea.processBlocks(data).toHexStr
   }
@@ -264,10 +266,11 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     val decryptIdea = new IDEA(ideaKey, false)
 
     val data = BitNumber(hexStrToIntArray(encryptMessage))
+    val byteBuffer = decryptIdea.processBlocks(data).getBytes.toBuffer
+    // Удаление заполнителей в незавершенном блоке
+    while (byteBuffer.size > 1 && byteBuffer(byteBuffer.size-1) == Aggregate) byteBuffer.remove(byteBuffer.size - 1)
 
-    val bytes = decryptIdea.processBlocks(data).getBytes
-    decryptMessageTextArea.text = new String(bytes, CharsetName)
-    //TODO убрать заполнитель
+    decryptMessageTextArea.text = new String(byteBuffer.toArray, CharsetName)
   }
 
   /** Показ определенной панели метода шифрования и скрытие остальных */
