@@ -250,7 +250,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
   private def ideaEncrypt() {
     val encryptIdea = new IDEA(ideaKey, true)
 
-    val data = BitNumber(decryptMessage.getBytes) //TODO charset
+    val data = BitNumber(decryptMessage.getBytes(CharsetName))
     val Aggregate = '^'.toByte
     val aggregateCount = (IDEA.BlockSize - data.size % IDEA.BlockSize) / 8
     val agr = (for (i <- 1 to aggregateCount) yield Aggregate).toArray
@@ -266,7 +266,7 @@ object MainForm extends SimpleSwingApplication with GostTopPanel with Rc4TopPane
     val data = BitNumber(hexStrToIntArray(encryptMessage))
 
     val bytes = decryptIdea.processBlocks(data).getBytes
-    decryptMessageTextArea.text = new String(bytes) //TODO charset
+    decryptMessageTextArea.text = new String(bytes, CharsetName)
     //TODO убрать заполнитель
   }
 
