@@ -40,8 +40,8 @@ trait IDEATools {
   }
 
   /**
-   * The function to invert the encryption subkey to the decryption subkey.
-   * It also involves the multiplicative inverse and the additive inverse functions.
+   * Функция инвертирует подключи шифрования в подключи расшифрования.
+   * Она таже включает в себя функции для нахождения мультипликативного обратного и аддитивно обратного.
    */
   def invertKey(inKeySeq: Seq[Seq[BitNumber]]) = {
     /** Промежуточные значения */
@@ -94,10 +94,10 @@ trait IDEATools {
   }
 
   /**
-   * This function computes multiplicative inverse using Euclid's Greatest
-   * Common Divisor algorithm. Zero and one are self inverse.
+   * Вычисляет мультипликативное обратное используя алгоритм Евклида для нахождения НОД.
+   * Ноли и один self inverse.
    * <p>
-   * i.e. x * mulInv(x) == 1 (modulo BASE)
+   * x * mulInv(x) == 1 (modulo BASE)
    */
   private def mulInv(xIn: Int): Int = {
     var t0 = 0
@@ -127,9 +127,9 @@ trait IDEATools {
   }
 
   /**
-   * Return the additive inverse of x.
+   * Возвращает аддитивное обратное для x.
    * <p>
-   * i.e. x + addInv(x) == 0
+   * x + addInv(x) == 0
    */
   private def addInv(x: Int) =  (0 - x) & Mask
 
