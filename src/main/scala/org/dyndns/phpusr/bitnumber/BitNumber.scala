@@ -71,6 +71,7 @@ object BitNumber {
 /**
  * Класс для хранения числа состоящего различного количества бит
  */
+//TODO сделать 2 реализации mutable & immutable
 class BitNumber(bitList: Seq[BitNum]) {
 
   /** Представление числа */
