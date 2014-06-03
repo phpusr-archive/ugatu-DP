@@ -3,9 +3,6 @@
 
 # TODO list
 
-* Сделать заметку в Evernote по сдвиговым операциям и вставить сюда ссылку
-
-
 # ГОСТ 28147-89
 
 ## Информация
@@ -18,6 +15,7 @@
 
 * [Побитовые операции и операции битового сдвига в Java и не только](http://habrahabr.ru/post/187606/)
 * [Битовые сдвиги и приведения в Java: подводные камни](http://dark-barker.blogspot.ru/2012/03/bit-operations-java-pitfalls.html)
+* [Моя заметка о сдвигах](https://www.evernote.com/shard/s129/sh/1b8ff6c5-2b25-4bcf-9abb-d2c5965d2a9a/ae7b1e80ca0b18b78bc4080f8553093b)
 
 ## Реализации
 
